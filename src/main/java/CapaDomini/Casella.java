@@ -8,7 +8,6 @@ public class Casella {
 	private Fitxa fitxa;
 	
 	public Casella(int x, int y, boolean teFitxa){
-		
 	
 		this.intPosicioX = x;
 		this.intPosicioY = y;
