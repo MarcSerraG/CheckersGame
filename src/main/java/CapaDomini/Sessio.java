@@ -1,5 +1,6 @@
 package CapaDomini;
 import java.util.List;
+import java.util.Timer;
 
 public class Sessio {
 
@@ -18,6 +19,7 @@ public class Sessio {
 	
 	public boolean registrarUsuari() {
 		
+		return true;
 	}
 	
 	public List<String> veureUsuaris() {

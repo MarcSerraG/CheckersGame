@@ -5,16 +5,37 @@ public class Casella {
 	private int intPosicioX;
 	private int intPosicioY;
 	private boolean boolTeFitxa;
+	private Fitxa fitxa;
 	
-	public Casella(){
+	public Casella(int x, int y, boolean teFitxa){
 		
+	
+		this.intPosicioX = x;
+		this.intPosicioY = y;
+		this.boolTeFitxa = teFitxa;
 	}
 	
-	public void eliminarFitxa(Casella posicio) {
-			
+	public boolean eliminarFitxa() {
+		
+		if(boolTeFitxa) this.boolTeFitxa = false;
+		else return false;
+		return true;
 	}
 	
-	public void afegirFitxa(Casella posicio) {
+	public boolean afegirFitxa(Fitxa tipus) throws Exception{
 		
+		try {
+			if(!boolTeFitxa) {
+				this.boolTeFitxa = true;
+				this.fitxa = tipus;
+			}
+			else return false;
+			return true;
+		}
+		
+		catch (IllegalArgumentException e) {
+			throw new IllegalArgumentException();
+		
+		}
 	}
 }
