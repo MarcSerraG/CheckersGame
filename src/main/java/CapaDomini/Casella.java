@@ -14,6 +14,26 @@ public class Casella {
 		this.boolTeFitxa = teFitxa;
 	}
 	
+	public Fitxa getFitxa() {
+		
+		return fitxa;
+	}
+	
+	public boolean getTeFitxa() {
+		
+		return boolTeFitxa;
+	}
+	
+	public int getX() {
+		
+		return intPosicioX;
+	}
+	
+	public int getY() {
+		
+		return intPosicioY;
+	}
+	
 	public boolean eliminarFitxa() {
 		
 		if(boolTeFitxa) this.boolTeFitxa = false;
