@@ -1,60 +1,52 @@
 package CapaDomini;
 
 public class Casella {
-
+	
+	//Variables
+	private static int ident = 0;
 	private int intPosicioX;
 	private int intPosicioY;
 	private boolean boolTeFitxa;
 	private Fitxa fitxa;
 	
+	//Constructor
 	public Casella(int x, int y, boolean teFitxa){
 	
 		this.intPosicioX = x;
 		this.intPosicioY = y;
 		this.boolTeFitxa = teFitxa;
-	}
-	
-	public Fitxa getFitxa() {
 		
-		return fitxa;
-	}
-	
-	public boolean getTeFitxa() {
-		
-		return boolTeFitxa;
-	}
-	
-	public int getX() {
-		
-		return intPosicioX;
-	}
-	
-	public int getY() {
-		
-		return intPosicioY;
-	}
-	
-	public boolean eliminarFitxa() {
-		
-		if(boolTeFitxa) this.boolTeFitxa = false;
-		else return false;
-		return true;
-	}
-	
-	public boolean afegirFitxa(Fitxa tipus) throws Exception{
-		
-		try {
-			if(!boolTeFitxa) {
-				this.boolTeFitxa = true;
-				this.fitxa = tipus;
+		if(teFitxa) {
+			if (x < 4) {
+				fitxa = new Peo(ident, 1);
+				ident++;
 			}
-			else return false;
-			return true;
+			else {
+				fitxa = new Peo(ident, 0);
+				ident++;
+			}
 		}
+	}
+	
+	//Gets
+	public Fitxa getFitxa() {return fitxa;}
+	public boolean getTeFitxa() {return boolTeFitxa;}
+	public int getX() {return intPosicioX;}
+	public int getY() {return intPosicioY;}
+	
+	//posa la fitxa a null
+	public void eliminarFitxa() {
 		
-		catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException();
-		
-		}
+		fitxa = null;
+	}
+	
+	//Crea una dama quan un peo arriba al final del taulell
+	public void afegirDama(Fitxa fitxa) throws IllegalArgumentException{
+	
+		int ID = fitxa.iID;
+		int color = fitxa.iColor;
+				
+		fitxa = new Dama(ID, color);
+	
 	}
 }

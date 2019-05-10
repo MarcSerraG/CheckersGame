@@ -5,15 +5,16 @@ import java.util.Vector;
 
 public class Dama extends Fitxa{
 	
+	//Constructor
 	//0 = white, 1 = black
-	public Dama (String strID, int strColor) throws IllegalArgumentException{
-		//Falta especificar strID (pot ser int?)
-		if(strColor <0 || strColor > 1) throw new IllegalArgumentException("Color only can be 0 or 1");
+	public Dama (int iID, int iColor) throws IllegalArgumentException{
 		
-		this.strID = strID;
-		this.strColor = strColor;
+		if(iColor <0 || iColor > 1) throw new IllegalArgumentException("Color only can be 0 or 1");
+		
+		this.iID = iID;
+		this.iColor = iColor;
 	}
-
+	//Torna una llista de moviments possibles de dama
 	public List<int[]> possiblesMoviments(int x, int y) throws IllegalArgumentException{
 		
 		if (x < 0 || x > 9 || y < 0 || y > 9) throw new IllegalArgumentException("Position out of bounds");
@@ -24,7 +25,6 @@ public class Dama extends Fitxa{
 				for (int j = 0; j <= 9; j++) {
 					//Select only diagonal movements
 					if(Math.abs(i) == Math.abs(j)) {
-						
 						int fila = x+i;
 						int columna = y+j;
 						//Select only positions inside the game
@@ -37,5 +37,5 @@ public class Dama extends Fitxa{
 				}
 			}
 		return llista;
-	}	
+	}
 }

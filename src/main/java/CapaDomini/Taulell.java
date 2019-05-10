@@ -41,11 +41,11 @@ public class Taulell {
 		
 		return casella.getTeFitxa();
 	}
-	
+	//Aquest metode obte una casella i calcula totes les caselles possibles on la fitxa es pot moure
 	public List veurePossiblesMoviments(Casella casella) throws Exception{
 		
 		if(casella == null) throw new IllegalArgumentException("Parameter can not be empty");
-		if(casella.getTeFitxa() == false) throw new IllegalArgumentException("You selected an empty space");
+		if(!casella.getTeFitxa()) throw new IllegalArgumentException("You selected an empty space");
 		List<int[]> moviment;
 		
 		try {
@@ -57,9 +57,11 @@ public class Taulell {
 				int [] mov = moviment.get(i);
 				//If a position is full
 				if (casMatCaselles[mov[0]][mov[1]].getTeFitxa()) {
-					//If the color match with own
-					if (casMatCaselles[mov[0]][mov[1]].getFitxa().strColor == casella.getFitxa().strColor) 
+					//If the color match
+					if (casMatCaselles[mov[0]][mov[1]].getFitxa().iColor == casella.getFitxa().iColor) 
 						moviment.remove(i);
+					//If the color does not match
+					else this.casellaMatada(moviment, casella, mov);
 			}
 			
 		}
@@ -70,7 +72,11 @@ public class Taulell {
 		}
 		return moviment;
 	}
-	
+	private List casellaMatada(List<int[]>moviment, Casella casella, int[] mov) {
+		
+		return moviment;
+	}
+	//Aquest metode recorre el taulell i li assigna 
 	public void omplirTaulell() {
 		boolean toca = false;
 		

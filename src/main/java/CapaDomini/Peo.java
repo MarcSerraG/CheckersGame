@@ -5,42 +5,42 @@ import java.util.Vector;
 
 public class Peo extends Fitxa{
 	
+	//Constructor
 	//0 = white, 1 = black
-	public Peo (String strID, int strColor) throws IllegalArgumentException{
-		//Falta especificar strID (pot ser int?)
-		if(strColor <0 || strColor > 1) throw new IllegalArgumentException("Color only can be 0 or 1");
+	public Peo (int iID, int iColor) throws IllegalArgumentException{
 		
-		this.strID = strID;
-		this.strColor = strColor;
+		if(iColor <0 || iColor > 1) throw new IllegalArgumentException("Color only can be 0 or 1");
+		
+		this.iID = iID;
+		this.iColor = iColor;
 	}
-
-	public List<int[]> possiblesMoviments(int x, int y) throws Exception{
+	//Torna una llista de moviments possibles de peo
+	public List<int[]> possiblesMoviments(int x, int y) throws IllegalArgumentException{
 		
 		if (x < 0 || x > 9 || y < 0 || y > 9) throw new IllegalArgumentException("Position out of bounds");
 		
-		try {
-			Vector <int[]> llista = new Vector<int[]>();
+		Vector <int[]> llista = new Vector<int[]>();
 			
-			switch (this.strColor) {
-			//In case it is white it can only go up
+		switch (this.iColor) {
+		//In case it is white it can only go up
 			case 0: 
 				int mov1[] = {x+1, y+1};
 				int mov2[] = {x+1, y-1};
+				//Select only positions inside the game
+				if(!(mov1[0]<0 || mov1[0]>9 || mov1[1]<0 || mov1[1]>9))
 				llista.add(mov1);
+				if(!(mov2[0]<0 || mov2[0]>9 || mov2[1]<0 || mov2[1]>9))
 				llista.add(mov2);
 			//In case it is black it can only go down	
 			case 1:
-				int mov3[] = {x+1, y+1};
-				int mov4[] = {x+1, y-1};
-				llista.add(mov3);
-				llista.add(mov4);
-			}
-			return llista;
+				int mov3[] = {x-1, y+1};
+				int mov4[] = {x-1, y-1};
+				//Select only positions inside the game
+				if(!(mov3[0]<0 || mov3[0]>9 || mov3[1]<0 || mov3[1]>9))
+					llista.add(mov3);
+					if(!(mov4[0]<0 || mov4[0]>9 || mov4[1]<0 || mov4[1]>9))
+					llista.add(mov4);
 		}
-		
-		catch(Exception e) {
-			throw new Exception();
-		}
+		return llista;
 	}
-	
 }
