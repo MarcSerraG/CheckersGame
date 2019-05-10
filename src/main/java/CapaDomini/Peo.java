@@ -20,27 +20,29 @@ public class Peo extends Fitxa{
 		if (x < 0 || x > 9 || y < 0 || y > 9) throw new IllegalArgumentException("Position out of bounds");
 		
 		Vector <int[]> llista = new Vector<int[]>();
-			
+		int mov1[] = null;
+		int mov2[] = null;
+		
 		switch (this.iColor) {
 		//In case it is white it can only go up
 			case 0: 
-				int mov1[] = {x+1, y+1};
-				int mov2[] = {x+1, y-1};
-				//Select only positions inside the game
-				if(!(mov1[0]<0 || mov1[0]>9 || mov1[1]<0 || mov1[1]>9))
-				llista.add(mov1);
-				if(!(mov2[0]<0 || mov2[0]>9 || mov2[1]<0 || mov2[1]>9))
-				llista.add(mov2);
+				mov1[0] = x-1;
+				mov1[1] = y+1;
+				mov2[0] = x-1;
+				mov2[1] = y-1;
+				
 			//In case it is black it can only go down	
 			case 1:
-				int mov3[] = {x-1, y+1};
-				int mov4[] = {x-1, y-1};
-				//Select only positions inside the game
-				if(!(mov3[0]<0 || mov3[0]>9 || mov3[1]<0 || mov3[1]>9))
-					llista.add(mov3);
-					if(!(mov4[0]<0 || mov4[0]>9 || mov4[1]<0 || mov4[1]>9))
-					llista.add(mov4);
+				mov1[0] = x+1;
+				mov1[1] = y+1;
+				mov2[0] = x+1;
+				mov2[1] = y-1;
 		}
+		//Select only positions inside the game
+		if(!(mov1[0]<0 || mov1[0]>9 || mov1[1]<0 || mov1[1]>9))
+		llista.add(mov1);
+		if(!(mov2[0]<0 || mov2[0]>9 || mov2[1]<0 || mov2[1]>9))
+		llista.add(mov2);
 		return llista;
 	}
 }
