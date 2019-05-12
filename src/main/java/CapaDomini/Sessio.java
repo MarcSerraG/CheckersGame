@@ -1,16 +1,15 @@
 package CapaDomini;
-import java.util.List;
-import java.util.TimerTask;
-import java.util.Timer;
+import java.util.*;
 
 public class Sessio {
 
 	private String strUsuariNom;
 	private Timer timInactivitat;
-	private int iNumPartides;
+	// private int iNumPartides; Length del set 
 	private int iNumPendents; // Partides pendents de la teva atenció
 	private boolean boolConnectat;
 	private TimerTask task;
+	private Set<Partida> setPartides;
 	
 	/**
 	 * Construeix una sessió, possant el timer a 10 minuts del time-out
@@ -20,7 +19,7 @@ public class Sessio {
 	 * @param iPendents Número de partides pendents de l'atenció de l'usuari
 	 * @throws IllegalArgumentException Nom no pot ser null, ni tenir menys de tres caracters. Partides no pot ser menor que zero.
 	 */
-	public Sessio(String strNom, int iPartides, int iPendents) throws IllegalArgumentException {
+	public Sessio(String strNom, Set<Partida> setPartides, int iPendents) throws IllegalArgumentException {
 		/* Comprovació d'arguments */
 		if (strNom == null) {
 			throw new IllegalArgumentException("El nom no pot ser null.");
@@ -37,8 +36,9 @@ public class Sessio {
 		
 		/* Assignació d'atributs */
 		this.strUsuariNom = strNom;
-		this.iNumPartides = iPartides;
 		this.iNumPendents = iPendents;
+		this.boolConnectat = true;
+		this.setPartides = new HashSet<Partida>(setPartides);
 		
 		/* Configurem el timer */
 		this.timInactivitat = new Timer();
@@ -46,14 +46,28 @@ public class Sessio {
 	        @Override
 	        public void run()
 	        {
-	            timeOut();
+	            /* TO-DO: Disconnect task... Com? Potser el timer hauria d'estar al main?*/
+	        	boolConnectat = false;
 	        }
 		};
-		this.timInactivitat.schedule(task, 10*1000*60);
 	}
 	
+	public int getNumPartides() {return this.setPartides.size();}
+	public String getNom() {return this.strUsuariNom;}
+	public int getPartidesPendents() {return this.iNumPendents;}
+	
+	
 	public void timeOut() {
+		this.timInactivitat.cancel();
+		this.timInactivitat.purge();
+		this.actualitzarPartides();
 		
+		if (this.iNumPendents > 0) {
+			this.timInactivitat.schedule(task, 10*1000*60); // 10 minuts
+		}
+		else {
+			this.timInactivitat.schedule(task, 20*1000*60); // 20 minuts
+		}
 	}
 	
 	public boolean registrarUsuari() {
@@ -61,14 +75,13 @@ public class Sessio {
 		return false;
 	}
 	
-	public List<String> veureUsuaris() {
+	public Set<String> veureUsuaris() {
 		
 		return null;
 	}
 	
-	public List<Partida> actualitzarPartides() {
+	public void actualitzarPartides() {
 	
-		return null;
 	}
 	
 	public boolean convidarUsuariPartida(String strNom) {
