@@ -49,4 +49,9 @@ public class Casella {
 		fitxa = new Dama(ID, color);
 	
 	}
+	public String toString() {
+		
+		if(this.boolTeFitxa) return "["+fitxa+"]";
+		else return "[ ]";
+	}
 }

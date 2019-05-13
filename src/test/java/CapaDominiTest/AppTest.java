@@ -1,4 +1,4 @@
-package JocDames;
+package CapaDominiTest;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

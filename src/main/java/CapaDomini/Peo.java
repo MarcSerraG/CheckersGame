@@ -9,7 +9,7 @@ public class Peo extends Fitxa{
 	//0 = white, 1 = black
 	public Peo (int iID, int iColor) throws IllegalArgumentException{
 		
-		if(iColor <0 || iColor > 1) throw new IllegalArgumentException("Color only can be 0 or 1");
+		if(iColor < 0 || iColor > 1) throw new IllegalArgumentException("Color only can  be 0 or 1");
 		
 		this.iID = iID;
 		this.iColor = iColor;
@@ -39,10 +39,14 @@ public class Peo extends Fitxa{
 				mov2[1] = y-1;
 		}
 		//Select only positions inside the game
-		if(!(mov1[0]<0 || mov1[0]>9 || mov1[1]<0 || mov1[1]>9))
+		if(!(mov1[0]<0 || mov1[0]> 9 || mov1[1]<0 || mov1[1]>9))
 		llista.add(mov1);
 		if(!(mov2[0]<0 || mov2[0]>9 || mov2[1]<0 || mov2[1]>9))
 		llista.add(mov2);
 		return llista;
+	}
+	public String toString() {
+		
+		return String.valueOf(iColor);
 	}
 }

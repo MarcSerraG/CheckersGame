@@ -8,7 +8,8 @@ public class Taulell {
 	private int intLlargada;
 	private int intAmplada;
 	private Casella casMatCaselles[][];
-	private int intNumFitxes;
+	private int intNumNegres;
+	private int intNumBlanques;
 	private final int UPRIGHT = 0;
 	private final int DOWNRIGHT = 1;
 	private final int DOWNLEFT = 2;
@@ -19,18 +20,22 @@ public class Taulell {
 		
 		intLlargada = llarg;
 		intAmplada = ample;
-		intNumFitxes = 0;
+		intNumBlanques = 0;
+		intNumNegres = 0;
 		casMatCaselles = new Casella [llarg][ample];
 		this.omplirTaulell(llarg, ample);
 	}
+	//Gets
+	public int getNumNegres(){return this.intNumNegres;}
+	public int getNumBlanques(){return this.intNumBlanques;}
 	//No se que fa aquest metode
 	public void actualitzarTaulell() {
 		
 	}
 	//No se que fa aquest metode
-	public boolean seleccionarFitxa(Casella casella) {
+	public Casella seleccionarFitxa(int fila, int columna) {
 		
-		return casella.getTeFitxa();
+		return casMatCaselles[fila][columna];
 	}
 	//Comprova si es factible realitzar el moviment, el fa, mata si cal i retorna si ha matat o no
 	public boolean moviment (Casella casOrigen, Casella casDesti) throws IllegalArgumentException{
@@ -242,12 +247,16 @@ public class Taulell {
 	private void omplirTaulell(int llarg, int ample) {
 		boolean toca = false;
 		
-		for (int i = 0; i <= llarg; i++) {
-			for(int j = 0; j <= ample; j++) {
+		for (int i = 0; i <= llarg - 1; i++) {
+			for(int j = 0; j <= ample - 1; j++) {
 				if ((i%2 == 0 && j%2 != 0)||(i%2 != 0 && j%2 == 0)) {
-					if (i <= 3 && i >= llarg - 4) {
+					if (i <= 3) {
 						toca = true;
-						intNumFitxes++;
+						intNumNegres++;
+					}
+					if(i >= llarg - 4) {
+						toca = true;
+						intNumBlanques++;
 					}
 				}
 				else toca = false;
@@ -255,5 +264,17 @@ public class Taulell {
 			}
 		}
 	}
-	
+	public String toString() {
+		
+		String text = "";
+		
+		for(int i = 0; i <= 9; i++ ) {
+			text += "\n";
+			for (int j = 0; j <= 9; j++) {
+				text += casMatCaselles[i][j];
+			}
+		}
+		
+		return text + "\n";
+	}
 }
