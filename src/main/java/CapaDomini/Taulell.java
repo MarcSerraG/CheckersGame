@@ -9,16 +9,19 @@ public class Taulell {
 	private int intAmplada;
 	private Casella casMatCaselles[][];
 	private int intNumFitxes;
-	private static final int UPRIGHT = 0;
-	private static final int DOWNRIGHT = 1;
-	private static final int DOWNLEFT = 2;
-	private static final int UPLEFT = 3;
+	private final int UPRIGHT = 0;
+	private final int DOWNRIGHT = 1;
+	private final int DOWNLEFT = 2;
+	private final int UPLEFT = 3;
 	
 	//Constructor
 	public Taulell(int llarg, int ample) {
-		//Falta especificar comportament del constructor!
-		//omplir taulell anira amb amplada i llargada o sera generic?
-		this.omplirTaulell();
+		
+		intLlargada = llarg;
+		intAmplada = ample;
+		intNumFitxes = 0;
+		casMatCaselles = new Casella [llarg][ample];
+		this.omplirTaulell(llarg, ample);
 	}
 	//No se que fa aquest metode
 	public void actualitzarTaulell() {
@@ -234,13 +237,13 @@ public class Taulell {
 		return moviment;
 	}
 	//Recorre el taulell i fa new de les caselles
-	private void omplirTaulell() {
+	private void omplirTaulell(int llarg, int ample) {
 		boolean toca = false;
 		
-		for (int i = 0; i <= 9; i++) {
-			for(int j = 0; j <= 9; j++) {
+		for (int i = 0; i <= llarg; i++) {
+			for(int j = 0; j <= ample; j++) {
 				if ((i%2 == 0 && j%2 != 0)||(i%2 != 0 && j%2 == 0)) {
-					if (i <= 3 && i >= 6) {
+					if (i <= 3 && i >= llarg - 4) {
 						toca = true;
 						intNumFitxes++;
 					}
