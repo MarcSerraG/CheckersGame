@@ -32,8 +32,8 @@ public class Taulell {
 		
 		return casella.getTeFitxa();
 	}
-	//Comprova si es factible realitzar el moviment, el fa i mata si cal
-	public void moviment (Casella casOrigen, Casella casDesti) throws IllegalArgumentException{
+	//Comprova si es factible realitzar el moviment, el fa, mata si cal i retorna si ha matat o no
+	public boolean moviment (Casella casOrigen, Casella casDesti) throws IllegalArgumentException{
 		
 		if(!casOrigen.getTeFitxa()) throw new IllegalArgumentException("origin empty");
 		if(casDesti.getTeFitxa()) throw new IllegalArgumentException("destination full");
@@ -87,11 +87,11 @@ public class Taulell {
 		//Remove killed token
 		if(!(casMatar == null)) {
 			casMatar.eliminarFitxa();
-			
-
+			return true;
 		}
+		return false;
 	}
-	//Calcula totes les caselles possibles on la fitxa es pot moure
+ 	//Calcula totes les caselles possibles on la fitxa es pot moure
 	private List<int[]> veurePossiblesMoviments(Casella casella) throws IllegalArgumentException{
 		
 		if(casella == null) throw new IllegalArgumentException("Parameter can not be empty");
