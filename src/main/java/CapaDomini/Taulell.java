@@ -37,6 +37,7 @@ public class Taulell {
 		
 		if(!casOrigen.getTeFitxa()) throw new IllegalArgumentException("origin empty");
 		if(casDesti.getTeFitxa()) throw new IllegalArgumentException("destination full");
+		if(casOrigen.equals(casDesti)) throw new IllegalArgumentException("origin and destination are the same");
 		
 		int[] posOrigen = {casOrigen.getX(), casOrigen.getY()};
 		int[] posDesti = {casDesti.getX(), casDesti.getY()};
@@ -59,7 +60,7 @@ public class Taulell {
 			//RIGHT
 			else direccio = DOWNRIGHT;
 		}
-		//Know if it has killed
+		//Know if it can kill
 		switch (direccio) {
 		//UPRIGHT
 		case 0:
@@ -86,7 +87,8 @@ public class Taulell {
 		//Remove killed token
 		if(!(casMatar == null)) {
 			casMatar.eliminarFitxa();
-			//veurePossiblesMoviments(casellaDesti)????????
+			
+
 		}
 	}
 	//Calcula totes les caselles possibles on la fitxa es pot moure
