@@ -49,7 +49,9 @@ public class Taulell {
 		//Store all the possible movements
 		List<int[]> moviments = this.veurePossiblesMoviments(casOrigen);
 		//Find out if the destination position is within possible movements
-		for(int i = 0; i<moviments.size();i++) if(moviments.get(i)[0] == casDesti.getX() && moviments.get(i)[1] == casDesti.getY()) trobat = true;
+		for(int i = 0; i<moviments.size();i++) {
+			if(moviments.get(i)[0] == casDesti.getX() && moviments.get(i)[1] == casDesti.getY()) trobat = true;
+		}
 		if(!trobat) throw new IllegalArgumentException("destination out of range");
 		//Find if we can kill any token
 		casMatar = this.potMatar(casOrigen, casDesti);
@@ -284,10 +286,12 @@ public class Taulell {
 	//Retorna el taulell dibuixat amb la disposicio de les fitxes
 	public String toString() {
 		
-		String text = "";
+		int fila = 0;
+		String text = "  0  1  2  3  4  5  6  7  8  9 ";
 		
 		for(int i = 0; i <= 9; i++ ) {
-			text += "\n";
+			text += "\n" + fila;
+			fila ++;
 			for (int j = 0; j <= 9; j++) {
 				text += casMatCaselles[i][j];
 			}
