@@ -7,11 +7,11 @@ public class Dama extends Fitxa{
 	
 	//Constructor
 	//0 = white, 1 = black
-	public Dama (int iID, int iColor) throws IllegalArgumentException{
+	public Dama (int iColor) throws IllegalArgumentException{
 		
 		if(iColor <0 || iColor > 1) throw new IllegalArgumentException("Color only can be 0 or 1");
 		
-		this.iID = iID;
+		this.iID = this.hashCode();
 		this.iColor = iColor;
 	}
 	//Torna una llista de moviments possibles de dama
@@ -37,5 +37,10 @@ public class Dama extends Fitxa{
 				}
 			}
 		return llista;
+	}
+	//Retorna D per dama blanca i d per dama negra
+	public String toString() {
+		if(iColor == 0) return "D";
+		else return "d";
 	}
 }
