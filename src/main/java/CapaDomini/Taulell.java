@@ -38,6 +38,7 @@ public class Taulell {
 		
 		Casella casMatar = null;
 		boolean trobat = false;
+		boolean haMatat = false;
 		//Store all the possible movements
 		List<int[]> moviments = this.veurePossiblesMoviments(casOrigen);
 		//Find out if the destination position is within possible movements
@@ -48,13 +49,17 @@ public class Taulell {
 		//Find if we can kill any token
 		casMatar = this.potMatar(casOrigen, casDesti);
 		//Remove killed token if there is any
-		if(!(casMatar == null)) casMatar.eliminarFitxa();
+		if(!(casMatar == null)) {
+			casMatar.eliminarFitxa();
+			haMatat = true;
+		}
 		//Move selected token
 		casDesti.setFitxa(casOrigen.getFitxa());
 		casOrigen.eliminarFitxa();
-		return false;
+		this.canviDama(casDesti.getFitxa().iColor, casDesti);
+		return haMatat;
 	}
- 	//Calcula totes les caselles possibles on la fitxa es pot moure
+	//Calcula totes les caselles possibles on la fitxa es pot moure
 	private List<int[]> veurePossiblesMoviments(Casella casOrigen) throws IllegalArgumentException{
 		
 		List<int[]> moviment;
@@ -242,6 +247,13 @@ public class Taulell {
 			}break;
 		}
 		return casMatar;
+	}
+	//Canvia a dama una fitxa que hagi arribat al final del taulell
+	private void canviDama(int color, Casella casella) {
+		//White 
+		if(color == 0 && casella.getX()== 0) casMatCaselles[casella.getX()][casella.getY()].afegirDama(casella.getFitxa());
+		if(color == 1 && casella.getX()== 9) casMatCaselles[casella.getX()][casella.getY()].afegirDama(casella.getFitxa());
+		
 	}
 	//Recorre el taulell i fa new de les caselles
 	private void omplirTaulell(int llarg, int ample) {
