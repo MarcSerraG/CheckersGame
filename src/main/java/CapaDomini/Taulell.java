@@ -44,6 +44,7 @@ public class Taulell {
 		//Find out if the destination position is within possible movements
 		for(int i = 0; i<moviments.size();i++) {
 			if(moviments.get(i)[0] == casDesti.getX() && moviments.get(i)[1] == casDesti.getY()) trobat = true;
+			System.out.println(moviments.get(i)[0] + " "+ moviments.get(i)[1]);
 		}
 		if(!trobat) throw new IllegalArgumentException("destination out of range");
 		//Find if we can kill any token
@@ -83,39 +84,54 @@ public class Taulell {
 		if (casMatCaselles[mov[0]][mov[1]].getFitxa().iColor == casella.getFitxa().iColor)	moviment.remove(mov);
 		//If the color does not match
 		else {
-			int newMov[] = mov;
+			for(int i = 0; i < moviment.size(); i++) {
+				System.out.println(moviment.get(i)[0] + " " + moviment.get(i)[1]);
+			}
+			System.out.println("Entra");
+			int newMov[] = {mov[0], mov[1]};
 			if (casella.getFitxa() instanceof Peo) {
-				
 				switch (casella.getFitxa().iColor) {
 				//White side, always up
 				case 0:
 					//Movement to the right
 					if(mov[1] > casella.getY()){
+						System.out.println("blanc dret");
 						newMov[0]--;
 						newMov[1]++;
 					}
 					//Movement to the left
 					else {
+						System.out.println("blanc esquerra");
+						System.out.println("anticMov"+newMov[0] + newMov[1]);
 						newMov[0]--;
 						newMov[1]--;
+						System.out.println("nouMov"+newMov[0] + newMov[1]);
 					}break;
 					//Black side, always down
 				case 1:
 					//Movement to the right
 					if(mov[1] > casella.getY()){
+						System.out.println("negre dret");
 						newMov[0]++;
 						newMov[1]++;
 					}
 					//Movement to the left
 					else {
+						System.out.println("negre esquerra");
 						newMov[0]++;
 						newMov[1]--;
 					}break;
 				}
 				//If the new movement is inside the game and it is empty
-				if (!((newMov[0]<0 || newMov[0]>9 || newMov[1]<0 || newMov[1]>9) &&
-					casMatCaselles[newMov[0]][newMov[1]].getTeFitxa())) moviment.add(newMov);
+				if (!(newMov[0]<0 || newMov[0]>9 || newMov[1]<0 || newMov[1]>9) &&
+					(casMatCaselles[newMov[0]][newMov[1]].getTeFitxa())) {
+					System.out.println("pre" + mov[0] + " " + mov[1]);
+					System.out.println("afegim" + newMov[0] + " " + newMov[1]);
+					System.out.println("post" + mov[0] + " " + mov[1]);
+					moviment.add(newMov);
+				}
 				//Always remove previous possible movement
+				System.out.println("eliminem" + mov[0] + " " + mov[1]);
 				moviment.remove(mov);
 			}
 		}
