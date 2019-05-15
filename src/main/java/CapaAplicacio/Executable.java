@@ -7,10 +7,10 @@ public class Executable {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Login frame = new Login();
+					BaseInterficie frame = new BaseInterficie();
 					frame.setVisible(true);
 					frame.setResizable(false);
-					frame.setSize(500, 250);
+					frame.setSize(1200, 700);
 					frame.setLocationRelativeTo(null);
 					frame.setTitle("Joc de Dames");
 
