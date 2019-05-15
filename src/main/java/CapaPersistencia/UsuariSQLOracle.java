@@ -1,38 +1,58 @@
 package CapaPersistencia;
 
-import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import CapaDomini.Sessio;
 
 public class UsuariSQLOracle {
 	
 	private String SQLINSERT =  "INSERT INTO ";
-	private static ConnectionSQLOracle conn;
+	private String SQLSELECT = "SELECT ";
+	private ConnectionSQLOracle conn;
 	
 	public UsuariSQLOracle (ConnectionSQLOracle con) {
 		this.conn = con;
 	}
 	
-	
-	public Sessio selectUsuari() {
-		return null;
-	}
-	
-	public boolean deleteUsuari(String nom) {
-		return false;
+	/**
+	 * 
+	 * @param nomUsu
+	 * @return
+	 * si no existeix null
+	 */
+	public String getPasword(String nomUsu) {
+		
+		String psw = null;
+		String sql = SQLSELECT;
+		sql += "(CONTRASENYA) FROM USUARIS WHERE ";
+		sql += "nom = '"+nomUsu+"'";
+		try {
+			ResultSet rs = conn.ferSelect(sql);
+			while (rs.next()) {
+				psw = rs.getString("CONTRASENYA");
+			}
+			return psw;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return psw;
+		}
 	}
 	
 	//Insert usuari
-	public boolean insertUsuari(String nom, String contrasena, String email, String user) {
+	/**
+	 * 
+	 * @param nom
+	 * @param contrasena
+	 * @param email
+	 * @return
+	 */
+	public boolean insertUsuari(String nom, String contrasena, String email) {
 		
 		//String sql
 		String sql = SQLINSERT;
 		sql += "USUARIS ";
 		sql += "VALUES ";
-		sql += "('"+nom+"','"+contrasena+"','"+email+"','"+user+"')";
-		
-		System.out.println(sql);
+		sql += "('"+nom+"','"+contrasena+"','"+email+"')";
 		try {
 			if (conn == null)
 				return false;
