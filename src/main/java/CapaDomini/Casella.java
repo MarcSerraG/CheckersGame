@@ -51,4 +51,11 @@ public class Casella {
 		if(this.boolTeFitxa) return "["+fitxa+"]";
 		else return "[ ]";
 	}
+	public boolean equals(Object o) {
+		
+		if(!(o instanceof Casella)) return false;
+		Casella cas = (Casella) o;
+		if ((this.getX() == cas.getX()) && (this.getY()==cas.getY())) return true;
+		return false;
+	}
 }

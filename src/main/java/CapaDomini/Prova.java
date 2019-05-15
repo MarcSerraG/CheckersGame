@@ -21,9 +21,8 @@ public class Prova {
 			fDesti = keyboard.nextInt();
 			System.out.println("A quina columna vols moure?");
 			cDesti = keyboard.nextInt();
-			taulell.moviment(taulell.seleccionarFitxa(fOrigen, cOrigen), taulell.seleccionarFitxa(fDesti, cDesti));
+			taulell.moviment(taulell.seleccionarCasella(fOrigen,cOrigen), taulell.seleccionarCasella(fDesti, cDesti));
 		}
 		System.out.println("Fi del joc");
 	}
-		
 }
