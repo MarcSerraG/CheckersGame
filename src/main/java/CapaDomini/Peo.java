@@ -30,6 +30,7 @@ public class Peo extends Fitxa{
 				mov1[1] = y+1;
 				mov2[0] = x-1;
 				mov2[1] = y-1;
+				break;
 				
 			//In case it is black it can only go down	
 			case 1:
@@ -37,9 +38,10 @@ public class Peo extends Fitxa{
 				mov1[1] = y+1;
 				mov2[0] = x+1;
 				mov2[1] = y-1;
+				break;
 		}
 		//Select only positions inside the game
-		if(!(mov1[0]<0 || mov1[0]> 9 || mov1[1]<0 || mov1[1]>9))
+		if(!(mov1[0]<0 || mov1[0]>9 || mov1[1]<0 || mov1[1]>9))
 		llista.add(mov1);
 		if(!(mov2[0]<0 || mov2[0]>9 || mov2[1]<0 || mov2[1]>9))
 		llista.add(mov2);

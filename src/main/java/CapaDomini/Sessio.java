@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Sessio {
 
-	private String strUsuariNom;
+	private Usuari usrJugador; // L'usuari jugant
 	private Timer timInactivitat;
 	// private int iNumPartides; Length del set 
 	private int iNumPendents; // Partides pendents de la teva atenció
@@ -27,15 +27,12 @@ public class Sessio {
 		if (strNom.length() < 3) {
 			throw new IllegalArgumentException("El nom no pot tenir menys de tres caracters.");
 		}
-		if (iPartides < 0) {
-			throw new IllegalArgumentException("L'usuari no pot tenir menys de 0 partides.");
-		}
 		if (iPendents < 0) {
 			throw new IllegalArgumentException("Les partides pendents no poden ser menys de 0.");
 		}
 		
 		/* Assignació d'atributs */
-		this.strUsuariNom = strNom;
+		this.usrJugador = new Usuari(strNom);
 		this.iNumPendents = iPendents;
 		this.boolConnectat = true;
 		this.setPartides = new HashSet<Partida>(setPartides);
@@ -53,7 +50,7 @@ public class Sessio {
 	}
 	
 	public int getNumPartides() {return this.setPartides.size();}
-	public String getNom() {return this.strUsuariNom;}
+	public String getUsuariNom() {return this.usrJugador.getNom();}
 	public int getPartidesPendents() {return this.iNumPendents;}
 	
 	

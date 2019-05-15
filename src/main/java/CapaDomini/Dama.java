@@ -18,24 +18,19 @@ public class Dama extends Fitxa{
 	public List<int[]> possiblesMoviments(int x, int y) throws IllegalArgumentException{
 		
 		if (x < 0 || x > 9 || y < 0 || y > 9) throw new IllegalArgumentException("Position out of bounds");
+			
+		Vector <int[]> llista = new Vector<int[]>();
+			
+		int[] mov1 = {x-1,y+1};
+		int[] mov2 = {x-1,y-1};
+		int[] mov3 = {x+1,y+1};
+		int[] mov4 = {x+1,y-1};
 		
-			Vector <int[]> llista = new Vector<int[]>();
-			//Go through the matrix to get all positions
-			for (int i = 0; i <= 9; i++) {
-				for (int j = 0; j <= 9; j++) {
-					//Select only diagonal movements
-					if(Math.abs(i) == Math.abs(j)) {
-						int fila = x+i;
-						int columna = y+j;
-						//Select only positions inside the game
-						if (fila < 0 || fila > 9 || columna < 0 || columna > 9) {
-							//Add position to list
-							int[] mov = {x + i, y + j};
-							llista.add(mov);
-						}
-					}
-				}
-			}
+		//Select only positions inside the game
+		if(!(mov1[0]<0 || mov1[0]>9 || mov1[1]<0 || mov1[1]>9)) llista.add(mov1);
+		if(!(mov2[0]<0 || mov2[0]>9 || mov2[1]<0 || mov2[1]>9)) llista.add(mov2);
+		if(!(mov3[0]<0 || mov3[0]>9 || mov3[1]<0 || mov3[1]>9)) llista.add(mov3);
+		if(!(mov4[0]<0 || mov4[0]>9 || mov4[1]<0 || mov4[1]>9)) llista.add(mov4);
 		return llista;
 	}
 	//Retorna D per dama blanca i d per dama negra
