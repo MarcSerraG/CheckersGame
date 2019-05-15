@@ -22,7 +22,6 @@ public class Prova {
 			System.out.println("A quina columna vols moure?");
 			cDesti = keyboard.nextInt();
 			taulell.moviment(taulell.seleccionarFitxa(fOrigen, cOrigen), taulell.seleccionarFitxa(fDesti, cDesti));
-			
 		}
 		System.out.println("Fi del joc");
 	}
