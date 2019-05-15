@@ -16,11 +16,6 @@ public class UsuariSQLOracle {
 	
 	//Usuari sessio no
 	public Sessio selectUsuari() {
-		
-		
-		
-		
-		
 		return null;
 	}
 	
