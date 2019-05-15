@@ -1,5 +1,6 @@
 package CapaDomini;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Prova {
@@ -25,4 +26,5 @@ public class Prova {
 		}
 		System.out.println("Fi del joc");
 	}
+		
 }

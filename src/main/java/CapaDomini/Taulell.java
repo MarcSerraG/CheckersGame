@@ -44,56 +44,24 @@ public class Taulell {
 		if(casDesti.getTeFitxa()) throw new IllegalArgumentException("destination full");
 		if(casOrigen.equals(casDesti)) throw new IllegalArgumentException("origin and destination are the same");
 		
-		int[] posOrigen = {casOrigen.getX(), casOrigen.getY()};
-		int[] posDesti = {casDesti.getX(), casDesti.getY()};
-		int direccio;
 		Casella casMatar = null;
+		boolean trobat = false;
+		//Store all the possible movements
 		List<int[]> moviments = this.veurePossiblesMoviments(casOrigen);
-		if(!moviments.contains(posDesti)) throw new IllegalArgumentException("destination out of range");
-		//Know the direction of the movement
-		//UP
-		if(posDesti[0]<posOrigen[0]) {
-			//LEFT
-			if(posDesti[1]<posOrigen[1]) direccio = UPLEFT; 
-			//RIGHT
-			else direccio = UPRIGHT;
+		//Find out if the destination position is within possible movements
+		for(int i = 0; i<moviments.size();i++) {
+			if(moviments.get(i)[0] == casDesti.getX() && moviments.get(i)[1] == casDesti.getY()) trobat = true;
 		}
-		//DOWN
-		else {
-			//LEFT
-			if(posDesti[1]<posOrigen[1]) direccio = DOWNLEFT; 
-			//RIGHT
-			else direccio = DOWNRIGHT;
-		}
-		//Know if it can kill
-		switch (direccio) {
-		//UPRIGHT
-		case 0:
-			if(casMatCaselles[posDesti[0]+1][posDesti[1]-1].getTeFitxa() && !(casMatCaselles[posDesti[0]+1][posDesti[1]-1]).equals(casOrigen)) {
-				casMatar = casMatCaselles[posDesti[0]+1][posDesti[1]-1];
-			}
-				
-		//DOWNRIGHT
-		case 1:
-			if(casMatCaselles[posDesti[0]-1][posDesti[1]-1].getTeFitxa() && !(casMatCaselles[posDesti[0]+1][posDesti[1]-1]).equals(casOrigen)) {
-				casMatar = casMatCaselles[posDesti[0]-1][posDesti[1]-1];
-			}
-		//DOWNLEFT
-		case 2:
-			if(casMatCaselles[posDesti[0]-1][posDesti[1]+1].getTeFitxa() && !(casMatCaselles[posDesti[0]+1][posDesti[1]-1]).equals(casOrigen)) {
-				casMatar = casMatCaselles[posDesti[0]-1][posDesti[1]+1];
-			}
-		//UPLEFT
-		case 3:
-			if(casMatCaselles[posDesti[0]+1][posDesti[1]+1].getTeFitxa() && !(casMatCaselles[posDesti[0]+1][posDesti[1]-1]).equals(casOrigen)) {
-				casMatar = casMatCaselles[posDesti[0]+1][posDesti[1]+1];
-			}
-		}
-		//Remove killed token
+		if(!trobat) throw new IllegalArgumentException("destination out of range");
+		//Find if we can kill any token
+		casMatar = this.potMatar(casOrigen, casDesti);
+		//Remove killed token if there is any
 		if(!(casMatar == null)) {
 			casMatar.eliminarFitxa();
 			return true;
 		}
+		casDesti.setFitxa(casOrigen.getFitxa());
+		casOrigen.eliminarFitxa();
 		return false;
 	}
  	//Calcula totes les caselles possibles on la fitxa es pot moure
@@ -243,6 +211,57 @@ public class Taulell {
 		moviment.remove(mov);
 		return moviment;
 	}
+	//Retorna la casella que s'ha de matar si es pot
+	private Casella potMatar(Casella casOrigen, Casella casDesti) {
+		
+		int[] posOrigen = casOrigen.getCoordenades();
+		int[] posDesti = casDesti.getCoordenades();
+		int direccio;
+		Casella casMatar = null;
+		//Know the direction of the movement
+		//UP
+		if(posDesti[0]<posOrigen[0]) {
+			//LEFT
+			if(posDesti[1]<posOrigen[1]) direccio = UPLEFT; 
+			//RIGHT
+			else direccio = UPRIGHT;
+		}
+		//DOWN
+		else {
+			//LEFT
+			if(posDesti[1]<posOrigen[1]) direccio = DOWNLEFT; 
+			//RIGHT
+			else direccio = DOWNRIGHT;
+		}
+		//Know if it can kill
+		switch (direccio) {
+		//UPRIGHT
+		case 0:
+			if(casMatCaselles[posDesti[0]+1][posDesti[1]-1].getTeFitxa() && !(((casMatCaselles[posDesti[0]+1][posDesti[1]-1]).getX() == posOrigen[0]) && (casMatCaselles[posDesti[0]+1][posDesti[1]-1]).getY() == posOrigen[1])) {
+				casMatar = casMatCaselles[posDesti[0]+1][posDesti[1]-1];
+				System.out.print("upright");
+			}	
+		//DOWNRIGHT
+		case 1:
+			if(casMatCaselles[posDesti[0]-1][posDesti[1]-1].getTeFitxa() && !(((casMatCaselles[posDesti[0]-1][posDesti[1]-1]).getX() == posOrigen[0]) && (casMatCaselles[posDesti[0]-1][posDesti[1]-1]).getY() == posOrigen[1])) {
+				casMatar = casMatCaselles[posDesti[0]-1][posDesti[1]-1];
+				System.out.print("downright");
+			}
+		//DOWNLEFT
+		case 2:
+			if(casMatCaselles[posDesti[0]-1][posDesti[1]+1].getTeFitxa() && !(((casMatCaselles[posDesti[0]-1][posDesti[1]+1]).getX() == posOrigen[0]) && (casMatCaselles[posDesti[0]-1][posDesti[1]+1]).getY() == posOrigen[1])) {
+				casMatar = casMatCaselles[posDesti[0]-1][posDesti[1]+1];
+				System.out.print("downleft");
+			}
+		//UPLEFT
+		case 3:
+			if(casMatCaselles[posDesti[0]+1][posDesti[1]+1].getTeFitxa() && !(((casMatCaselles[posDesti[0]+1][posDesti[1]+1]).getX() == posOrigen[0]) && (casMatCaselles[posDesti[0]+1][posDesti[1]+1]).getY() == posOrigen[1])) {
+				casMatar = casMatCaselles[posDesti[0]+1][posDesti[1]+1];
+				System.out.print("upleft");
+			}
+		}
+		return casMatar;
+	}
 	//Recorre el taulell i fa new de les caselles
 	private void omplirTaulell(int llarg, int ample) {
 		boolean toca = false;
@@ -264,12 +283,15 @@ public class Taulell {
 			}
 		}
 	}
+	//Retorna el taulell dibuixat amb la disposicio de les fitxes
 	public String toString() {
 		
-		String text = "";
+		int fila = 0;
+		String text = "  0  1  2  3  4  5  6  7  8  9 ";
 		
 		for(int i = 0; i <= 9; i++ ) {
-			text += "\n";
+			text += "\n" + fila;
+			fila ++;
 			for (int j = 0; j <= 9; j++) {
 				text += casMatCaselles[i][j];
 			}
