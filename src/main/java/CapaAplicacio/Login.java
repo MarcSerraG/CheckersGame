@@ -1,18 +1,17 @@
 package CapaAplicacio;
 
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SpringLayout;
 
-public class Login extends JFrame implements ActionListener {
+public class Login extends JPanel implements ActionListener {
 
 	JLabel labelMain, labelUsername, labelPassword;
 
@@ -21,13 +20,19 @@ public class Login extends JFrame implements ActionListener {
 	JPasswordField fPassword;
 
 	public Login() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 30, 400, 30);
-		getContentPane().setLayout(null);
 
-		ImageIcon ImageIcon = new ImageIcon(getClass().getResource("Tecno2.png"));
-		Image Image = ImageIcon.getImage();
-		this.setIconImage(Image);
+	}
+
+	public JPanel LoginCreate() {
+		JPanel panelLogin = new JPanel();
+
+		panelLogin.setLayout(new SpringLayout());
+
+		JLabel labelName = new JLabel("Enter Name: ");
+		JLabel labelDescription = new JLabel("Enter Description: ");
+		JTextField textName = new JTextField(20);
+		JTextField textDescription = new JTextField(20);
+		JButton buttonLogin = new JButton("Button Me");
 
 		labelMain = new JLabel("Login");
 
@@ -48,13 +53,14 @@ public class Login extends JFrame implements ActionListener {
 
 		labelMain.setFont(new Font("SansSerif", Font.BOLD, 16));
 
-		getContentPane().add(labelMain);
-		getContentPane().add(labelUsername);
-		getContentPane().add(tfUsuari);
-		getContentPane().add(labelPassword);
-		getContentPane().add(fPassword);
-		getContentPane().add(bEntrar);
+		panelLogin.add(labelMain);
+		panelLogin.add(labelUsername);
+		panelLogin.add(labelPassword);
+		panelLogin.add(tfUsuari);
+		panelLogin.add(fPassword);
+		panelLogin.add(bEntrar);
 
+		return panelLogin;
 	}
 
 	public void actionPerformed(ActionEvent e) {
