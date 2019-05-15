@@ -14,7 +14,7 @@ public class UsuariSQLOracle {
 		this.conn = con;
 	}
 	
-	//Usuari sessio no
+	
 	public Sessio selectUsuari() {
 		return null;
 	}
