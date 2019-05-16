@@ -24,10 +24,12 @@ public class Login extends JPanel implements ActionListener {
 	JTextField tfUsuari;
 	JPasswordField fPassword;
 	UsuariSQLOracle userSQL;
+	BaseInterficie interficieBase;
 
-	public Login(ConnectionSQLOracle connection) {
+	public Login(ConnectionSQLOracle connection, BaseInterficie base) {
 
 		userSQL = new UsuariSQLOracle(connection);
+		interficieBase = base;
 	}
 
 	public JPanel LoginCreate() {
@@ -95,23 +97,32 @@ public class Login extends JPanel implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 
-		// String Password = labelPassword.getText();
-
 		if (e.getSource() == this.bEntrar) {
-			comprovarPassword();
+			entrar();
 		}
 
 	}
 
-	private void comprovarPassword() {
+	private void entrar() {
 
 		if (tfUsuari.getText().equals("")) {
 			labelMessage.setText("UserName is required");
 		} else {
 			if (labelMessage.getText().equals("Welcome New User!")) {
 				userSQL.insertUsuari(tfUsuari.getText(), fPassword.getText(), "-", "1");
+				desbloquejarBotons();
+				canviPantalla();
+				// toDo = Entrar al Joc
 			} else {
+				if (fPassword.getText().equals(userSQL.getPasword(tfUsuari.getText()))) {
+					labelMessage.setText(tfUsuari.getText() + " is connected!");
+					desbloquejarBotons();
+					canviPantalla();
 
+					// toDo = Entrar al Joc
+				} else {
+					labelMessage.setText("Incorrect Password!");
+				}
 			}
 		}
 	}
@@ -120,9 +131,6 @@ public class Login extends JPanel implements ActionListener {
 
 		if (!(tfUsuari.getText().equals(""))) {
 			String PassSQL = userSQL.getPasword(tfUsuari.getText());
-			System.out.println(PassSQL);
-			System.out.println(tfUsuari.getText());
-
 			if (PassSQL == null) {
 				labelMessage.setText("Welcome New User!");
 			} else {
@@ -130,6 +138,24 @@ public class Login extends JPanel implements ActionListener {
 			}
 		}
 
+	}
+
+	private void desbloquejarBotons() {
+		interficieBase.bLogin.setEnabled(false);
+		interficieBase.bNewGame.setEnabled(true);
+		interficieBase.bContinue_Game.setEnabled(true);
+		interficieBase.bStatistics.setEnabled(true);
+		interficieBase.bEvents.setEnabled(true);
+		interficieBase.bConnected_Players.setEnabled(true);
+		interficieBase.bLogOut.setEnabled(true);
+	}
+
+	private void canviPantalla() {
+		interficieBase.centerLogin.setVisible(false);
+		interficieBase.bEvents.setBackground(new Color(237, 215, 178));
+		interficieBase.bEvents.setForeground(Color.BLACK);
+		interficieBase.bLogin.setBackground(Color.GRAY);
+		interficieBase.bLogin.setForeground(Color.WHITE);
 	}
 
 }
