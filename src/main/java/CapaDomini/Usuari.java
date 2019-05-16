@@ -5,10 +5,10 @@ public class Usuari {
 	private String strNom;
 	
 	public Usuari(String nom) throws IllegalArgumentException {
-		if (strNom == null) {
+		if (nom == null) {
 			throw new IllegalArgumentException("El nom no pot ser null.");
 		}
-		if (strNom.length() < 3) {
+		if (nom.length() < 3) {
 			throw new IllegalArgumentException("El nom no pot tenir menys de tres caracters.");
 		}
 		this.strNom = nom;

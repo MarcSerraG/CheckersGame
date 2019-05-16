@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import CapaDomini.Usuari;
+
 public class ConnectionSQLOracle {
 
 	private Connection conn;
@@ -81,10 +83,14 @@ public class ConnectionSQLOracle {
 			
 			ConnectionSQLOracle cn =  new ConnectionSQLOracle("g3geilab1", "g3geilab1");
 			UsuariSQLOracle usu =  new UsuariSQLOracle(cn);
-			usu.insertUsuari("Marc", "1234", "msg@gmail.com","0");
+			//usu.insertUsuari("Marc", "1234", "msg@gmail.com","0");
 			System.out.println("OK");
-			String nom = usu.getPasword("Marc");
-			System.out.println(nom);
+			//String nom = usu.getPasword("Marc");
+			//System.out.println(nom);
+			PartidesSQLOracle pt = new PartidesSQLOracle(cn);
+			Usuari n = new Usuari("Marc");
+			Usuari c = new Usuari("Ricard");
+			pt.crearPartidaNova(n, c);
 			
 			
 		} catch (Exception e) {

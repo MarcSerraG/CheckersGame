@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
+import CapaDomini.Sessio;
 import CapaDomini.Usuari;
 
 public class UsuariSQLOracle {
@@ -52,6 +53,9 @@ public class UsuariSQLOracle {
 		sql += "(nom,connectat) FROM USUARIS";
 		try {
 			rs = conn.ferSelect(sql);
+			while (rs.next()) {
+				
+			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
