@@ -124,7 +124,7 @@ public class Taulell {
 				}
 				//If the new movement is inside the game and it is empty
 				if (!(newMov[0]<0 || newMov[0]>9 || newMov[1]<0 || newMov[1]>9) &&
-					(casMatCaselles[newMov[0]][newMov[1]].getTeFitxa())) {
+					!(casMatCaselles[newMov[0]][newMov[1]].getTeFitxa())) {
 					System.out.println("pre" + mov[0] + " " + mov[1]);
 					System.out.println("afegim" + newMov[0] + " " + newMov[1]);
 					System.out.println("post" + mov[0] + " " + mov[1]);
@@ -268,6 +268,7 @@ public class Taulell {
 	private void canviDama(int color, Casella casella) {
 		//White 
 		if(color == 0 && casella.getX()== 0) casMatCaselles[casella.getX()][casella.getY()].afegirDama(casella.getFitxa());
+		//Black
 		if(color == 1 && casella.getX()== 9) casMatCaselles[casella.getX()][casella.getY()].afegirDama(casella.getFitxa());
 		
 	}
