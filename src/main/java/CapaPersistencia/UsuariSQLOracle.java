@@ -90,9 +90,12 @@ public class UsuariSQLOracle {
 	 * @return
 	 */
 	public boolean insertUsuari(String nom, String contrasena, String email, String connected) {
+		
+		String sql = ConnectionSQLOracle.SQLINSERT;
+		
 		sql += "USUARIS ";
 		sql += "VALUES ";
-		sql += "('" + nom + "','" + contrasena + "','" + email + "','" + connected + "')";
+		sql += "('" + nom + "','" + contrasena + "','" + email + "'," + connected + ")";
 		try {
 			if (conn == null)
 				return false;
