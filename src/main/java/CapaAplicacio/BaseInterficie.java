@@ -7,6 +7,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -23,10 +24,11 @@ import CapaPersistencia.ConnectionSQLOracle;
 public class BaseInterficie extends JFrame implements ActionListener {
 
 	private JButton bLogin, bNewGame, bContinue_Game, bStatistics, bEvents, bConnected_Players, bLogOut;
+	private ConnectionSQLOracle cn;
 
 	public BaseInterficie() {
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 30, 400, 30);
 		getContentPane().setLayout(new BorderLayout());
 
@@ -35,28 +37,27 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.setIconImage(Image);
 
 		MenuBar();
-		Login log = Center();
 
-		ConnectionSQLOracle conn = ServerConnection(log);
+		ServerConnection();
 
-		if (conn == null)
-			JOptionPane.showMessageDialog(null, "Error connecting to server. Please try Again!");
+		Login log = Center(cn);
+		if (cn != null)
+			log.labelMessage.setText("Connection Sucessfully");
 
 	}
 
-	public ConnectionSQLOracle ServerConnection(Login log) {
+	public void ServerConnection() {
 		try {
-			ConnectionSQLOracle cn = new ConnectionSQLOracle("g3geilab1", "g3geilab1");
-			log.labelMessage.setText("Connection Compleated!");
-			return cn;
+			cn = new ConnectionSQLOracle("g3geilab1", "g3geilab1");
+
 		} catch (Exception e) {
-			log.labelMessage.setText("Error Connecting to Server. Please try again" + e);
-			return null;
+			JOptionPane.showMessageDialog(null, "Error connecting to server. Please try Again!");
+			cn = null;
 		}
 	}
 
-	private Login Center() {
-		Login login = new Login();
+	private Login Center(ConnectionSQLOracle conn) {
+		Login login = new Login(conn);
 		JPanel center = login.LoginCreate();
 		getContentPane().add(center, BorderLayout.CENTER);
 		login.labelMessage.setText("Connecting...");
@@ -299,6 +300,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 	}
 
 	private void actionLogOut() {
+
 		this.bLogOut.setBackground(new Color(237, 215, 178));
 		this.bLogOut.setForeground(Color.BLACK);
 
@@ -316,4 +318,16 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bEvents.setForeground(Color.WHITE);
 		this.bConnected_Players.setForeground(Color.WHITE);
 	}
+
+	public void CloseConnection() {
+		try {
+			cn.tancaConeccio();
+			System.out.print("Tancat");
+		} catch (SQLException e) {
+		}
+
+		System.exit(0);
+
+	}
+
 }

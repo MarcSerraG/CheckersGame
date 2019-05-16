@@ -4,12 +4,17 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+
+import CapaPersistencia.ConnectionSQLOracle;
+import CapaPersistencia.UsuariSQLOracle;
 
 public class Login extends JPanel implements ActionListener {
 
@@ -18,9 +23,11 @@ public class Login extends JPanel implements ActionListener {
 	JButton bEntrar;
 	JTextField tfUsuari;
 	JPasswordField fPassword;
+	UsuariSQLOracle userSQL;
 
-	public Login() {
+	public Login(ConnectionSQLOracle connection) {
 
+		userSQL = new UsuariSQLOracle(connection);
 	}
 
 	public JPanel LoginCreate() {
@@ -65,6 +72,9 @@ public class Login extends JPanel implements ActionListener {
 		labelPassword.setForeground(new Color(237, 215, 178));
 		labelMessage.setForeground(new Color(237, 215, 178));
 
+		fPassword.addActionListener(this);
+		bEntrar.addActionListener(this);
+
 		panelLogin.add(labelMain);
 		panelLogin.add(labelUsername);
 		panelLogin.add(labelPassword);
@@ -73,18 +83,53 @@ public class Login extends JPanel implements ActionListener {
 		panelLogin.add(bEntrar);
 		panelLogin.add(labelMessage);
 
+		fPassword.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				comprovarUsuari();
+			}
+		});
+
 		return panelLogin;
 	}
 
 	public void actionPerformed(ActionEvent e) {
 
-		String Usuari = labelUsername.getText();
-		String Password = labelPassword.getText();
+		// String Password = labelPassword.getText();
+
+		if (e.getSource() == this.bEntrar) {
+			comprovarPassword();
+		}
 
 	}
 
-	public void changeMessage(String Message) {
-		labelMessage.setText(Message);
+	private void comprovarPassword() {
+
+		if (tfUsuari.getText().equals("")) {
+			labelMessage.setText("UserName is required");
+		} else {
+			if (labelMessage.getText().equals("Welcome New User!")) {
+				userSQL.insertUsuari(tfUsuari.getText(), fPassword.getText(), "-", "1");
+			} else {
+
+			}
+		}
+	}
+
+	private void comprovarUsuari() {
+
+		if (!(tfUsuari.getText().equals(""))) {
+			String PassSQL = userSQL.getPasword(tfUsuari.getText());
+			System.out.println(PassSQL);
+			System.out.println(tfUsuari.getText());
+
+			if (PassSQL == null) {
+				labelMessage.setText("Welcome New User!");
+			} else {
+				labelMessage.setText("Welcome back " + tfUsuari.getText() + "!");
+			}
+		}
+
 	}
 
 }
