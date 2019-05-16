@@ -10,36 +10,36 @@ public class UsuariSQLOracle {
 	
 	
 	private ConnectionSQLOracle conn;
-	
-	public UsuariSQLOracle (ConnectionSQLOracle con) {
+
+	public UsuariSQLOracle(ConnectionSQLOracle con) {
 		this.conn = con;
 	}
-	
+
 	/**
 	 * Retorna la contrasenya tipo string del usuari passat
 	 * @param nomUsu
-	 * @return
-	 * si no existeix null
+	 * @return si no existeix null
 	 */
 	public String getPasword(String nomUsu) {
-		
+
 		String psw = null;
 		String sql = ConnectionSQLOracle.SQLSELECT;
 		sql += "(CONTRASENYA) FROM USUARIS WHERE ";
-		sql += "nom = '"+nomUsu+"'";
+		sql += "nom = '" + nomUsu + "'";
 		try {
 			ResultSet rs = conn.ferSelect(sql);
 			while (rs.next()) {
 				psw = rs.getString("CONTRASENYA");
 			}
 			return psw;
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return psw;
 		}
 	}
-	
+
+	// Insert usuari
 	/**
 	 * Torna un resultset de nom usuaris i conectats o no
 	 * @return
@@ -89,13 +89,10 @@ public class UsuariSQLOracle {
 	 * @param email
 	 * @return
 	 */
-	public boolean insertUsuari(String nom, String contrasena, String email) {
-		
-		//String sql
-		String sql = ConnectionSQLOracle.SQLINSERT;
+	public boolean insertUsuari(String nom, String contrasena, String email, String connected) {
 		sql += "USUARIS ";
 		sql += "VALUES ";
-		sql += "('"+nom+"','"+contrasena+"','"+email+"',0)";
+		sql += "('" + nom + "','" + contrasena + "','" + email + "','" + connected + "')";
 		try {
 			if (conn == null)
 				return false;

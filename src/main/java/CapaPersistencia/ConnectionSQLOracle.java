@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class ConnectionSQLOracle {
-	
+
 	private Connection conn;
 	
 	public static String SQLINSERT =  "INSERT INTO ";
@@ -15,16 +15,15 @@ public class ConnectionSQLOracle {
 	public static String SQLUPDATE = "UPDATE";
 	
 	public ConnectionSQLOracle(String usuari, String contrasena) throws Exception {
-		Class.forName("oracle.jdbc.driver.OracleDriver"); 
-		
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@kali.tecnocampus.cat:1521:sapiens",
-				usuari, contrasena);
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+
+		conn = DriverManager.getConnection("jdbc:oracle:thin:@kali.tecnocampus.cat:1521:sapiens", usuari, contrasena);
 	}
-	
+
 	public void tancaConeccio() throws SQLException {
 		conn.close();
 	}
-	
+
 	/**
 	 * 
 	 * @param sql
@@ -32,7 +31,7 @@ public class ConnectionSQLOracle {
 	 * @throws SQLException
 	 */
 	public ResultSet ferSelect(String sql) throws SQLException {
-		
+
 		Statement st = null;
 		ResultSet rs = null;
 		try {
@@ -41,19 +40,20 @@ public class ConnectionSQLOracle {
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		try {
 			rs = st.executeQuery(sql);
 			return rs;
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param sql script sql
-	 * @return Retorna true si sa fet la transaccio correctament false si no funciona
+	 * @return Retorna true si sa fet la transaccio correctament false si no
+	 *         funciona
 	 * @throws SQLException
 	 * 
 	 */
@@ -65,7 +65,7 @@ public class ConnectionSQLOracle {
 			e.printStackTrace();
 			return false;
 		}
-		
+
 		try {
 			st.executeUpdate(sql);
 			return true;

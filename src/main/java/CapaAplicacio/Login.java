@@ -1,5 +1,6 @@
 package CapaAplicacio;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,11 +10,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SpringLayout;
 
 public class Login extends JPanel implements ActionListener {
 
-	JLabel labelMain, labelUsername, labelPassword;
+	JLabel labelMain, labelUsername, labelPassword, labelMessage;
 
 	JButton bEntrar;
 	JTextField tfUsuari;
@@ -26,32 +26,44 @@ public class Login extends JPanel implements ActionListener {
 	public JPanel LoginCreate() {
 		JPanel panelLogin = new JPanel();
 
-		panelLogin.setLayout(new SpringLayout());
+		panelLogin.setLayout(null);
 
-		JLabel labelName = new JLabel("Enter Name: ");
-		JLabel labelDescription = new JLabel("Enter Description: ");
-		JTextField textName = new JTextField(20);
-		JTextField textDescription = new JTextField(20);
-		JButton buttonLogin = new JButton("Button Me");
+		labelMain = new JLabel("DRAUGHTS", JLabel.TRAILING);
+		labelMessage = new JLabel("", JLabel.TRAILING); // Connecting... ; Welcome New User! ;
+														// Incorrect Password...
 
-		labelMain = new JLabel("Login");
-
-		labelUsername = new JLabel("Usuari");
-		labelPassword = new JLabel("Contrasenya");
+		labelUsername = new JLabel("UserName", JLabel.TRAILING);
+		labelPassword = new JLabel("Password", JLabel.TRAILING);
 
 		tfUsuari = new JTextField();
 		fPassword = new JPasswordField();
 
-		bEntrar = new JButton("Entrar");
+		bEntrar = new JButton("Let's Play!");
+		labelMain.setFont(new Font("Monospaced", Font.BOLD, 60));
+		labelUsername.setFont(new Font("SansSerif", Font.BOLD, 12));
+		labelPassword.setFont(new Font("SansSerif", Font.BOLD, 12));
+		labelMessage.setFont(new Font("SansSerif", Font.BOLD, 12));
 
-		labelMain.setBounds(210, 10, 200, 30);
-		labelUsername.setBounds(80, 50, 200, 30);
-		labelPassword.setBounds(80, 90, 200, 30);
-		tfUsuari.setBounds(200, 50, 200, 30);
-		fPassword.setBounds(200, 90, 200, 30);
-		bEntrar.setBounds(190, 140, 100, 30);
+		labelMain.setBounds(210, 100, 400, 50);
+		labelUsername.setBounds(-225, 220, 500, 30);
+		tfUsuari.setBounds(210, 250, 500, 30);
+		labelPassword.setBounds(-230, 320, 500, 30);
+		fPassword.setBounds(210, 350, 500, 30);
+		bEntrar.setBounds(210, 450, 500, 40);
+		labelMessage.setBounds(450, 625, 500, 40);
 
-		labelMain.setFont(new Font("SansSerif", Font.BOLD, 16));
+		fPassword.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		tfUsuari.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+
+		panelLogin.setBackground(Color.DARK_GRAY);
+		bEntrar.setBackground(Color.GRAY);
+		bEntrar.setForeground(Color.WHITE);
+		tfUsuari.setBackground(Color.LIGHT_GRAY);
+		fPassword.setBackground(Color.LIGHT_GRAY);
+		labelMain.setForeground(new Color(237, 215, 178));
+		labelUsername.setForeground(new Color(237, 215, 178));
+		labelPassword.setForeground(new Color(237, 215, 178));
+		labelMessage.setForeground(new Color(237, 215, 178));
 
 		panelLogin.add(labelMain);
 		panelLogin.add(labelUsername);
@@ -59,16 +71,20 @@ public class Login extends JPanel implements ActionListener {
 		panelLogin.add(tfUsuari);
 		panelLogin.add(fPassword);
 		panelLogin.add(bEntrar);
+		panelLogin.add(labelMessage);
 
 		return panelLogin;
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 
 		String Usuari = labelUsername.getText();
 		String Password = labelPassword.getText();
 
+	}
+
+	public void changeMessage(String Message) {
+		labelMessage.setText(Message);
 	}
 
 }
