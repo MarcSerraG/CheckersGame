@@ -50,7 +50,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 			log.labelMessage.setText("Connection Compleated!");
 			return cn;
 		} catch (Exception e) {
-			log.labelMessage.setText("Error Connecting to Server. Please try again");
+			log.labelMessage.setText("Error Connecting to Server. Please try again" + e);
 			return null;
 		}
 	}
