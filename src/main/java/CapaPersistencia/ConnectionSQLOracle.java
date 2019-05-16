@@ -9,7 +9,11 @@ import java.sql.Statement;
 public class ConnectionSQLOracle {
 
 	private Connection conn;
-
+	
+	public static String SQLINSERT =  "INSERT INTO ";
+	public static String SQLSELECT = "SELECT ";
+	public static String SQLUPDATE = "UPDATE";
+	
 	public ConnectionSQLOracle(String usuari, String contrasena) throws Exception {
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 
@@ -70,16 +74,22 @@ public class ConnectionSQLOracle {
 			return false;
 		}
 	}
-	/*
-	 * public static void main(String[] args) { //Sa dimportar odbc.jar try {
-	 * 
-	 * ConnectionSQLOracle cn = new ConnectionSQLOracle("g3geilab1", "g3geilab1");
-	 * UsuariSQLOracle usu = new UsuariSQLOracle(cn); //usu.insertUsuari("Marc",
-	 * "1234", "msg@gmail.com"); System.out.println("OK"); String nom =
-	 * usu.getPasword("Marc"); System.out.println(nom);
-	 * 
-	 * 
-	 * } catch (Exception e) { System.out.println(e); } }
-	 */
+	
+	public static void main(String[] args) {
+		//Sa dimportar odbc.jar
+		try {
+			
+			ConnectionSQLOracle cn =  new ConnectionSQLOracle("g3geilab1", "g3geilab1");
+			UsuariSQLOracle usu =  new UsuariSQLOracle(cn);
+			usu.insertUsuari("Marc", "1234", "msg@gmail.com","0");
+			System.out.println("OK");
+			String nom = usu.getPasword("Marc");
+			System.out.println(nom);
+			
+			
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
 
 }
