@@ -15,7 +15,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import CapaPersistencia.ConnectionSQLOracle;
 
 public class BaseInterficie extends JFrame implements ActionListener {
 
@@ -32,15 +35,32 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.setIconImage(Image);
 
 		MenuBar();
-		Center();
+		Login log = Center();
+
+		ConnectionSQLOracle conn = ServerConnection(log);
+
+		if (conn == null)
+			JOptionPane.showMessageDialog(null, "Error connecting to server. Please try Again!");
 
 	}
 
-	private void Center() {
+	public ConnectionSQLOracle ServerConnection(Login log) {
+		try {
+			ConnectionSQLOracle cn = new ConnectionSQLOracle("g3geilab1", "g3geilab1");
+			log.labelMessage.setText("Connection Compleated!");
+			return cn;
+		} catch (Exception e) {
+			log.labelMessage.setText("Error Connecting to Server. Please try again");
+			return null;
+		}
+	}
+
+	private Login Center() {
 		Login login = new Login();
 		JPanel center = login.LoginCreate();
 		getContentPane().add(center, BorderLayout.CENTER);
-		center.setBackground(Color.DARK_GRAY);
+		login.labelMessage.setText("Connecting...");
+		return login;
 	}
 
 	private void MenuBar() {
@@ -58,7 +78,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bConnected_Players = createButton("Connected Players", size);
 		this.bLogOut = createButton("Log Out", size);
 
-		this.bLogin.setBackground(Color.GRAY);
+		this.bLogin.setBackground(new Color(237, 215, 178));
 		this.bNewGame.setBackground(Color.GRAY);
 		this.bContinue_Game.setBackground(Color.GRAY);
 		this.bStatistics.setBackground(Color.GRAY);
@@ -66,7 +86,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bConnected_Players.setBackground(Color.GRAY);
 		this.bLogOut.setBackground(Color.GRAY);
 
-		this.bLogin.setForeground(Color.WHITE);
+		this.bLogin.setForeground(Color.BLACK);
 		this.bNewGame.setForeground(Color.WHITE);
 		this.bContinue_Game.setForeground(Color.WHITE);
 		this.bStatistics.setForeground(Color.WHITE);
