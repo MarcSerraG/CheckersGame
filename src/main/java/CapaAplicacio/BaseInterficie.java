@@ -23,8 +23,10 @@ import CapaPersistencia.ConnectionSQLOracle;
 
 public class BaseInterficie extends JFrame implements ActionListener {
 
-	private JButton bLogin, bNewGame, bContinue_Game, bStatistics, bEvents, bConnected_Players, bLogOut;
+	public JButton bLogin, bNewGame, bContinue_Game, bStatistics, bEvents, bConnected_Players, bLogOut;
+	public JPanel centerLogin;
 	private ConnectionSQLOracle cn;
+	private Login log;
 
 	public BaseInterficie() {
 
@@ -40,7 +42,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 
 		ServerConnection();
 
-		Login log = Center(cn);
+		log = CenterLogin(cn);
 		if (cn != null)
 			log.labelMessage.setText("Connection Sucessfully");
 
@@ -56,10 +58,10 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		}
 	}
 
-	private Login Center(ConnectionSQLOracle conn) {
-		Login login = new Login(conn);
-		JPanel center = login.LoginCreate();
-		getContentPane().add(center, BorderLayout.CENTER);
+	private Login CenterLogin(ConnectionSQLOracle conn) {
+		Login login = new Login(conn, this);
+		centerLogin = login.LoginCreate();
+		getContentPane().add(centerLogin, BorderLayout.CENTER);
 		login.labelMessage.setText("Connecting...");
 		return login;
 	}
@@ -102,6 +104,13 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bEvents.addActionListener(this);
 		this.bConnected_Players.addActionListener(this);
 		this.bLogOut.addActionListener(this);
+
+		this.bNewGame.setEnabled(false);
+		this.bContinue_Game.setEnabled(false);
+		this.bStatistics.setEnabled(false);
+		this.bEvents.setEnabled(false);
+		this.bConnected_Players.setEnabled(false);
+		this.bLogOut.setEnabled(false);
 
 		Image myImage;
 		try {
@@ -148,8 +157,6 @@ public class BaseInterficie extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-
-		System.out.print("New Event!");
 
 		if (e.getSource() == this.bLogin) {
 			System.out.print("Boto Login!");
@@ -300,29 +307,34 @@ public class BaseInterficie extends JFrame implements ActionListener {
 	}
 
 	private void actionLogOut() {
+		/*
+		 * TODO: desconectar l'usuari i tornar a la pagina de login
+		 * this.bLogOut.setBackground(new Color(237, 215, 178));
+		 * this.bLogOut.setForeground(Color.BLACK);
+		 * 
+		 * this.bLogin.setBackground(Color.GRAY);
+		 * this.bNewGame.setBackground(Color.GRAY);
+		 * this.bContinue_Game.setBackground(Color.GRAY);
+		 * this.bStatistics.setBackground(Color.GRAY);
+		 * this.bEvents.setBackground(Color.GRAY);
+		 * this.bConnected_Players.setBackground(Color.GRAY);
+		 * 
+		 * this.bLogin.setForeground(Color.WHITE);
+		 * this.bNewGame.setForeground(Color.WHITE);
+		 * this.bContinue_Game.setForeground(Color.WHITE);
+		 * this.bStatistics.setForeground(Color.WHITE);
+		 * this.bEvents.setForeground(Color.WHITE);
+		 * this.bConnected_Players.setForeground(Color.WHITE);
+		 * 
+		 */
 
-		this.bLogOut.setBackground(new Color(237, 215, 178));
-		this.bLogOut.setForeground(Color.BLACK);
-
-		this.bLogin.setBackground(Color.GRAY);
-		this.bNewGame.setBackground(Color.GRAY);
-		this.bContinue_Game.setBackground(Color.GRAY);
-		this.bStatistics.setBackground(Color.GRAY);
-		this.bEvents.setBackground(Color.GRAY);
-		this.bConnected_Players.setBackground(Color.GRAY);
-
-		this.bLogin.setForeground(Color.WHITE);
-		this.bNewGame.setForeground(Color.WHITE);
-		this.bContinue_Game.setForeground(Color.WHITE);
-		this.bStatistics.setForeground(Color.WHITE);
-		this.bEvents.setForeground(Color.WHITE);
-		this.bConnected_Players.setForeground(Color.WHITE);
+		CloseConnection();
 	}
 
 	public void CloseConnection() {
 		try {
+			// ToDO: posar a BD l'usuari a 0
 			cn.tancaConeccio();
-			System.out.print("Tancat");
 		} catch (SQLException e) {
 		}
 
