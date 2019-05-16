@@ -43,7 +43,7 @@ public class UsuariSQLOracle {
 	/**
 	 * Torna un resultset de nom usuaris i conectats o no
 	 * @return
-	 * TODO
+	 * FENSE
 	 */
 	public Set<Usuari> retornaUsuaris() {
 		
