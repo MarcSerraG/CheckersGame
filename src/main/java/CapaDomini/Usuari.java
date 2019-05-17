@@ -33,4 +33,7 @@ public class Usuari {
 		
 		return this.strNom.equals(((Usuari)o).strNom);
 	}
+	public String toString() {
+		return this.strNom;
+	}
 }
