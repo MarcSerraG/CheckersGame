@@ -26,5 +26,6 @@ public class Prova {
 			taulell.moviment(taulell.seleccionarCasella(fOrigen,cOrigen), taulell.seleccionarCasella(fDesti, cDesti));
 		}
 		System.out.println("Fi del joc");
+			
 	}
 }

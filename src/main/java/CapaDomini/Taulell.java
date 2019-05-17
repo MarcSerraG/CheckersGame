@@ -63,6 +63,7 @@ public class Taulell {
 	//Calcula totes les caselles possibles on la fitxa es pot moure
 	private List<int[]> veurePossiblesMoviments(Casella casOrigen) throws IllegalArgumentException{
 		
+		int[] movMatada = null;
 		List<int[]> moviment;
 		//Get full movements
 		moviment = casOrigen.getFitxa().possiblesMoviments(casOrigen.getX(), casOrigen.getY());
@@ -71,22 +72,23 @@ public class Taulell {
 			int [] mov = moviment.get(i);
 			//If a position is full
 			if (casMatCaselles[mov[0]][mov[1]].getTeFitxa()) {
-				if(casOrigen.getFitxa() instanceof Peo) moviment = this.casellaMatadaPeo(moviment, casOrigen, mov);
+				if(casOrigen.getFitxa() instanceof Peo) {
+					movMatada = this.casellaMatadaPeo(moviment, casOrigen, mov);
+					if (movMatada != null) moviment.set(i, movMatada);
+				}
 				else moviment = this.casellaMatadaDama(moviment, casOrigen, mov);
 			}
 		}
 		return moviment;
 	}
 	//Modifica els possibles moviments del peo quan hi ha una fitxa al cami
-	private List<int[]> casellaMatadaPeo(List<int[]>moviment, Casella casella, int[] mov) {
+	private int[] casellaMatadaPeo(List<int[]>moviment, Casella casella, int[] mov) {
 		
+		int[] movMatada = null;
 		//If the color match
-		if (casMatCaselles[mov[0]][mov[1]].getFitxa().iColor == casella.getFitxa().iColor)	moviment.remove(mov);
+		if (casMatCaselles[mov[0]][mov[1]].getFitxa().iColor == casella.getFitxa().iColor)	return null;
 		//If the color does not match
 		else {
-			for(int i = 0; i < moviment.size(); i++) {
-				System.out.println(moviment.get(i)[0] + " " + moviment.get(i)[1]);
-			}
 			System.out.println("Entra");
 			int newMov[] = {mov[0], mov[1]};
 			if (casella.getFitxa() instanceof Peo) {
@@ -128,14 +130,11 @@ public class Taulell {
 					System.out.println("pre" + mov[0] + " " + mov[1]);
 					System.out.println("afegim" + newMov[0] + " " + newMov[1]);
 					System.out.println("post" + mov[0] + " " + mov[1]);
-					moviment.add(newMov);
+					return newMov;
 				}
-				//Always remove previous possible movement
-				System.out.println("eliminem" + mov[0] + " " + mov[1]);
-				moviment.remove(mov);
 			}
 		}
-		return moviment;
+		return null;
 	}
 	//Modifica els possibles moviments de la dama quan hi ha una fitxa al cami
 	private List<int[]> casellaMatadaDama(List<int[]>moviment, Casella casella, int[]mov){
