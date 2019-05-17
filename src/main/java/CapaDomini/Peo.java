@@ -9,7 +9,7 @@ public class Peo extends Fitxa{
 	//0 = white, 1 = black
 	public Peo (int iColor) throws IllegalArgumentException{
 		
-		if(iColor < 0 || iColor > 1) throw new IllegalArgumentException("Color only can  be 0 or 1");
+		if(iColor < 0 || iColor > 1) throw new IllegalArgumentException("Color only can be 0 or 1");
 		
 		this.iID = this.hashCode();
 		this.iColor = iColor;
