@@ -73,7 +73,7 @@ public class Taulell {
 			//If a position is full
 			if (casMatCaselles[mov[0]][mov[1]].getTeFitxa()) {
 				if(casOrigen.getFitxa() instanceof Peo) {
-					movMatada = this.casellaMatadaPeo(moviment, casOrigen, mov);
+					movMatada = this.casellaMatadaPeo(casOrigen, mov);
 					if (movMatada != null) moviment.set(i, movMatada);
 				}
 				else moviment = this.casellaMatadaDama(moviment, casOrigen, mov);
@@ -82,14 +82,12 @@ public class Taulell {
 		return moviment;
 	}
 	//Modifica els possibles moviments del peo quan hi ha una fitxa al cami
-	private int[] casellaMatadaPeo(List<int[]>moviment, Casella casella, int[] mov) {
+	private int[] casellaMatadaPeo(Casella casella, int[] mov) {
 		
-		int[] movMatada = null;
 		//If the color match
 		if (casMatCaselles[mov[0]][mov[1]].getFitxa().iColor == casella.getFitxa().iColor)	return null;
 		//If the color does not match
 		else {
-			System.out.println("Entra");
 			int newMov[] = {mov[0], mov[1]};
 			if (casella.getFitxa() instanceof Peo) {
 				switch (casella.getFitxa().iColor) {
@@ -97,29 +95,23 @@ public class Taulell {
 				case 0:
 					//Movement to the right
 					if(mov[1] > casella.getY()){
-						System.out.println("blanc dret");
 						newMov[0]--;
 						newMov[1]++;
 					}
 					//Movement to the left
 					else {
-						System.out.println("blanc esquerra");
-						System.out.println("anticMov"+newMov[0] + newMov[1]);
 						newMov[0]--;
 						newMov[1]--;
-						System.out.println("nouMov"+newMov[0] + newMov[1]);
 					}break;
 					//Black side, always down
 				case 1:
 					//Movement to the right
 					if(mov[1] > casella.getY()){
-						System.out.println("negre dret");
 						newMov[0]++;
 						newMov[1]++;
 					}
 					//Movement to the left
 					else {
-						System.out.println("negre esquerra");
 						newMov[0]++;
 						newMov[1]--;
 					}break;
@@ -127,9 +119,6 @@ public class Taulell {
 				//If the new movement is inside the game and it is empty
 				if (!(newMov[0]<0 || newMov[0]>9 || newMov[1]<0 || newMov[1]>9) &&
 					!(casMatCaselles[newMov[0]][newMov[1]].getTeFitxa())) {
-					System.out.println("pre" + mov[0] + " " + mov[1]);
-					System.out.println("afegim" + newMov[0] + " " + newMov[1]);
-					System.out.println("post" + mov[0] + " " + mov[1]);
 					return newMov;
 				}
 			}
@@ -264,12 +253,15 @@ public class Taulell {
 		return casMatar;
 	}
 	//Canvia a dama una fitxa que hagi arribat al final del taulell
-	private void canviDama(int color, Casella casella) {
+	public void canviDama(int color, Casella casella) {
 		//White 
-		if(color == 0 && casella.getX()== 0) casMatCaselles[casella.getX()][casella.getY()].afegirDama(casella.getFitxa());
+		if(color == 0 && casella.getX()== 0) {
+			casMatCaselles[casella.getX()][casella.getY()].setFitxa(new Dama(0));
+		}
 		//Black
-		if(color == 1 && casella.getX()== 9) casMatCaselles[casella.getX()][casella.getY()].afegirDama(casella.getFitxa());
-		
+		if(color == 1 && casella.getX()== 9) {
+			casMatCaselles[casella.getX()][casella.getY()].setFitxa(new Dama(1));
+		}
 	}
 	//Recorre el taulell i fa new de les caselles
 	private void omplirTaulell(int llarg, int ample) {

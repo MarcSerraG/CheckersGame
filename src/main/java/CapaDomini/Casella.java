@@ -20,7 +20,7 @@ public class Casella {
 			else fitxa = new Peo(0);
 		}
 	}
-	//Gets
+	//Gets & Sets
 	public Fitxa getFitxa() {return fitxa;}
 	public boolean getTeFitxa() {return boolTeFitxa;}
 	public int getX() {return intPosicioX;}
@@ -38,12 +38,6 @@ public class Casella {
 		
 		fitxa = null;
 		boolTeFitxa = false;
-	}
-	//Crea una dama quan un peo arriba al final del taulell
-	public void afegirDama(Fitxa fitxa) throws IllegalArgumentException{
-	
-		int color = fitxa.iColor;			
-		fitxa = new Dama(color);
 	}
 	//Retorna el valor de la fitxa envoltat per la casella
 	public String toString() {

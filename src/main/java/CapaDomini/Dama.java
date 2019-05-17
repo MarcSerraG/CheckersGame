@@ -10,7 +10,6 @@ public class Dama extends Fitxa{
 	public Dama (int iColor) throws IllegalArgumentException{
 		
 		if(iColor <0 || iColor > 1) throw new IllegalArgumentException("Color only can be 0 or 1");
-		
 		this.iID = this.hashCode();
 		this.iColor = iColor;
 	}
