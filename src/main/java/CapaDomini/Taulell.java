@@ -75,8 +75,13 @@ public class Taulell {
 				if(casOrigen.getFitxa() instanceof Peo) {
 					movMatada = this.casellaMatadaPeo(casOrigen, mov);
 					if (movMatada != null) moviment.set(i, movMatada);
+					else moviment.remove(i);
 				}
-				else moviment = this.casellaMatadaDama(moviment, casOrigen, mov);
+				else {
+					movMatada = this.casellaMatadaDama(casOrigen, mov);
+					if (movMatada != null) moviment.set(i, movMatada);
+					else moviment.remove(i);
+				}
 			}
 		}
 		return moviment;
@@ -126,13 +131,49 @@ public class Taulell {
 		return null;
 	}
 	//Modifica els possibles moviments de la dama quan hi ha una fitxa al cami
-	private List<int[]> casellaMatadaDama(List<int[]>moviment, Casella casella, int[]mov){
-		int auxMov[] = mov;
-		boolean diffColor = false;
-		//If the color does not match, save the firt next position to kill
-		if (!(casMatCaselles[mov[0]][mov[1]].getFitxa().iColor == casella.getFitxa().iColor)) diffColor = true;
+	private int[] casellaMatadaDama(Casella casella, int[] mov){
 			
-		//Down
+		//If the color match
+		if (casMatCaselles[mov[0]][mov[1]].getFitxa().iColor == casella.getFitxa().iColor)	return null;
+		//If the color does not match
+		else {
+			int newMov[] = {mov[0], mov[1]};
+			if (casella.getFitxa() instanceof Dama) {
+				//Movement up
+				if(mov[0] < casella.getX()) {
+					//Movement to the right
+					if(mov[1] > casella.getY()){
+						newMov[0]--;
+						newMov[1]++;
+					}
+					//Movement to the left
+					else {
+						newMov[0]--;
+						newMov[1]--;
+					}
+				}
+				//Movement down
+				else {
+					//Movement to the right
+					if(mov[1] > casella.getY()){
+						newMov[0]++;
+						newMov[1]++;
+					}
+					//Movement to the left
+					else {
+						newMov[0]++;
+						newMov[1]--;
+					}
+				}
+				//If the new movement is inside the game and it is empty
+				if (!(newMov[0]<0 || newMov[0]>9 || newMov[1]<0 || newMov[1]>9) &&
+					!(casMatCaselles[newMov[0]][newMov[1]].getTeFitxa())) {
+					return newMov;
+				}
+			}
+		}
+		return null;
+		/*//Down
 		if(mov[0]>casella.getX()) {
 			//Right
 			if(mov[1]>casella.getY()) {
@@ -203,7 +244,7 @@ public class Taulell {
 			}
 		}
 		moviment.remove(mov);
-		return moviment;
+		return moviment;*/
 	}
 	//Retorna la casella que s'ha de matar si es pot
 	private Casella potMatar(Casella casOrigen, Casella casDesti) {
