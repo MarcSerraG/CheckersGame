@@ -94,9 +94,11 @@ public class UsuariSQLOracle {
 		// String sql
 		String sql;
 		if (connectat)
-			sql = ConnectionSQLOracle.SQLUPDATE + " USUARIS SET (connectat = 1)";
+			sql = ConnectionSQLOracle.SQLUPDATE + " USUARIS SET connectat = 1";
 		else
-			sql = ConnectionSQLOracle.SQLUPDATE + " USUARIS SET (connectat = 0)";
+			sql = ConnectionSQLOracle.SQLUPDATE + " USUARIS SET connectat = 0";
+		sql += " WHERE NOM = '"+nomUsu+"'";
+		
 		try {
 			if (conn == null)
 				return false;
