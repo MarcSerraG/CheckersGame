@@ -28,22 +28,23 @@ public class JocAPI {
 	public String login(String user, String password) {
 		
 		JSONObject json = new JSONObject();
-		String BDPassword;
-		boolean passwordMatch;
 		json.put("res", user);
 		json.put("err", "");
 		json.put("sErr", "");
 		
+		boolean jaConnectat = this.userSQL.getConnectat(user);
+		if (jaConnectat) json.put("err", "Usuari amb sessió oberta");
 		
 		/* Password checking */
-		BDPassword = this.userSQL.getPasword(user);
+		String BDPassword = this.userSQL.getPasword(user);
 		if (BDPassword == null) json.put("err", "User-password incorrecte");
 		else {
-			passwordMatch = SCryptUtil.check(password, BDPassword);
+			boolean passwordMatch = SCryptUtil.check(password, BDPassword);
 			if (!passwordMatch) json.put("err", "User-password incorrecte");
 		}
-		boolean jaConnectat = false;
-		if (jaConnectat) json.put("err", "Usuari amb sessió oberta");
+		
+		boolean connexioCorrecte = this.userSQL.canviarSessio(user, true);
+		if (!connexioCorrecte) json.put("sErr", "No s'ha pogut crear la sessio");
 		
 		this.sessio = new Sessio(user, new HashSet<Partida>(), 0); // TEMPORAL
 		
@@ -53,12 +54,12 @@ public class JocAPI {
 	public String registra(String user, String password) {
 		
 		JSONObject json = new JSONObject();
-		String BDPassword;
-		boolean userExists = false;
 		json.put("res", user);
 		json.put("err", "");
 		json.put("sErr", "");
 		
+		boolean userExists = this.userSQL.getPasword(user) != null;
+		if (userExists) json.put("err", "Usuari existent");
 		
 	}
 }
