@@ -1,16 +1,19 @@
 package CapaAPI;
 
-import CapaPersistencia.*;
-import CapaDomini.*;
 import org.json.JSONObject;
+
 import com.lambdaworks.crypto.SCryptUtil;
 
+import CapaPersistencia.ConnectionSQLOracle;
+import CapaPersistencia.PartidesSQLOracle;
+import CapaPersistencia.UsuariSQLOracle;
+
 public class JocAPI {
-	
+
 	private ConnectionSQLOracle connSQL;
 	private UsuariSQLOracle userSQL;
 	private PartidesSQLOracle partSQL;
-	
+
 	public JocAPI() throws Exception {
 		connSQL = new ConnectionSQLOracle("dpina", "dpina");
 		userSQL = new UsuariSQLOracle(connSQL);
@@ -18,28 +21,134 @@ public class JocAPI {
 	}
 
 	/**
-	 * Comprova les dades de l'usuari passat per parametres, i fa login si son correctes
-	 * @param user nom de l'usuari
+	 * Comprova les dades de l'usuari passat per parametres, i fa login si son
+	 * correctes
+	 * 
+	 * @param user     nom de l'usuari
 	 * @param password contrasenya de l'usuari, SENSE hashing
-	 * @return "res": "IdSessio", "err": "usuari o contrasenya incorrecte", "sErr": "";
+	 * @return "res": "IdSessio", "err": "usuari o contrasenya incorrecte", "sErr":
+	 *         "";
 	 */
 	public String login(String user, String password) {
-		
+
 		JSONObject json = new JSONObject();
 		String BDPassword;
 		boolean passwordMatch;
 		json.put("res", "temporalID");
 		json.put("err", "");
 		json.put("sErr", "");
-		
+
 		/* Password checking */
 		BDPassword = this.userSQL.getPasword(user);
-		if (BDPassword == null) json.put("err", "usuari o contrasenya incorrecte");
+		if (BDPassword == null)
+			json.put("err", "usuari o contrasenya incorrecte");
 		else {
 			passwordMatch = SCryptUtil.check(password, BDPassword);
-			if (!passwordMatch) json.put("err", "usuari o contrasenya incorrecte");
+			if (!passwordMatch)
+				json.put("err", "usuari o contrasenya incorrecte");
 		}
-		
+
 		return json.toString();
 	}
+
+	public void logout(String idSessio) {
+
+	}
+
+	public void reconnecta(String idSessio, String password) {
+
+	}
+
+	public String getEstadistics(String idSessio) {
+		return null;
+	}
+
+	public String getCandidatsSol(String idSessio) {
+		return null;
+	}
+
+	public void enviaSol(String idSessio, String usuari) {
+
+	}
+
+	public String solicituds(String idSessio) {
+		return null;
+	}
+
+	public void acceptaSol(String idSessio, String usuari) {
+
+	}
+
+	public void rebutjaSol(String idSessio, String usuari) {
+
+	}
+
+	public String gerPartidesTorn(String idSessio) {
+		return null;
+	}
+
+	public String getPartidesNoTorn(String idSessio) {
+		return null;
+	}
+
+	public String getPartidesAcabades(String idSessio) {
+		return null;
+	}
+
+	public void tiraPartida(String idSessio, String usuari) {
+
+	}
+
+	public String obtenirColor(String idSessio, String idPartida) {
+		return null;
+	}
+
+	public String obtenirTaulerAnt(String idSessio, String idPartida) {
+		return null;
+	}
+
+	public String obtenirTaulerAct(String idSessio, String idPartida) {
+		return null;
+	}
+
+	public String obtenirTaulerRes(String idSessio, String idPartida) {
+		return null;
+	}
+
+	public String obtenirMovsAnt(String idSessio, String idPartida) {
+		return null;
+	}
+
+	public String grabarTirada(String idSessio, String idPartida) {
+		return null;
+	}
+
+	public String obtenirMovimentsPossibles(String idSessio, String idPartida) {
+		return null;
+	}
+
+	public String ferMoviment(String idSessio, String idPartida, String posIni, String posFi) {
+		return null;
+	}
+
+	public String ferDama(String idSessio, String idPartida, String pos) {
+		return null;
+	}
+
+	public String ferBufa(String idSessio, String idPartida, String pos) {
+		return null;
+	}
+
+	public String acceptaTaules(String idSessio, String idPartida) {
+		return null;
+	}
+
+	public String proposaTaules(String idSessio, String idPartida) {
+		return null;
+	}
+
+	public String movsPessa(String idSessio, String idPartida, String Pos) {
+		return null;
+	}
+
 }
