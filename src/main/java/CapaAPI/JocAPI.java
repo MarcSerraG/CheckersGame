@@ -4,15 +4,17 @@ import CapaPersistencia.*;
 import CapaDomini.*;
 import org.json.JSONObject;
 import com.lambdaworks.crypto.SCryptUtil;
+import java.util.*;
 
 public class JocAPI {
 	
 	private ConnectionSQLOracle connSQL;
 	private UsuariSQLOracle userSQL;
 	private PartidesSQLOracle partSQL;
+	private Sessio sessio;
 	
 	public JocAPI() throws Exception {
-		connSQL = new ConnectionSQLOracle("dpina", "dpina");
+		connSQL = new ConnectionSQLOracle("g3geilab1", "g3geilab1");
 		userSQL = new UsuariSQLOracle(connSQL);
 		partSQL = new PartidesSQLOracle(connSQL);
 	}
@@ -28,18 +30,35 @@ public class JocAPI {
 		JSONObject json = new JSONObject();
 		String BDPassword;
 		boolean passwordMatch;
-		json.put("res", "temporalID");
+		json.put("res", user);
 		json.put("err", "");
 		json.put("sErr", "");
 		
+		
 		/* Password checking */
 		BDPassword = this.userSQL.getPasword(user);
-		if (BDPassword == null) json.put("err", "usuari o contrasenya incorrecte");
+		if (BDPassword == null) json.put("err", "User-password incorrecte");
 		else {
 			passwordMatch = SCryptUtil.check(password, BDPassword);
-			if (!passwordMatch) json.put("err", "usuari o contrasenya incorrecte");
+			if (!passwordMatch) json.put("err", "User-password incorrecte");
 		}
+		boolean jaConnectat = false;
+		if (jaConnectat) json.put("err", "Usuari amb sessió oberta");
+		
+		this.sessio = new Sessio(user, new HashSet<Partida>(), 0); // TEMPORAL
 		
 		return json.toString();
+	}
+	
+	public String registra(String user, String password) {
+		
+		JSONObject json = new JSONObject();
+		String BDPassword;
+		boolean userExists = false;
+		json.put("res", user);
+		json.put("err", "");
+		json.put("sErr", "");
+		
+		
 	}
 }
