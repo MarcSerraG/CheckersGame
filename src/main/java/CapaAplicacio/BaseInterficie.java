@@ -262,10 +262,11 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bEvents.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
 
-		CanviPantalla();
 		Partida partida = new Partida(this);
 		centerPanel = partida.partidaCreate();
+		getContentPane().remove(centerPanel);
 		getContentPane().add(centerPanel, BorderLayout.CENTER);
+		this.centerPanel.setVisible(true);
 
 	}
 
@@ -331,8 +332,8 @@ public class BaseInterficie extends JFrame implements ActionListener {
 
 	}
 
-	public void CanviPantalla() {
-		this.centerPanel = null;
-	}
+	/*
+	 * public void CanviPantalla() { this.centerPanel.setVisible(false); }
+	 */
 
 }

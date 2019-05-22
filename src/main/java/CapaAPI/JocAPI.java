@@ -92,6 +92,8 @@ public class JocAPI {
 
 	public void logout(String idSessio) {
 
+		userSQL.canviarSessio(idSessio, false);
+
 	}
 
 	public void reconnecta(String idSessio, String password) {

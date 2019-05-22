@@ -37,7 +37,8 @@ public class Partida extends JPanel implements ActionListener {
 
 			JLabel miss = new JLabel("UserName", JLabel.TRAILING);
 
-			miss.setBounds(450, 625, 500, 40);
+			miss.setBounds(250, 400, 500, 40);
+			tb.setBounds(200, 400, 500, 40);
 			miss.setFont(new Font("Monospaced", Font.BOLD, 60));
 
 			panelTaulell.add(tb);
