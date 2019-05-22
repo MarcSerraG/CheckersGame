@@ -27,6 +27,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 	public JPanel centerLogin;
 	private ConnectionSQLOracle cn;
 	private Login log;
+	private Partida par;
 
 	public BaseInterficie() {
 
@@ -78,6 +79,14 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		getContentPane().add(centerLogin, BorderLayout.CENTER);
 		login.labelMessage.setText("Connecting...");
 		return login;
+	}
+	
+	private Partida CenterPartida(ConnectionSQLOracle conn) {
+		
+		Partida partida = new Partida(conn, this);
+		centerLogin = partida.partidaCreate();
+		getContentPane().add(centerLogin, BorderLayout.CENTER);
+		return partida;
 	}
 
 	private void MenuBar() {
@@ -206,7 +215,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		} else {
 			if (e.getSource() == this.bNewGame) {
 				actionNewGame();
-
+				par = CenterPartida(cn);
 			} else {
 				if (e.getSource() == this.bContinue_Game) {
 					actionContinue();
