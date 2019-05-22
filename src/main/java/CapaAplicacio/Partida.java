@@ -36,7 +36,6 @@ public class Partida extends JPanel implements ActionListener {
 	
 	public JPanel partidaCreate() {
 		JPanel panelTaulell = new JPanel();
-		JFrame taulell =  new JFrame();
 
 		panelTaulell.setLayout(null);	
 		panelTaulell.setBackground(Color.DARK_GRAY);
@@ -52,12 +51,12 @@ public class Partida extends JPanel implements ActionListener {
 			
 			JLabel tb = new JLabel(myImageTaulell);
 			
-			taulell.add(tb);
+			panelTaulell.add(tb);
 			
+			System.out.println("Fi panel");
 		} catch (Exception e) {
 			
 		}
-		panelTaulell.add(taulell);
 		return panelTaulell;
 	}
 	

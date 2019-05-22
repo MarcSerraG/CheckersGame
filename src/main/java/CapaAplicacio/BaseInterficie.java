@@ -25,6 +25,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 
 	public JButton bLogin, bNewGame, bContinue_Game, bStatistics, bEvents, bLogOut;
 	public JPanel centerLogin;
+	public JPanel centerPartida;
 	private ConnectionSQLOracle cn;
 	private Login log;
 	private Partida par;
@@ -207,8 +208,8 @@ public class BaseInterficie extends JFrame implements ActionListener {
 			actionLogin();
 		} else {
 			if (e.getSource() == this.bNewGame) {
+				System.out.println("Boto new game");
 				actionNewGame();
-				par = CenterPartida(cn);
 			} else {
 				if (e.getSource() == this.bContinue_Game) {
 					actionContinue();
@@ -262,6 +263,8 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bStatistics.setForeground(Color.WHITE);
 		this.bEvents.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
+		
+		par = CenterPartida(cn);
 	}
 
 	private void actionContinue() {
