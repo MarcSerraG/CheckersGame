@@ -62,13 +62,8 @@ public class ConnectionSQLOracle {
 	public boolean crearInsert(String sql) throws SQLException {
 		Statement st = null;
 		try {
+			System.out.println(sql);
 			st = conn.createStatement();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-
-		try {
 			st.executeUpdate(sql);
 			return true;
 		} catch (SQLException e) {
