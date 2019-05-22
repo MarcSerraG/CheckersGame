@@ -12,7 +12,7 @@ public class JocAPI {
 	private PartidesSQLOracle partSQL;
 	
 	public JocAPI() throws Exception {
-		connSQL = new ConnectionSQLOracle("dpina", "dpina");
+		connSQL = new ConnectionSQLOracle("g3geilab1", "g3geilab1");
 		userSQL = new UsuariSQLOracle(connSQL);
 		partSQL = new PartidesSQLOracle(connSQL);
 	}
@@ -42,4 +42,6 @@ public class JocAPI {
 		
 		return json.toString();
 	}
+	
+	
 }
