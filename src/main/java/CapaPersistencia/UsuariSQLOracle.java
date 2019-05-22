@@ -62,6 +62,27 @@ public class UsuariSQLOracle {
 		return null;
 
 	}
+	
+	public boolean getConnectat(String nomUsu) {
+		int con = 0;
+		String sql = ConnectionSQLOracle.SQLSELECT;
+		sql += "(CONNECTAT) FROM USUARIS WHERE ";
+		sql += "nom = '" + nomUsu + "'";
+		try {
+			ResultSet rs = conn.ferSelect(sql);
+			while (rs.next()) {
+				con = rs.getInt("CONNECTAT");
+			}
+			if (con == 1)
+				return true;
+			else
+				return false;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 	/**
 	 * Canvia la sessio del usuari per nom i quin estat
