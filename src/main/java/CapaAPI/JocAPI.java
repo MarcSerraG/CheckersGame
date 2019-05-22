@@ -55,7 +55,12 @@ public class JocAPI {
 		boolean connexioCorrecte = this.userSQL.canviarSessio(user, true);
 		if (!connexioCorrecte) json.put("sErr", "No s'ha pogut crear la sessio");
 		
-		this.sessio = new Sessio(user, new HashSet<Partida>(), 0); // TEMPORAL
+		try {
+			this.sessio = new Sessio(user, new HashSet<Partida>(), 0, "g3geilab1", "g3geilab1");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} // TEMPORAL
 
 		return json.toString();
 	}

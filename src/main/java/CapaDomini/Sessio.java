@@ -93,7 +93,7 @@ public class Sessio {
 	
 	public boolean convidarUsuariPartida(String strNom) {
 		
-		return true;
+		return false;
 	}
 	
 	public Partida acceptarPartida(String strID) {
