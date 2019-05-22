@@ -70,10 +70,16 @@ public class JocAPI {
 		boolean userExists = this.userSQL.getPasword(user) != null;
 		if (userExists) json.put("err", "Usuari existent");
 		
+		String BDPassword = SCryptUtil.scrypt(password, 16, 16, 16);
+		
+		boolean creacioCorrecte = this.userSQL.insertUsuari(user, BDPassword, "", "1");
+		if (!creacioCorrecte) json.put("err", "Error al crear usuari");
+		
+		return json.toString();
 	}
 
 	public void logout(String idSessio) {
-
+		
 	}
 
 	public void reconnecta(String idSessio, String password) {
