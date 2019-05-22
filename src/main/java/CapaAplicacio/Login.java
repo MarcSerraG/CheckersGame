@@ -125,6 +125,7 @@ public class Login extends JPanel implements ActionListener {
 				labelMessage.setText(Err);
 			} else {
 				this.user = Mss;
+				interficieBase.setTitle("Joc de Dames          Jugador: " + Mss);
 				desbloquejarBotons();
 				canviPantalla();
 			}
@@ -156,6 +157,7 @@ public class Login extends JPanel implements ActionListener {
 					} else {
 						this.labelMessage.setText("Welcome: " + Mss);
 						this.user = Mss;
+						interficieBase.setTitle("Joc de Dames          Jugador: " + Mss);
 						desbloquejarBotons();
 						canviPantalla();
 					}

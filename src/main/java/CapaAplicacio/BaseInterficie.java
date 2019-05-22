@@ -24,7 +24,6 @@ public class BaseInterficie extends JFrame implements ActionListener {
 
 	public JButton bLogin, bNewGame, bContinue_Game, bStatistics, bEvents, bLogOut;
 	public JPanel centerPanel;
-	public JPanel centerPartida;
 	private JocAPI api;
 	private Login log;
 	private Partida par;
@@ -49,6 +48,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 			// carrega la pagina de login la qual es situa en el centre
 			log = CenterLogin();
 			log.labelMessage.setText("Server Connection: Correct");
+
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Error Connecting server!");
 			// carrega la pagina de login la qual es situa en el centre
@@ -61,11 +61,13 @@ public class BaseInterficie extends JFrame implements ActionListener {
 	private Login CenterLogin() {
 
 		// Creem la pantalla de login i la situem en el contre de la applicacio
-
+		if (centerPanel != null)
+			centerPanel.setVisible(false);
 		Login login = new Login(api, this);
 		centerPanel = login.LoginCreate();
 		getContentPane().add(centerPanel, BorderLayout.CENTER);
-		login.labelMessage.setText("Connecting...");
+		getContentPane().repaint();
+		validate();
 		return login;
 	}
 
@@ -247,6 +249,10 @@ public class BaseInterficie extends JFrame implements ActionListener {
 	}
 
 	private void actionContinue() {
+
+		System.out.print("Continue!");
+		centerPanel.setVisible(false);
+
 		this.bContinue_Game.setBackground(new Color(237, 215, 178));
 		this.bContinue_Game.setForeground(Color.BLACK);
 
@@ -264,9 +270,10 @@ public class BaseInterficie extends JFrame implements ActionListener {
 
 		Partida partida = new Partida(this);
 		centerPanel = partida.partidaCreate();
-		getContentPane().remove(centerPanel);
+		partida.setVisible(true);
 		getContentPane().add(centerPanel, BorderLayout.CENTER);
-		this.centerPanel.setVisible(true);
+		getContentPane().repaint();
+		validate();
 
 	}
 
@@ -307,20 +314,34 @@ public class BaseInterficie extends JFrame implements ActionListener {
 	private void actionLogOut() {
 
 		api.logout(log.user);
+		log = null;
+		this.setTitle("Joc de Dames");
 
-		this.bLogOut.setBackground(new Color(237, 215, 178));
-		this.bLogOut.setForeground(Color.BLACK);
+		this.bLogin.setBackground(new Color(237, 215, 178));
+		this.bLogin.setForeground(Color.BLACK);
 
-		this.bLogin.setBackground(Color.GRAY);
+		this.bLogOut.setBackground(Color.GRAY);
+
 		this.bNewGame.setBackground(Color.GRAY);
 		this.bContinue_Game.setBackground(Color.GRAY);
 		this.bStatistics.setBackground(Color.GRAY);
 		this.bEvents.setBackground(Color.GRAY);
-		this.bLogin.setForeground(Color.WHITE);
+
+		this.bLogOut.setForeground(Color.WHITE);
 		this.bNewGame.setForeground(Color.WHITE);
 		this.bContinue_Game.setForeground(Color.WHITE);
 		this.bStatistics.setForeground(Color.WHITE);
 		this.bEvents.setForeground(Color.WHITE);
+
+		this.bLogin.setEnabled(true);
+		this.bNewGame.setEnabled(false);
+		this.bContinue_Game.setEnabled(false);
+		this.bStatistics.setEnabled(false);
+		this.bEvents.setEnabled(false);
+		this.bLogOut.setEnabled(false);
+
+		log = CenterLogin();
+		log.labelMessage.setText("Server Connection: Correct");
 
 	}
 

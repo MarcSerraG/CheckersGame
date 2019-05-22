@@ -1,7 +1,6 @@
 package CapaAplicacio;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,10 +9,12 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class Partida extends JPanel implements ActionListener {
 
 	BaseInterficie interficieBase;
+	JTextField tfUsuari;
 
 	public Partida(BaseInterficie base) {
 		interficieBase = base;
@@ -23,28 +24,29 @@ public class Partida extends JPanel implements ActionListener {
 		JPanel panelTaulell = new JPanel();
 
 		panelTaulell.setLayout(null);
-		panelTaulell.setBackground(Color.DARK_GRAY);
 
 		Image myImage;
 		try {
 			myImage = ImageIO.read(getClass().getResource("taulell.png"));
 
-			myImage = myImage.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
+			myImage = myImage.getScaledInstance(500, 500, java.awt.Image.SCALE_SMOOTH);
+			ImageIcon myImageIcon = new ImageIcon(myImage);
 
-			ImageIcon myImageTaulell = new ImageIcon(myImage);
+			JLabel icon = new JLabel(myImageIcon);
 
-			JLabel tb = new JLabel(myImageTaulell);
+			tfUsuari = new JTextField();
 
-			JLabel miss = new JLabel("UserName", JLabel.TRAILING);
+			// tfUsuari.setBounds(210, 250, 500, 30);
+			icon.setBounds(230, 100, 500, 500);
 
-			miss.setBounds(250, 400, 500, 40);
-			tb.setBounds(200, 400, 500, 40);
-			miss.setFont(new Font("Monospaced", Font.BOLD, 60));
+			tfUsuari.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
-			panelTaulell.add(tb);
-			panelTaulell.add(miss);
+			panelTaulell.setBackground(Color.DARK_GRAY);
+			tfUsuari.setBackground(Color.LIGHT_GRAY);
 
-			System.out.println("Fi panel");
+			// panelTaulell.add(tfUsuari);
+			panelTaulell.add(icon);
+
 		} catch (Exception e) {
 
 		}
