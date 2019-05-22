@@ -23,7 +23,7 @@ import CapaAPI.JocAPI;
 public class BaseInterficie extends JFrame implements ActionListener {
 
 	public JButton bLogin, bNewGame, bContinue_Game, bStatistics, bEvents, bLogOut;
-	public JPanel centerLogin;
+	public JPanel centerPanel;
 	public JPanel centerPartida;
 	private JocAPI api;
 	private Login log;
@@ -63,18 +63,12 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		// Creem la pantalla de login i la situem en el contre de la applicacio
 
 		Login login = new Login(api, this);
-		centerLogin = login.LoginCreate();
-		getContentPane().add(centerLogin, BorderLayout.CENTER);
+		centerPanel = login.LoginCreate();
+		getContentPane().add(centerPanel, BorderLayout.CENTER);
 		login.labelMessage.setText("Connecting...");
 		return login;
 	}
 
-	/*
-	 * private Partida CenterPartida() {
-	 * 
-	 * Partida partida = new Partida(this); centerLogin = partida.partidaCreate();
-	 * getContentPane().add(centerLogin, BorderLayout.CENTER); return partida; }
-	 */
 	private void MenuBar() {
 
 		// Creem el menu lateral el qual estara sempre visible
@@ -267,6 +261,12 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bStatistics.setForeground(Color.WHITE);
 		this.bEvents.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
+
+		CanviPantalla();
+		Partida partida = new Partida(this);
+		centerPanel = partida.partidaCreate();
+		getContentPane().add(centerPanel, BorderLayout.CENTER);
+
 	}
 
 	private void actionStatics() {
@@ -329,6 +329,10 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		api.logout(log.user);
 		System.exit(0);
 
+	}
+
+	public void CanviPantalla() {
+		this.centerPanel = null;
 	}
 
 }

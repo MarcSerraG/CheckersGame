@@ -190,7 +190,7 @@ public class Login extends JPanel implements ActionListener {
 	}
 
 	private void canviPantalla() {
-		interficieBase.centerLogin.setVisible(false);
+		interficieBase.centerPanel.setVisible(false);
 		interficieBase.bEvents.setBackground(new Color(237, 215, 178));
 		interficieBase.bEvents.setForeground(Color.BLACK);
 		interficieBase.bLogin.setBackground(Color.GRAY);
