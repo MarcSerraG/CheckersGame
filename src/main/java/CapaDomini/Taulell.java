@@ -1,12 +1,9 @@
 package CapaDomini;
 import java.util.List;
-import java.util.Vector;
 
 public class Taulell {
 	
 	//Variables
-	private int intLlargada;
-	private int intAmplada;
 	private Casella casMatCaselles[][];
 	private int intNumNegres;
 	private int intNumBlanques;
@@ -16,14 +13,12 @@ public class Taulell {
 	private final int UPLEFT = 3;
 	
 	//Constructor
-	public Taulell(int llarg, int ample) {
+	public Taulell() {
 		
-		intLlargada = llarg;
-		intAmplada = ample;
 		intNumBlanques = 0;
 		intNumNegres = 0;
-		casMatCaselles = new Casella [llarg][ample];
-		this.omplirTaulell(llarg, ample);
+		casMatCaselles = new Casella [10][10];
+		this.omplirTaulell(10,10);
 	}
 	//Gets
 	public int getNumNegres(){return this.intNumNegres;}
@@ -39,6 +34,7 @@ public class Taulell {
 		Casella casMatar = null;
 		boolean trobat = false;
 		boolean haMatat = false;
+		boolean potMoure = false;
 		//Store all the possible movements
 		List<int[]> moviments = this.veurePossiblesMoviments(casOrigen);
 		//Find out if the destination position is within possible movements
@@ -58,7 +54,9 @@ public class Taulell {
 		casDesti.setFitxa(casOrigen.getFitxa());
 		casOrigen.eliminarFitxa();
 		this.canviDama(casDesti.getFitxa().iColor, casDesti);
-		return haMatat;
+		//Look if in the next position there is any movement available
+		if(this.veurePossiblesMoviments(casDesti).size()!= 0) potMoure = true;
+		return haMatat && potMoure;
 	}
 	//Calcula totes les caselles possibles on la fitxa es pot moure
 	private List<int[]> veurePossiblesMoviments(Casella casOrigen) throws IllegalArgumentException{
@@ -75,8 +73,13 @@ public class Taulell {
 				if(casOrigen.getFitxa() instanceof Peo) {
 					movMatada = this.casellaMatadaPeo(casOrigen, mov);
 					if (movMatada != null) moviment.set(i, movMatada);
+					else moviment.remove(i);
 				}
-				else moviment = this.casellaMatadaDama(moviment, casOrigen, mov);
+				else {
+					movMatada = this.casellaMatadaDama(casOrigen, mov);
+					if (movMatada != null) moviment.set(i, movMatada);
+					else moviment.remove(i);
+				}
 			}
 		}
 		return moviment;
@@ -126,84 +129,48 @@ public class Taulell {
 		return null;
 	}
 	//Modifica els possibles moviments de la dama quan hi ha una fitxa al cami
-	private List<int[]> casellaMatadaDama(List<int[]>moviment, Casella casella, int[]mov){
-		int auxMov[] = mov;
-		boolean diffColor = false;
-		//If the color does not match, save the firt next position to kill
-		if (!(casMatCaselles[mov[0]][mov[1]].getFitxa().iColor == casella.getFitxa().iColor)) diffColor = true;
+	private int[] casellaMatadaDama(Casella casella, int[] mov){
 			
-		//Down
-		if(mov[0]>casella.getX()) {
-			//Right
-			if(mov[1]>casella.getY()) {
-				if(diffColor) {
-					auxMov[0]+= 2;
-					auxMov[1]+= 2;
+		//If the color match
+		if (casMatCaselles[mov[0]][mov[1]].getFitxa().iColor == casella.getFitxa().iColor)	return null;
+		//If the color does not match
+		else {
+			int newMov[] = {mov[0], mov[1]};
+			if (casella.getFitxa() instanceof Dama) {
+				//Movement up
+				if(mov[0] < casella.getX()) {
+					//Movement to the right
+					if(mov[1] > casella.getY()){
+						newMov[0]--;
+						newMov[1]++;
+					}
+					//Movement to the left
+					else {
+						newMov[0]--;
+						newMov[1]--;
+					}
 				}
+				//Movement down
 				else {
-					auxMov[0]++;
-					auxMov[1]++;
+					//Movement to the right
+					if(mov[1] > casella.getY()){
+						newMov[0]++;
+						newMov[1]++;
+					}
+					//Movement to the left
+					else {
+						newMov[0]++;
+						newMov[1]--;
+					}
 				}
-				while (!(auxMov[0]>9 || auxMov[1]>9)) {
-					moviment.remove(auxMov);
-					auxMov[0]++;
-					auxMov[1]++;
-				}
-			}
-			//Left
-			else {
-				if(diffColor) {
-					auxMov[0]+= 2;
-					auxMov[1]-= 2;
-				}
-				else {
-					auxMov[0]++;
-					auxMov[1]--;
-				}
-				while (!(auxMov[0]>9 || auxMov[1]<0)) {
-					moviment.remove(auxMov);
-					auxMov[0]++;
-					auxMov[1]--;
-				}
-			}
-		}
-		//Up
-		else{
-			//Right
-			if(mov[1]>casella.getY()) {
-				if(diffColor) {
-					auxMov[0]-= 2;
-					auxMov[1]+= 2;
-				}
-				else {
-					auxMov[0]--;
-					auxMov[1]++;
-				}
-				while (!(auxMov[0]<0 || auxMov[1]>9)) {
-					moviment.remove(auxMov);
-					auxMov[0]--;
-					auxMov[1]++;
-				}
-			}
-			//Left
-			else {
-				if(diffColor) {
-					auxMov[0]+= 2;
-					auxMov[1]+= 2;
-				}
-				else {
-					auxMov[0]--;
-					auxMov[1]--;
-				}
-				while (!(auxMov[0]<0 || auxMov[1]<0)) {
-					moviment.remove(auxMov);
-					auxMov[0]--;
-					auxMov[1]--;
+				//If the new movement is inside the game and it is empty
+				if (!(newMov[0]<0 || newMov[0]>9 || newMov[1]<0 || newMov[1]>9) &&
+					!(casMatCaselles[newMov[0]][newMov[1]].getTeFitxa())) {
+					return newMov;
 				}
 			}
 		}
-		moviment.remove(mov);
-		return moviment;
+		return null;
 	}
 	//Retorna la casella que s'ha de matar si es pot
 	private Casella potMatar(Casella casOrigen, Casella casDesti) {
