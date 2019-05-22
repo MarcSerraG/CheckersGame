@@ -14,6 +14,7 @@ public class Partida {
 		this.usrJugador = usrJugador;
 		this.usrContrincant = usrContrincant;
 		this.usrUsuariTorn = this.usrJugador;
+		this.boolPartidaEnCurs = true;
 		this.taulell = new Taulell();
 	}
 	
@@ -21,16 +22,22 @@ public class Partida {
 	public Usuari getJugador() {return this.usrJugador;}
 	public Usuari getContrincant() {return this.usrContrincant;}
 	public Usuari getUsuariTorn() {return this.usrUsuariTorn;}
+	public void setUsuariTorn() {
+		if (this.usrUsuariTorn == usrJugador) this.usrUsuariTorn = usrContrincant;
+		else this.usrUsuariTorn = usrJugador;
+	}
 	public boolean getPartidaEnCurs() {return this.boolPartidaEnCurs;}
 	public Taulell getTaulell() {return this.taulell;}
 	//Comprova els moviments que pot fer un jugador fins al final del seu torn
 	public void movimentTorn(Casella casOrigen, Casella casDesti) {
 		
+		if (!this.boolPartidaEnCurs) throw new IllegalArgumentException("The game is over");
 		if (this.usrUsuariTorn == usrJugador && casOrigen.getFitxa().iColor == 1) throw new IllegalArgumentException("Invalid color for this user");
 		if (this.usrUsuariTorn == usrContrincant && casOrigen.getFitxa().iColor == 0) throw new IllegalArgumentException("Invalid color for this user");
 		
+		//Know if the user has killed a token
 		boolean potMoure = taulell.moviment(casOrigen, casDesti);
-		
+		//If the user did not kill, change turn to the other player
 		if(!potMoure) {
 			if(usrUsuariTorn == usrJugador) usrUsuariTorn = usrContrincant;
 			else usrUsuariTorn = usrJugador;
@@ -59,13 +66,16 @@ public class Partida {
 	}
 	
 	public boolean proposarTaules() {
-		
+
 		return true;
 	}
 	
 	public void acabarPartida () {
 		
+		this.boolPartidaEnCurs = false;
+		
 	}
+	//Retorna el taulell dibuixat amb informacio de quin torn toca
 	public String toString() {
 		
 		String torn = ("Torn del jugador: " + usrUsuariTorn + "\n");

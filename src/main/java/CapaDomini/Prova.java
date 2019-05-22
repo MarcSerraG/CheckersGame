@@ -1,5 +1,6 @@
 package CapaDomini;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Prova {
@@ -11,8 +12,9 @@ public class Prova {
 		Partida partida = new Partida("0000", u1, u2);
 		Scanner keyboard = new Scanner(System.in);
 		int fOrigen, cOrigen, fDesti, cDesti, decisio;
+		List<int[]> movimentsTaules;
 		
-		while (partida.getTaulell().getNumNegres()!= 0 || partida.getTaulell().getNumBlanques()!= 0) {
+		while (!partida.getTaulell().comprovarFitxes() && partida.getPartidaEnCurs()) {
 			System.out.println("Que vols fer? (0 = tirar 1 = porposar taules 2 = finalitzar partida)");
 			decisio = keyboard.nextInt();
 			switch (decisio) {
@@ -31,14 +33,46 @@ public class Prova {
 					break;
 				
 				case 1:
-					System.out.println("Fi del joc");
-					keyboard.close();
-					System.exit(0);
-					break;
-					
+					partida.setUsuariTorn();
+					System.out.println(partida);
+					System.out.println("El teu contrincant ha proposat taules.");
+					System.out.println("Selecciona casella origen i casella desti o escriu 10 si acceptes");
+					fOrigen = keyboard.nextInt();
+					if (fOrigen == 10) {
+						partida.acabarPartida();
+						System.out.println("Empat");
+						keyboard.close();
+						System.exit(0);
+						break;
+					}
+					else {
+						System.out.println("A quina columna es la fitxa?");
+						cOrigen = keyboard.nextInt();
+						System.out.println("A quina fila vols moure?");
+						fDesti = keyboard.nextInt();
+						System.out.println("A quina columna vols moure?");
+						cDesti = keyboard.nextInt();
+						movimentsTaules = partida.getTaulell().veurePossiblesMoviments(partida.getTaulell().seleccionarCasella(fOrigen, cOrigen));
+						
+						for (int i = 0; i < movimentsTaules.size(); i++) {
+							
+							if(movimentsTaules.get(i)[0] == fDesti && movimentsTaules.get(i)[1] == cDesti) {
+							System.out.println("El contrincant podia fer un moviment, tu guanyes");
+							partida.acabarPartida();
+							System.out.println("Fi de joc");
+							keyboard.close();
+							System.exit(0);
+							}
+						}
+							System.out.println("El contrincant no podia fer mes moviments, empat");
+							partida.acabarPartida();
+							keyboard.close();
+							System.exit(0);
+						}
 				case 2:
-					System.out.println("Fi del joc");
+					partida.acabarPartida();
 					keyboard.close();
+					System.out.println("Fi del joc");
 					System.exit(0);
 					break;
 			}

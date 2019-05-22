@@ -20,9 +20,8 @@ public class Taulell {
 		casMatCaselles = new Casella [10][10];
 		this.omplirTaulell(10,10);
 	}
-	//Gets
-	public int getNumNegres(){return this.intNumNegres;}
-	public int getNumBlanques(){return this.intNumBlanques;}
+	//Retorna si algun jugador no te fitxes per moure
+	public boolean comprovarFitxes(){return (intNumNegres == 0 || intNumBlanques == 0);}
 	public Casella seleccionarCasella(int x, int y){return this.casMatCaselles[x][y];}
 	//Comprova si es factible realitzar el moviment, el fa, mata si cal i retorna si ha matat o no
 	public boolean moviment (Casella casOrigen, Casella casDesti) throws IllegalArgumentException{
@@ -59,7 +58,7 @@ public class Taulell {
 		return haMatat && potMoure;
 	}
 	//Calcula totes les caselles possibles on la fitxa es pot moure
-	private List<int[]> veurePossiblesMoviments(Casella casOrigen) throws IllegalArgumentException{
+	public List<int[]> veurePossiblesMoviments(Casella casOrigen) throws IllegalArgumentException{
 		
 		int[] movMatada = null;
 		List<int[]> moviment;
