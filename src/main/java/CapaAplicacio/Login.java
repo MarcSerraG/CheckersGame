@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -13,22 +11,23 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import CapaPersistencia.ConnectionSQLOracle;
-import CapaPersistencia.UsuariSQLOracle;
+import org.json.JSONObject;
+
+import CapaAPI.JocAPI;
 
 public class Login extends JPanel implements ActionListener {
 
-	JLabel labelMain, labelUsername, labelPassword, labelMessage;
+	JLabel labelMain, labelUsername, labelPassword, labelRepeatPassword, labelMessage;
 
-	JButton bEntrar;
+	JButton bEntrar, bRegistrar;
 	JTextField tfUsuari;
-	JPasswordField fPassword;
-	UsuariSQLOracle userSQL;
+	JPasswordField fPassword, fRepeatPassword;
+	JocAPI api;
 	BaseInterficie interficieBase;
+	String user;
 
-	public Login(ConnectionSQLOracle connection, BaseInterficie base) {
-
-		userSQL = new UsuariSQLOracle(connection);
+	public Login(JocAPI api, BaseInterficie base) {
+		this.api = api;
 		interficieBase = base;
 	}
 
@@ -43,14 +42,19 @@ public class Login extends JPanel implements ActionListener {
 
 		labelUsername = new JLabel("UserName", JLabel.TRAILING);
 		labelPassword = new JLabel("Password", JLabel.TRAILING);
+		labelRepeatPassword = new JLabel("Repeat Password", JLabel.TRAILING);
 
 		tfUsuari = new JTextField();
 		fPassword = new JPasswordField();
+		fRepeatPassword = new JPasswordField();
 
 		bEntrar = new JButton("Let's Play!");
+		bRegistrar = new JButton("Register");
 		labelMain.setFont(new Font("Monospaced", Font.BOLD, 60));
 		labelUsername.setFont(new Font("SansSerif", Font.BOLD, 12));
 		labelPassword.setFont(new Font("SansSerif", Font.BOLD, 12));
+		labelRepeatPassword.setFont(new Font("SansSerif", Font.BOLD, 12));
+		fRepeatPassword.setFont(new Font("SansSerif", Font.BOLD, 12));
 		labelMessage.setFont(new Font("SansSerif", Font.BOLD, 12));
 
 		labelMain.setBounds(210, 100, 400, 50);
@@ -63,19 +67,24 @@ public class Login extends JPanel implements ActionListener {
 
 		fPassword.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		tfUsuari.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		fRepeatPassword.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
 		panelLogin.setBackground(Color.DARK_GRAY);
 		bEntrar.setBackground(Color.GRAY);
 		bEntrar.setForeground(Color.WHITE);
+		bRegistrar.setBackground(Color.GRAY);
+		bRegistrar.setForeground(Color.WHITE);
 		tfUsuari.setBackground(Color.LIGHT_GRAY);
 		fPassword.setBackground(Color.LIGHT_GRAY);
+		fRepeatPassword.setBackground(Color.LIGHT_GRAY);
 		labelMain.setForeground(new Color(237, 215, 178));
 		labelUsername.setForeground(new Color(237, 215, 178));
 		labelPassword.setForeground(new Color(237, 215, 178));
+		labelRepeatPassword.setForeground(new Color(237, 215, 178));
 		labelMessage.setForeground(new Color(237, 215, 178));
 
-		fPassword.addActionListener(this);
 		bEntrar.addActionListener(this);
+		bRegistrar.addActionListener(this);
 
 		panelLogin.add(labelMain);
 		panelLogin.add(labelUsername);
@@ -83,14 +92,10 @@ public class Login extends JPanel implements ActionListener {
 		panelLogin.add(tfUsuari);
 		panelLogin.add(fPassword);
 		panelLogin.add(bEntrar);
+		panelLogin.add(bRegistrar);
 		panelLogin.add(labelMessage);
-
-		fPassword.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				comprovarUsuari();
-			}
-		});
+		panelLogin.add(labelRepeatPassword);
+		panelLogin.add(fRepeatPassword);
 
 		return panelLogin;
 	}
@@ -98,45 +103,80 @@ public class Login extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == this.bEntrar) {
-			entrar();
+			APIentrar();
+		} else {
+			APIregister();
 		}
 
 	}
 
-	private void entrar() {
+	private void APIregister() {
+		String pass = fPassword.getText();
+		String repeatPass = fRepeatPassword.getText();
+
+		if (!pass.equals(repeatPass)) {
+			this.labelMessage.setText("Passwords are not the same");
+		} else {
+			JSONObject json = new JSONObject(api.registra(tfUsuari.getText(), fPassword.getText()));
+			String Err = json.getString("err");
+			String Mss = json.getString("res");
+
+			if (!Err.equals("")) {
+				labelMessage.setText(Err);
+			} else {
+				this.user = Mss;
+				desbloquejarBotons();
+				canviPantalla();
+			}
+		}
+	}
+
+	private void APIentrar() {
 
 		if (tfUsuari.getText().equals("")) {
 			labelMessage.setText("UserName is required");
 		} else {
-			if (labelMessage.getText().equals("Welcome New User!")) {
-				userSQL.insertUsuari(tfUsuari.getText(), fPassword.getText(), "-", "1");
-				desbloquejarBotons();
-				canviPantalla();
-				// toDo = Entrar al Joc
-			} else {
-				if (fPassword.getText().equals(userSQL.getPasword(tfUsuari.getText()))) {
-					labelMessage.setText(tfUsuari.getText() + " is connected!");
-					desbloquejarBotons();
-					canviPantalla();
 
-					// toDo = Entrar al Joc
+			String apiReturn = api.login(tfUsuari.getText(), fPassword.getText());
+
+			JSONObject json = new JSONObject(apiReturn);
+
+			String sErr = json.getString("sErr");
+			String Err = json.getString("err");
+			String Mss = json.getString("res");
+
+			if (Err.contentEquals("No User")) {
+				register();
+			} else {
+				if (!sErr.equals("")) {
+					this.labelMessage.setText(sErr);
 				} else {
-					labelMessage.setText("Incorrect Password!");
+					if (!Err.equals("")) {
+						this.labelMessage.setText(Err);
+					} else {
+						this.labelMessage.setText("Welcome: " + Mss);
+						this.user = Mss;
+						desbloquejarBotons();
+						canviPantalla();
+					}
 				}
 			}
+
 		}
 	}
 
-	private void comprovarUsuari() {
+	private void register() {
 
-		if (!(tfUsuari.getText().equals(""))) {
-			String PassSQL = userSQL.getPasword(tfUsuari.getText());
-			if (PassSQL == null) {
-				labelMessage.setText("Welcome New User!");
-			} else {
-				labelMessage.setText("Welcome back " + tfUsuari.getText() + "!");
-			}
-		}
+		labelMain.setBounds(210, 100, 400, 50);
+		labelUsername.setBounds(-230, 220, 500, 30);
+		tfUsuari.setBounds(210, 250, 500, 30);
+		labelPassword.setBounds(-235, 320, 500, 30);
+		fPassword.setBounds(210, 350, 500, 30);
+		labelRepeatPassword.setBounds(-190, 420, 500, 30);
+		fRepeatPassword.setBounds(210, 450, 500, 30);
+		bRegistrar.setBounds(210, 520, 500, 40);
+		labelMessage.setBounds(450, 625, 500, 40);
+		bEntrar.setVisible(false);
 
 	}
 

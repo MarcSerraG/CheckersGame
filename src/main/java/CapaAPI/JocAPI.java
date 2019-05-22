@@ -19,8 +19,8 @@ public class JocAPI {
 	private PartidesSQLOracle partSQL;
 	private Sessio sessio;
 
-	public JocAPI() throws Exception {
-		connSQL = new ConnectionSQLOracle("g3geilab1", "g3geilab1");
+	public JocAPI(String user, String password) throws Exception {
+		connSQL = new ConnectionSQLOracle(user, password);
 		userSQL = new UsuariSQLOracle(connSQL);
 		partSQL = new PartidesSQLOracle(connSQL);
 	}
@@ -35,27 +35,31 @@ public class JocAPI {
 	 *         "";
 	 */
 	public String login(String user, String password) {
-
 		JSONObject json = new JSONObject();
 		json.put("res", user);
 		json.put("err", "");
 		json.put("sErr", "");
-		
+
 		boolean jaConnectat = this.userSQL.getConnectat(user);
-		if (jaConnectat) json.put("err", "Usuari amb sessió oberta");
-		
-		/* Password checking */
-		String BDPassword = this.userSQL.getPasword(user);
-		if (BDPassword == null) json.put("err", "User-password incorrecte");
+		if (jaConnectat)
+			json.put("err", "Usuari amb sessió oberta");
 		else {
-			boolean passwordMatch = SCryptUtil.check(password, BDPassword);
-			if (!passwordMatch) json.put("err", "User-password incorrecte");
+			/* Password checking */
+			String BDPassword = this.userSQL.getPasword(user);
+			if (BDPassword == null)
+				json.put("err", "No User");
+			else {
+				boolean passwordMatch = SCryptUtil.check(password, BDPassword);
+				if (!passwordMatch)
+					json.put("err", "User-password incorrecte");
+
+				boolean connexioCorrecte = this.userSQL.canviarSessio(user, true);
+				if (!connexioCorrecte)
+					json.put("sErr", "No s'ha pogut crear la sessio");
+
+				this.sessio = new Sessio(user, new HashSet<Partida>(), 0); // TEMPORAL
+			}
 		}
-		
-		boolean connexioCorrecte = this.userSQL.canviarSessio(user, true);
-		if (!connexioCorrecte) json.put("sErr", "No s'ha pogut crear la sessio");
-		
-		this.sessio = new Sessio(user, new HashSet<Partida>(), 0); // TEMPORAL
 
 		return json.toString();
 	}
@@ -66,10 +70,11 @@ public class JocAPI {
 		json.put("res", user);
 		json.put("err", "");
 		json.put("sErr", "");
-		
+
 		boolean userExists = this.userSQL.getPasword(user) != null;
-		if (userExists) json.put("err", "Usuari existent");
-		
+		if (userExists)
+			json.put("err", "Usuari existent");
+		return null;
 	}
 
 	public void logout(String idSessio) {

@@ -7,7 +7,6 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.sql.SQLException;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -19,14 +18,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import CapaPersistencia.ConnectionSQLOracle;
+import CapaAPI.JocAPI;
 
 public class BaseInterficie extends JFrame implements ActionListener {
 
 	public JButton bLogin, bNewGame, bContinue_Game, bStatistics, bEvents, bLogOut;
 	public JPanel centerLogin;
 	public JPanel centerPartida;
-	private ConnectionSQLOracle cn;
+	private JocAPI api;
 	private Login log;
 	private Partida par;
 
@@ -45,51 +44,37 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		// carreguem els botns del lateral al panell principal
 		MenuBar();
 
-		// Conecta amb el servidor
-		ServerConnection();
-
-		// carrega la pagina de login la qual es situa en el centre
-		log = CenterLogin(cn);
-
-		// Si no hi ha hagut error al conectar amb el servidor
-		if (cn != null)
-			log.labelMessage.setText("Connection Sucessfully");
-
-	}
-
-	public void ServerConnection() {
-
-		// ens conectem al servidor, si tot esta ok cn contindra la connexio, si no sera
-		// null.
-		// si falla la conexio, avans de obrir el joc rebrem una alerta
 		try {
-			cn = new ConnectionSQLOracle("g3geilab1", "g3geilab1");
-
+			api = new JocAPI("g3geilab1", "g3geilab1");// usari i contrasenya del server
+			// carrega la pagina de login la qual es situa en el centre
+			log = CenterLogin();
+			log.labelMessage.setText("Server Connection: Correct");
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Error connecting to server. Please try Again!");
-			cn = null;
+			JOptionPane.showMessageDialog(null, "Error Connecting server!");
+			// carrega la pagina de login la qual es situa en el centre
+			log = CenterLogin();
+			log.labelMessage.setText("Server Connection: Fail");
 		}
+
 	}
 
-	private Login CenterLogin(ConnectionSQLOracle conn) {
+	private Login CenterLogin() {
 
 		// Creem la pantalla de login i la situem en el contre de la applicacio
 
-		Login login = new Login(conn, this);
+		Login login = new Login(api, this);
 		centerLogin = login.LoginCreate();
 		getContentPane().add(centerLogin, BorderLayout.CENTER);
 		login.labelMessage.setText("Connecting...");
 		return login;
 	}
-	
-	private Partida CenterPartida(ConnectionSQLOracle conn) {
-		
-		Partida partida = new Partida(conn, this);
-		centerLogin = partida.partidaCreate();
-		getContentPane().add(centerLogin, BorderLayout.CENTER);
-		return partida;
-	}
 
+	/*
+	 * private Partida CenterPartida() {
+	 * 
+	 * Partida partida = new Partida(this); centerLogin = partida.partidaCreate();
+	 * getContentPane().add(centerLogin, BorderLayout.CENTER); return partida; }
+	 */
 	private void MenuBar() {
 
 		// Creem el menu lateral el qual estara sempre visible
@@ -263,8 +248,8 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bStatistics.setForeground(Color.WHITE);
 		this.bEvents.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
-		
-		par = CenterPartida(cn);
+
+		// par = CenterPartida(cn);
 	}
 
 	private void actionContinue() {
@@ -319,40 +304,29 @@ public class BaseInterficie extends JFrame implements ActionListener {
 	}
 
 	private void actionLogOut() {
-		/*
-		 * TODO: desconectar l'usuari i tornar a la pagina de login
-		 * this.bLogOut.setBackground(new Color(237, 215, 178));
-		 * this.bLogOut.setForeground(Color.BLACK);
-		 * 
-		 * this.bLogin.setBackground(Color.GRAY);
-		 * this.bNewGame.setBackground(Color.GRAY);
-		 * this.bContinue_Game.setBackground(Color.GRAY);
-		 * this.bStatistics.setBackground(Color.GRAY);
-		 * this.bEvents.setBackground(Color.GRAY);
-		 * this.bConnected_Players.setBackground(Color.GRAY);
-		 * 
-		 * this.bLogin.setForeground(Color.WHITE);
-		 * this.bNewGame.setForeground(Color.WHITE);
-		 * this.bContinue_Game.setForeground(Color.WHITE);
-		 * this.bStatistics.setForeground(Color.WHITE);
-		 * this.bEvents.setForeground(Color.WHITE);
-		 * this.bConnected_Players.setForeground(Color.WHITE);
-		 * 
-		 */
 
-		CloseConnection();
+		api.logout(log.user);
+
+		this.bLogOut.setBackground(new Color(237, 215, 178));
+		this.bLogOut.setForeground(Color.BLACK);
+
+		this.bLogin.setBackground(Color.GRAY);
+		this.bNewGame.setBackground(Color.GRAY);
+		this.bContinue_Game.setBackground(Color.GRAY);
+		this.bStatistics.setBackground(Color.GRAY);
+		this.bEvents.setBackground(Color.GRAY);
+		this.bLogin.setForeground(Color.WHITE);
+		this.bNewGame.setForeground(Color.WHITE);
+		this.bContinue_Game.setForeground(Color.WHITE);
+		this.bStatistics.setForeground(Color.WHITE);
+		this.bEvents.setForeground(Color.WHITE);
+
 	}
 
 	public void CloseConnection() {
 
 		// Desconecta del servidor i tanca la aplicacio
-
-		try {
-			// TODO: posar a BD l'usuari a 0
-			cn.tancaConeccio();
-		} catch (SQLException e) {
-		}
-
+		api.logout(log.user);
 		System.exit(0);
 
 	}
