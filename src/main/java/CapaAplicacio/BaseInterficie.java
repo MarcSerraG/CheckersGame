@@ -325,7 +325,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 
 	public void CloseConnection() {
 
-		// Desconecta del servidor i tanca la aplicacio
+		// Desconecta del servidor l'usuari i tanca la aplicacio
 		api.logout(log.user);
 		System.exit(0);
 

@@ -57,19 +57,14 @@ public class JocAPI {
 				if (!connexioCorrecte)
 					json.put("sErr", "No s'ha pogut crear la sessio");
 
-				this.sessio = new Sessio(user, new HashSet<Partida>(), 0); // TEMPORAL
+				try {
+					this.sessio = new Sessio(user, new HashSet<Partida>(), 0, "g3geilab1", "g3geilab1");
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} // TEMPORAL
 			}
 		}
-		
-		boolean connexioCorrecte = this.userSQL.canviarSessio(user, true);
-		if (!connexioCorrecte) json.put("sErr", "No s'ha pogut crear la sessio");
-		
-		try {
-			this.sessio = new Sessio(user, new HashSet<Partida>(), 0, "g3geilab1", "g3geilab1");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} // TEMPORAL
 
 		return json.toString();
 	}
@@ -82,18 +77,21 @@ public class JocAPI {
 		json.put("sErr", "");
 
 		boolean userExists = this.userSQL.getPasword(user) != null;
-		if (userExists) json.put("err", "Usuari existent");
-		
-		String BDPassword = SCryptUtil.scrypt(password, 16, 16, 16);
-		
-		boolean creacioCorrecte = this.userSQL.insertUsuari(user, BDPassword, "", "1");
-		if (!creacioCorrecte) json.put("err", "Error al crear usuari");
-		
+		if (userExists)
+			json.put("err", "Usuari existent");
+		else {
+			String BDPassword = SCryptUtil.scrypt(password, 2, 2, 2);
+
+			boolean creacioCorrecte = this.userSQL.insertUsuari(user, BDPassword, "-", "1");
+			if (!creacioCorrecte)
+				json.put("err", "Error al crear usuari");
+		}
+
 		return json.toString();
 	}
 
 	public void logout(String idSessio) {
-		
+
 	}
 
 	public void reconnecta(String idSessio, String password) {
