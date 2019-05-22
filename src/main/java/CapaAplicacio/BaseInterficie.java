@@ -23,10 +23,12 @@ import CapaPersistencia.ConnectionSQLOracle;
 
 public class BaseInterficie extends JFrame implements ActionListener {
 
-	public JButton bLogin, bNewGame, bContinue_Game, bStatistics, bEvents, bConnected_Players, bLogOut;
+	public JButton bLogin, bNewGame, bContinue_Game, bStatistics, bEvents, bLogOut;
 	public JPanel centerLogin;
+	public JPanel centerPartida;
 	private ConnectionSQLOracle cn;
 	private Login log;
+	private Partida par;
 
 	public BaseInterficie() {
 
@@ -79,6 +81,14 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		login.labelMessage.setText("Connecting...");
 		return login;
 	}
+	
+	private Partida CenterPartida(ConnectionSQLOracle conn) {
+		
+		Partida partida = new Partida(conn, this);
+		centerLogin = partida.partidaCreate();
+		getContentPane().add(centerLogin, BorderLayout.CENTER);
+		return partida;
+	}
 
 	private void MenuBar() {
 
@@ -97,7 +107,6 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bContinue_Game = createButton("Continue Game", size);
 		this.bStatistics = createButton("Statistics", size);
 		this.bEvents = createButton("Events", size);
-		this.bConnected_Players = createButton("Connected Players", size);
 		this.bLogOut = createButton("Log Out", size);
 
 		// Definim el color de fons dels colors a gris menys el de login ja que sera el
@@ -107,7 +116,6 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bContinue_Game.setBackground(Color.GRAY);
 		this.bStatistics.setBackground(Color.GRAY);
 		this.bEvents.setBackground(Color.GRAY);
-		this.bConnected_Players.setBackground(Color.GRAY);
 		this.bLogOut.setBackground(Color.GRAY);
 
 		// Definim el color de les lletres dels botons a blanc menys la de login que
@@ -117,7 +125,6 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bContinue_Game.setForeground(Color.WHITE);
 		this.bStatistics.setForeground(Color.WHITE);
 		this.bEvents.setForeground(Color.WHITE);
-		this.bConnected_Players.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
 
 		// Definim que els botons "llancin" una accio al ser premuts
@@ -126,7 +133,6 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bContinue_Game.addActionListener(this);
 		this.bStatistics.addActionListener(this);
 		this.bEvents.addActionListener(this);
-		this.bConnected_Players.addActionListener(this);
 		this.bLogOut.addActionListener(this);
 
 		// Bloquejem tots els botons de tal manera que l'usuari tingui de entrar avans
@@ -135,7 +141,6 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bContinue_Game.setEnabled(false);
 		this.bStatistics.setEnabled(false);
 		this.bEvents.setEnabled(false);
-		this.bConnected_Players.setEnabled(false);
 		this.bLogOut.setEnabled(false);
 
 		// carreguem el logo del joc que esta situat adalt a la dreta
@@ -163,9 +168,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 			menu.add(bStatistics);
 			menu.add(Box.createRigidArea(new Dimension(0, 15)));
 			menu.add(bEvents);
-			menu.add(Box.createRigidArea(new Dimension(0, 15)));
-			menu.add(bConnected_Players);
-			menu.add(Box.createRigidArea(new Dimension(0, 180)));
+			menu.add(Box.createRigidArea(new Dimension(0, 195)));
 			menu.add(bLogOut);
 
 			// afegim el panell menu a la esquerra del panell principal
@@ -205,8 +208,8 @@ public class BaseInterficie extends JFrame implements ActionListener {
 			actionLogin();
 		} else {
 			if (e.getSource() == this.bNewGame) {
+				System.out.println("Boto new game");
 				actionNewGame();
-
 			} else {
 				if (e.getSource() == this.bContinue_Game) {
 					actionContinue();
@@ -219,14 +222,8 @@ public class BaseInterficie extends JFrame implements ActionListener {
 
 						if (e.getSource() == this.bEvents) {
 							actionEvents();
-
 						} else {
-							if (e.getSource() == this.bConnected_Players) {
-								actionConnected_Players();
-
-							} else {
-								actionLogOut();
-							}
+							actionLogOut();
 						}
 					}
 				}
@@ -242,14 +239,12 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bContinue_Game.setBackground(Color.GRAY);
 		this.bStatistics.setBackground(Color.GRAY);
 		this.bEvents.setBackground(Color.GRAY);
-		this.bConnected_Players.setBackground(Color.GRAY);
 		this.bLogOut.setBackground(Color.GRAY);
 
 		this.bNewGame.setForeground(Color.WHITE);
 		this.bContinue_Game.setForeground(Color.WHITE);
 		this.bStatistics.setForeground(Color.WHITE);
 		this.bEvents.setForeground(Color.WHITE);
-		this.bConnected_Players.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
 	}
 
@@ -261,15 +256,15 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bContinue_Game.setBackground(Color.GRAY);
 		this.bStatistics.setBackground(Color.GRAY);
 		this.bEvents.setBackground(Color.GRAY);
-		this.bConnected_Players.setBackground(Color.GRAY);
 		this.bLogOut.setBackground(Color.GRAY);
 
 		this.bLogin.setForeground(Color.WHITE);
 		this.bContinue_Game.setForeground(Color.WHITE);
 		this.bStatistics.setForeground(Color.WHITE);
 		this.bEvents.setForeground(Color.WHITE);
-		this.bConnected_Players.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
+		
+		par = CenterPartida(cn);
 	}
 
 	private void actionContinue() {
@@ -280,14 +275,12 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bNewGame.setBackground(Color.GRAY);
 		this.bStatistics.setBackground(Color.GRAY);
 		this.bEvents.setBackground(Color.GRAY);
-		this.bConnected_Players.setBackground(Color.GRAY);
 		this.bLogOut.setBackground(Color.GRAY);
 
 		this.bLogin.setForeground(Color.WHITE);
 		this.bNewGame.setForeground(Color.WHITE);
 		this.bStatistics.setForeground(Color.WHITE);
 		this.bEvents.setForeground(Color.WHITE);
-		this.bConnected_Players.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
 	}
 
@@ -299,14 +292,12 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bNewGame.setBackground(Color.GRAY);
 		this.bContinue_Game.setBackground(Color.GRAY);
 		this.bEvents.setBackground(Color.GRAY);
-		this.bConnected_Players.setBackground(Color.GRAY);
 		this.bLogOut.setBackground(Color.GRAY);
 
 		this.bLogin.setForeground(Color.WHITE);
 		this.bNewGame.setForeground(Color.WHITE);
 		this.bContinue_Game.setForeground(Color.WHITE);
 		this.bEvents.setForeground(Color.WHITE);
-		this.bConnected_Players.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
 	}
 
@@ -318,33 +309,12 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bNewGame.setBackground(Color.GRAY);
 		this.bContinue_Game.setBackground(Color.GRAY);
 		this.bStatistics.setBackground(Color.GRAY);
-		this.bConnected_Players.setBackground(Color.GRAY);
 		this.bLogOut.setBackground(Color.GRAY);
 
 		this.bLogin.setForeground(Color.WHITE);
 		this.bNewGame.setForeground(Color.WHITE);
 		this.bContinue_Game.setForeground(Color.WHITE);
 		this.bStatistics.setForeground(Color.WHITE);
-		this.bConnected_Players.setForeground(Color.WHITE);
-		this.bLogOut.setForeground(Color.WHITE);
-	}
-
-	private void actionConnected_Players() {
-		this.bConnected_Players.setBackground(new Color(237, 215, 178));
-		this.bConnected_Players.setForeground(Color.BLACK);
-
-		this.bLogin.setBackground(Color.GRAY);
-		this.bNewGame.setBackground(Color.GRAY);
-		this.bContinue_Game.setBackground(Color.GRAY);
-		this.bStatistics.setBackground(Color.GRAY);
-		this.bEvents.setBackground(Color.GRAY);
-		this.bLogOut.setBackground(Color.GRAY);
-
-		this.bLogin.setForeground(Color.WHITE);
-		this.bNewGame.setForeground(Color.WHITE);
-		this.bContinue_Game.setForeground(Color.WHITE);
-		this.bStatistics.setForeground(Color.WHITE);
-		this.bEvents.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
 	}
 
@@ -375,10 +345,10 @@ public class BaseInterficie extends JFrame implements ActionListener {
 
 	public void CloseConnection() {
 
-		// Desonecta del servidor i tanca la aplicacio
+		// Desconecta del servidor i tanca la aplicacio
 
 		try {
-			// ToDO: posar a BD l'usuari a 0
+			// TODO: posar a BD l'usuari a 0
 			cn.tancaConeccio();
 		} catch (SQLException e) {
 		}

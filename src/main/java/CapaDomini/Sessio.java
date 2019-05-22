@@ -67,10 +67,6 @@ public class Sessio {
 		}
 	}
 	
-	public boolean registrarUsuari() {
-		
-		return false;
-	}
 	
 	public Set<String> veureUsuaris() {
 		
