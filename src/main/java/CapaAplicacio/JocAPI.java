@@ -76,6 +76,11 @@ public class JocAPI {
 		json.put("res", user);
 		json.put("err", "");
 		json.put("sErr", "");
+		
+		if (user.contains(";") || user.contains("\"")) {
+			json.put("err", "El nom no pot contenir \" ni ;");
+			return json.toString();
+		}
 
 		boolean userExists = this.userSQL.getPasword(user) != null;
 		if (userExists)
@@ -159,26 +164,42 @@ public class JocAPI {
 
 	}
 
-	public String gerPartidesTorn(String idSessio) {
+	public String getPartidesTorn(String idSessio) {
 		JSONObject json = new JSONObject();
 		json.put("res", "");
 		json.put("err", "");
 		json.put("sErr", "");
 		
-		List<String> nomsUsuaris = new ArrayList<String>();
-		Set<Partida> setPartides = this.partSQL.getPartidesPendents(new Usuari(idSessio));
+		String nomsUsuaris = "";
+		Set<Partida> setPartides = this.partSQL.getPartidesEnCurs(new Usuari(idSessio));
 		for (Partida part : setPartides) {
 			if (part.getUsuariTorn().getNom().equals(idSessio))
-				nomsUsuaris.add(part.getContrincant().getNom());
+				nomsUsuaris += part.getContrincant().getNom() + ";";
 		}
 		
+		nomsUsuaris = nomsUsuaris.substring(0, nomsUsuaris.length() - 2); // Borrar ultim ;
 		json.put("res", nomsUsuaris);
 		
 		return json.toString();
 	}
 
 	public String getPartidesNoTorn(String idSessio) {
-		return null;
+		JSONObject json = new JSONObject();
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+		
+		String nomsUsuaris = "";
+		Set<Partida> setPartides = this.partSQL.getPartidesEnCurs(new Usuari(idSessio));
+		for (Partida part : setPartides) {
+			if (!part.getUsuariTorn().getNom().equals(idSessio))
+				nomsUsuaris += part.getContrincant().getNom() + ";";
+		}
+		
+		nomsUsuaris = nomsUsuaris.substring(0, nomsUsuaris.length() - 2); // Borrar ultim ;
+		json.put("res", nomsUsuaris);
+		
+		return json.toString();
 	}
 
 	public String getPartidesAcabades(String idSessio) {

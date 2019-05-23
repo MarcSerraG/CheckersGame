@@ -88,9 +88,22 @@ public class PartidesSQLOracle {
 		return tb;
 	}
 	
-	public Set<Partida> getPartidesPendents(Usuari jugador){
-		
-		
+	/**
+	 * Retorna les partides en curs de l'usuari que necessiten la seva atenció
+	 * @param jugador
+	 * @return
+	 */
+	public Set<Partida> getPartidesPendents(Usuari jugador){	
+		return null;
+	}
+	
+	/**
+	 * Retorna totes les partides en curs de l'usuari,
+	 * independentment de si es el seu torn o no
+	 * @param jugador
+	 * @return
+	 */
+	public Set<Partida> getPartidesEnCurs(Usuari jugador){	
 		return null;
 	}
 	
