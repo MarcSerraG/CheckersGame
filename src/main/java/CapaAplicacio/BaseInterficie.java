@@ -239,6 +239,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 	}
 
 	private void actionNewGame() {
+		centerPanel.setVisible(false);
 		this.bNewGame.setBackground(new Color(237, 215, 178));
 		this.bNewGame.setForeground(Color.BLACK);
 
@@ -254,12 +255,16 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bEvents.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
 
-		// par = CenterPartida(cn);
+		NewGame newGame = new NewGame(this);
+		centerPanel = newGame.NewGameCreate();
+		newGame.setVisible(true);
+		getContentPane().add(centerPanel, BorderLayout.CENTER);
+		getContentPane().repaint();
+		validate();
 	}
 
 	private void actionContinue() {
 
-		System.out.print("Continue!");
 		centerPanel.setVisible(false);
 
 		this.bContinue_Game.setBackground(new Color(237, 215, 178));
