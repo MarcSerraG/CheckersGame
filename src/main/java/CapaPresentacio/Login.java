@@ -1,4 +1,4 @@
-package CapaAplicacio;
+package CapaPresentacio;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 
 import org.json.JSONObject;
 
-import CapaAPI.JocAPI;
+import CapaAplicacio.JocAPI;
 
 public class Login extends JPanel implements ActionListener {
 

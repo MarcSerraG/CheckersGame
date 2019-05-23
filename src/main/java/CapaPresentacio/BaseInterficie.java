@@ -1,4 +1,4 @@
-package CapaAplicacio;
+package CapaPresentacio;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,7 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import CapaAPI.JocAPI;
+import CapaAplicacio.JocAPI;
 
 public class BaseInterficie extends JFrame implements ActionListener {
 

@@ -223,7 +223,7 @@ public class JocAPI {
 
 	public String ferDama(String idSessio, String idPartida, String pos) {
 		
-		
+		return null;
 	}
 
 	public String ferBufa(String idSessio, String idPartida, String pos) {
