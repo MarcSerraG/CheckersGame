@@ -1,5 +1,7 @@
 package CapaPersistencia;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Set;
 
@@ -8,52 +10,94 @@ import CapaDomini.Taulell;
 import CapaDomini.Usuari;
 
 public class PartidesSQLOracle {
+	
 	private ConnectionSQLOracle conn;
 	
 	public PartidesSQLOracle(ConnectionSQLOracle connection) {
 		this.conn = connection;
 	}
 
-	public boolean crearPartidaNova(Usuari jugador, Usuari contrincant) {
+	/**
+	 * Return ID sino null
+	 * @param jugador
+	 * @param contrincant
+	 * @return
+	 */
+	public String crearPartidaNova(Usuari jugador, Usuari contrincant) {
 		
-		Statement st = null;
-		String sql = ConnectionSQLOracle.SQLINSERT;
-		String sql2 = ConnectionSQLOracle.SQLINSERT;
-		
-		Set<Partida> ptPd = getPartidesPendents(jugador);
-		Set<Partida> ptCd = getPartidesPendents(contrincant);
-		if (ptPd != null && ptCd != null) {
-			if (ptPd.retainAll(ptCd))
-				return false;
+		String id = null;
+		ResultSet rs = null;
+		ResultSet rsc = null;
+		try { conn.setAutocommit(false); }
+		catch (SQLException e) {
+			return id;
 		}
-		sql += "partides VALUES (sysdate,null,0,null,null,'"+jugador+"')";
+		String sql = ConnectionSQLOracle.SQLINSERT;
+		String sql2 = ConnectionSQLOracle.SQLSELECT;
+		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 		
-		return true;
+		sqlcompro += "(id) from partides where ";
+		sqlcompro += " jugador = '"+jugador+" and contrincant = '"+contrincant+"' and "
+				+ " estat between 0 AND 2";
+		
+		try {
+			rsc = conn.ferSelect(sqlcompro);
+			if (rsc.next())
+				return null;	
+		} catch (SQLException e) {
+			
+		}
+		
+		//Option 0 no acceptat
+		//Option 1 jugan
+		//Option 3 acabat
+		//Option 2 proposat taules
+		//Comprovar partida no existent amb el usuari
+		//
+		
+		sql += "partides "
+				+ "(jugador,contrincant,data_inici,salvat,estat,torn) "
+				+ "VALUES ('"+jugador+"','"+contrincant+"',sysdate,'"+getTaullelnou().toString()+"',0,'"+jugador+"')";
+		
+		//select nomseq.currval from dual;
+		sql2  += "partides_sequence.currval from dual";
+		try {
+			conn.crearInsert(sql);
+			
+			
+			rs = conn.ferSelect(sql2);
+			
+			while (rs.next()) {
+				id += ""+rs.getInt(0);
+			}
+			
+			conn.ferCommit();
+			conn.setAutocommit(true);
+			
+		} catch (SQLException e){
+			return id;
+		}
+		return id;
 	}
 	
-	public Partida continuarPartida(String idPartida, String nom) {
+	public Taulell continuarPartida(String idPartida) {
 		
-		return null;
+		Taulell tb = new Taulell();
+		
+		
+		return tb;
 	}
 	
 	public Set<Partida> getPartidesPendents(Usuari jugador){
 		
+		
 		return null;
 	}
 	
-	private String getStringTaulellNou() {
+	private Taulell getTaullelnou() {
 		
-		String 	a =  "0,x,0;x,0;x,0;x,0,x;";
-				a += "x,0,x,0,x,0,x,0,x,0;";
-				a += "0,x,0;x,0;x,0;x,0,x;";
-				a += "x,0,x,0,x,0,x,0,x,0;";
-				a += "0,0,0,0,0,0,0,0,0,0;";
-				a += "0,0,0,0,0,0,0,0,0,0;";
-				a += "0,x,0;x,0;x,0;x,0,x;";
-				a += "x,0,x,0,x,0,x,0,x,0;";
-				a += "0,x,0;x,0;x,0;x,0,x;";
-				a += "x,0,x,0,x,0,x,0,x,0;";
-		return a;
+		Taulell p = new Taulell();
+		return p;
 	}
 	
 	private Taulell carregaPartida(String idPartida) {

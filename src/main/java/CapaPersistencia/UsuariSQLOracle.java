@@ -42,24 +42,28 @@ public class UsuariSQLOracle {
 
 	// Insert usuari
 	/**
-	 * Torna un resultset de nom usuaris i conectats o no
+	 * Torna un resultset de nom usuaris conectats
 	 * 
-	 * @return FENSE
+	 * @return 
 	 */
-	public Set<Usuari> retornaUsuaris() {
+	public String retornaUsuaris() {
 
 		ResultSet rs = null;
+		String sortida = "";
 		String sql = ConnectionSQLOracle.SQLSELECT;
-		sql += "(nom,connectat) FROM USUARIS";
+		sql += "(nom) FROM USUARIS where connectat = 1";
 		try {
 			rs = conn.ferSelect(sql);
 			while (rs.next()) {
+				
+				sortida += rs.getString(0);
+				sortida += ";";
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 
 		}
-		return null;
+		return sortida;
 
 	}
 	

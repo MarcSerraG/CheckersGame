@@ -1,4 +1,4 @@
-package CapaAPI;
+package CapaAplicacio;
 
 import java.util.HashSet;
 
@@ -105,9 +105,23 @@ public class JocAPI {
 	public String getEstadistics(String idSessio) {
 		return null;
 	}
-
+	/**
+	 * Retorna na llista d'usuaris separats per ;
+	 * @param idSessio
+	 * @return
+	 */
 	public String getCandidatsSol(String idSessio) {
-		return null;
+		JSONObject json = new JSONObject();
+		String res = "";
+		res = this.userSQL.retornaUsuaris();
+		if (res == null)
+			return json.put("sErr", "Hi ha hagut un problema de connexió.").toString();
+		else {
+			if (res == "")
+				return json.put("sErr", "No hi han usuaris connectats.").toString();
+			else 
+				return res;
+		}
 	}
 
 	public void enviaSol(String idSessio, String usuari) {

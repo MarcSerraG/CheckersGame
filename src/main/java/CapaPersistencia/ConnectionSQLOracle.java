@@ -72,6 +72,14 @@ public class ConnectionSQLOracle {
 		}
 	}
 	
+	public void ferCommit() throws SQLException {
+		conn.commit();
+	}
+	
+	public void setAutocommit(boolean opt) throws SQLException {
+		conn.setAutoCommit(opt);
+	}
+	
 	public static void main(String[] args) {
 		//Sa dimportar odbc.jar
 		try {
@@ -79,7 +87,6 @@ public class ConnectionSQLOracle {
 			ConnectionSQLOracle cn =  new ConnectionSQLOracle("g3geilab1", "g3geilab1");
 			UsuariSQLOracle usu =  new UsuariSQLOracle(cn);
 			//usu.insertUsuari("Marc", "1234", "msg@gmail.com","0");
-			
 			System.out.println(usu.getConnectat("Marc"));
 			
 			
