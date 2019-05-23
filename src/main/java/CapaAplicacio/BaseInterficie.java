@@ -99,6 +99,15 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bEvents.setBackground(Color.GRAY);
 		this.bLogOut.setBackground(Color.GRAY);
 
+		// Error color Mac:
+
+		this.bLogin.setOpaque(true);
+		this.bNewGame.setOpaque(true);
+		this.bContinue_Game.setOpaque(true);
+		this.bStatistics.setOpaque(true);
+		this.bEvents.setOpaque(true);
+		this.bLogOut.setOpaque(true);
+
 		// Definim el color de les lletres dels botons a blanc menys la de login que
 		// sera negre
 		this.bLogin.setForeground(Color.BLACK);
