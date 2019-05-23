@@ -6,20 +6,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import CapaDomini.Usuari;
-
 public class ConnectionSQLOracle {
 
 	private Connection conn;
-	
-	public static String SQLINSERT =  "INSERT INTO ";
+
+	public static String SQLINSERT = "INSERT INTO ";
 	public static String SQLSELECT = "SELECT ";
 	public static String SQLUPDATE = "UPDATE";
-	
+
 	public ConnectionSQLOracle(String usuari, String contrasena) throws Exception {
 		Class.forName("oracle.jdbc.driver.OracleDriver");
+		ConfigurationSQLOracle propietes = ConfigurationSQLOracle.getInstancia();
+		String server = propietes.getPropietat("Server.server");
+		String user = propietes.getPropietat("Server.user");
+		String pass = propietes.getPropietat("Server.pass");
 
-		conn = DriverManager.getConnection("jdbc:oracle:thin:@kali.tecnocampus.cat:1521:sapiens", usuari, contrasena);
+		conn = DriverManager.getConnection(server, user, pass);
 	}
 
 	public void tancaConeccio() throws SQLException {
@@ -71,18 +73,17 @@ public class ConnectionSQLOracle {
 			return false;
 		}
 	}
-	
+
 	public static void main(String[] args) {
-		//Sa dimportar odbc.jar
+		// Sa dimportar odbc.jar
 		try {
-			
-			ConnectionSQLOracle cn =  new ConnectionSQLOracle("g3geilab1", "g3geilab1");
-			UsuariSQLOracle usu =  new UsuariSQLOracle(cn);
-			//usu.insertUsuari("Marc", "1234", "msg@gmail.com","0");
-			
+
+			ConnectionSQLOracle cn = new ConnectionSQLOracle("g3geilab1", "g3geilab1");
+			UsuariSQLOracle usu = new UsuariSQLOracle(cn);
+			// usu.insertUsuari("Marc", "1234", "msg@gmail.com","0");
+
 			System.out.println(usu.getConnectat("Marc"));
-			
-			
+
 		} catch (Exception e) {
 			System.out.println(e);
 		}
