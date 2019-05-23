@@ -92,14 +92,34 @@ public class JocAPI {
 		return json.toString();
 	}
 
-	public void logout(String idSessio) {
+	public String logout(String idSessio) {
 
-		userSQL.canviarSessio(idSessio, false);
-
+		JSONObject json = new JSONObject();
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+		
+		boolean errorSessio = !userSQL.canviarSessio(idSessio, false);
+		if (errorSessio) {
+			json.put("err", "Error ID Sessió");
+		}
+		else this.sessio = null;
+		return json.toString();
 	}
 
-	public void reconnecta(String idSessio, String password) {
-
+	public String reconnecta(String idSessio, String password) {
+		
+		JSONObject json = new JSONObject();
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+		
+		boolean sessioCaducada = !this.sessio.getConnectat();
+		if (sessioCaducada)	return this.login(idSessio, password);
+		else {
+			json.put("err", "La sessió encara està connectada");
+		}
+		return json.toString();
 	}
 
 	public String getEstadistics(String idSessio) {
