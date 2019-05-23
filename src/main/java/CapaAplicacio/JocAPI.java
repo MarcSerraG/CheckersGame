@@ -1,12 +1,15 @@
 package CapaAplicacio;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.json.JSONObject;
 
 import com.lambdaworks.crypto.SCryptUtil;
 
-import CapaDomini.*;
+import CapaDomini.Partida;
+import CapaDomini.Sessio;
+import CapaDomini.Usuari;
 import CapaPersistencia.ConnectionSQLOracle;
 import CapaPersistencia.PartidesSQLOracle;
 import CapaPersistencia.UsuariSQLOracle;
@@ -76,7 +79,7 @@ public class JocAPI {
 		json.put("res", user);
 		json.put("err", "");
 		json.put("sErr", "");
-		
+
 		if (user.contains(";") || user.contains("\"")) {
 			json.put("err", "El nom no pot contenir \" ni ;");
 			return json.toString();
@@ -102,24 +105,25 @@ public class JocAPI {
 		json.put("res", "");
 		json.put("err", "");
 		json.put("sErr", "");
-		
+
 		boolean errorSessio = !userSQL.canviarSessio(idSessio, false);
 		if (errorSessio) {
 			json.put("err", "Error ID Sessió");
-		}
-		else this.sessio = null;
+		} else
+			this.sessio = null;
 		return json.toString();
 	}
 
 	public String reconnecta(String idSessio, String password) {
-		
+
 		JSONObject json = new JSONObject();
 		json.put("res", "");
 		json.put("err", "");
 		json.put("sErr", "");
-		
+
 		boolean sessioCaducada = !this.sessio.getConnectat();
-		if (sessioCaducada)	return this.login(idSessio, password);
+		if (sessioCaducada)
+			return this.login(idSessio, password);
 		else {
 			json.put("err", "La sessió encara està connectada");
 		}
@@ -129,8 +133,10 @@ public class JocAPI {
 	public String getEstadistics(String idSessio) {
 		return null;
 	}
+
 	/**
 	 * Retorna na llista d'usuaris separats per ;
+	 * 
 	 * @param idSessio
 	 * @return
 	 */
@@ -143,7 +149,7 @@ public class JocAPI {
 		else {
 			if (res == "")
 				return json.put("sErr", "No hi han usuaris connectats.").toString();
-			else 
+			else
 				return res;
 		}
 	}
@@ -169,17 +175,17 @@ public class JocAPI {
 		json.put("res", "");
 		json.put("err", "");
 		json.put("sErr", "");
-		
+
 		String nomsUsuaris = "";
 		Set<Partida> setPartides = this.partSQL.getPartidesEnCurs(new Usuari(idSessio));
 		for (Partida part : setPartides) {
 			if (part.getUsuariTorn().getNom().equals(idSessio))
 				nomsUsuaris += part.getContrincant().getNom() + ";";
 		}
-		
+
 		nomsUsuaris = nomsUsuaris.substring(0, nomsUsuaris.length() - 2); // Borrar ultim ;
 		json.put("res", nomsUsuaris);
-		
+
 		return json.toString();
 	}
 
@@ -188,17 +194,17 @@ public class JocAPI {
 		json.put("res", "");
 		json.put("err", "");
 		json.put("sErr", "");
-		
+
 		String nomsUsuaris = "";
 		Set<Partida> setPartides = this.partSQL.getPartidesEnCurs(new Usuari(idSessio));
 		for (Partida part : setPartides) {
 			if (!part.getUsuariTorn().getNom().equals(idSessio))
 				nomsUsuaris += part.getContrincant().getNom() + ";";
 		}
-		
+
 		nomsUsuaris = nomsUsuaris.substring(0, nomsUsuaris.length() - 2); // Borrar ultim ;
 		json.put("res", nomsUsuaris);
-		
+
 		return json.toString();
 	}
 
@@ -243,7 +249,7 @@ public class JocAPI {
 	}
 
 	public String ferDama(String idSessio, String idPartida, String pos) {
-		
+
 		return null;
 	}
 
