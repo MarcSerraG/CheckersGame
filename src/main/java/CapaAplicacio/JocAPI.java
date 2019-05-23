@@ -1,13 +1,12 @@
 package CapaAplicacio;
 
-import java.util.HashSet;
+import java.util.*;
 
 import org.json.JSONObject;
 
 import com.lambdaworks.crypto.SCryptUtil;
 
-import CapaDomini.Partida;
-import CapaDomini.Sessio;
+import CapaDomini.*;
 import CapaPersistencia.ConnectionSQLOracle;
 import CapaPersistencia.PartidesSQLOracle;
 import CapaPersistencia.UsuariSQLOracle;
@@ -92,14 +91,34 @@ public class JocAPI {
 		return json.toString();
 	}
 
-	public void logout(String idSessio) {
+	public String logout(String idSessio) {
 
-		userSQL.canviarSessio(idSessio, false);
-
+		JSONObject json = new JSONObject();
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+		
+		boolean errorSessio = !userSQL.canviarSessio(idSessio, false);
+		if (errorSessio) {
+			json.put("err", "Error ID Sessió");
+		}
+		else this.sessio = null;
+		return json.toString();
 	}
 
-	public void reconnecta(String idSessio, String password) {
-
+	public String reconnecta(String idSessio, String password) {
+		
+		JSONObject json = new JSONObject();
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+		
+		boolean sessioCaducada = !this.sessio.getConnectat();
+		if (sessioCaducada)	return this.login(idSessio, password);
+		else {
+			json.put("err", "La sessió encara està connectada");
+		}
+		return json.toString();
 	}
 
 	public String getEstadistics(String idSessio) {
@@ -141,7 +160,21 @@ public class JocAPI {
 	}
 
 	public String gerPartidesTorn(String idSessio) {
-		return null;
+		JSONObject json = new JSONObject();
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+		
+		List<String> nomsUsuaris = new ArrayList<String>();
+		Set<Partida> setPartides = this.partSQL.getPartidesPendents(new Usuari(idSessio));
+		for (Partida part : setPartides) {
+			if (part.getUsuariTorn().getNom().equals(idSessio))
+				nomsUsuaris.add(part.getContrincant().getNom());
+		}
+		
+		json.put("res", nomsUsuaris);
+		
+		return json.toString();
 	}
 
 	public String getPartidesNoTorn(String idSessio) {
@@ -189,7 +222,8 @@ public class JocAPI {
 	}
 
 	public String ferDama(String idSessio, String idPartida, String pos) {
-		return null;
+		
+		
 	}
 
 	public String ferBufa(String idSessio, String idPartida, String pos) {
