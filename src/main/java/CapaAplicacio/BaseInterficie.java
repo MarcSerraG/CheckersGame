@@ -36,7 +36,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		getContentPane().setLayout(new BorderLayout());
 
 		// definim la icona de la app
-		ImageIcon ImageIcon = new ImageIcon(getClass().getResource("Logo.png"));
+		ImageIcon ImageIcon = new ImageIcon(getClass().getResource("/Logo.png"));
 		Image Image = ImageIcon.getImage();
 		this.setIconImage(Image);
 
@@ -44,7 +44,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		MenuBar();
 
 		try {
-			api = new JocAPI("g3geilab1", "g3geilab1");// usari i contrasenya del server
+			api = new JocAPI("g3geilab1", "g3geilab1");// usuari i contrasenya del server
 			// carrega la pagina de login la qual es situa en el centre
 			log = CenterLogin();
 			log.labelMessage.setText("Server Connection: Correct");
@@ -99,7 +99,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bEvents.setBackground(Color.GRAY);
 		this.bLogOut.setBackground(Color.GRAY);
 
-		// Error color Mac:
+		// Solucio error color Mac: (No funciona...)
 
 		this.bLogin.setOpaque(true);
 		this.bNewGame.setOpaque(true);
@@ -136,7 +136,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		// carreguem el logo del joc que esta situat adalt a la dreta
 		Image myImage;
 		try {
-			myImage = ImageIO.read(getClass().getResource("Logo.png"));
+			myImage = ImageIO.read(getClass().getResource("/Logo.png"));
 
 			myImage = myImage.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
 			ImageIcon myImageIcon = new ImageIcon(myImage);
@@ -357,7 +357,8 @@ public class BaseInterficie extends JFrame implements ActionListener {
 	public void CloseConnection() {
 
 		// Desconecta del servidor l'usuari i tanca la aplicacio
-		api.logout(log.user);
+		if (log.user != null)
+			api.logout(log.user);
 		System.exit(0);
 
 	}

@@ -27,7 +27,7 @@ public class Partida extends JPanel implements ActionListener {
 
 		Image myImage;
 		try {
-			myImage = ImageIO.read(getClass().getResource("taulell.png"));
+			myImage = ImageIO.read(getClass().getResource("/taulell.png"));
 
 			myImage = myImage.getScaledInstance(500, 500, java.awt.Image.SCALE_SMOOTH);
 			ImageIcon myImageIcon = new ImageIcon(myImage);
