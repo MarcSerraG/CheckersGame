@@ -1,13 +1,12 @@
 package CapaAPI;
 
-import java.util.HashSet;
+import java.util.*;
 
 import org.json.JSONObject;
 
 import com.lambdaworks.crypto.SCryptUtil;
 
-import CapaDomini.Partida;
-import CapaDomini.Sessio;
+import CapaDomini.*;
 import CapaPersistencia.ConnectionSQLOracle;
 import CapaPersistencia.PartidesSQLOracle;
 import CapaPersistencia.UsuariSQLOracle;
@@ -147,7 +146,21 @@ public class JocAPI {
 	}
 
 	public String gerPartidesTorn(String idSessio) {
-		return null;
+		JSONObject json = new JSONObject();
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+		
+		List<String> nomsUsuaris = new ArrayList<String>();
+		Set<Partida> setPartides = this.partSQL.getPartidesPendents(new Usuari(idSessio));
+		for (Partida part : setPartides) {
+			if (part.getUsuariTorn().getNom().equals(idSessio))
+				nomsUsuaris.add(part.getContrincant().getNom());
+		}
+		
+		json.put("res", nomsUsuaris);
+		
+		return json.toString();
 	}
 
 	public String getPartidesNoTorn(String idSessio) {

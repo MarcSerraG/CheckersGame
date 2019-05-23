@@ -65,6 +65,7 @@ public class Sessio {
 	public String getUsuariNom() {return this.usrJugador.getNom();}
 	public int getPartidesPendents() {return this.iNumPendents;}
 	public boolean getConnectat() {return this.boolConnectat;}
+	public Set<Partida> getSetPartides() {return this.setPartides;}
 	
 	
 	public void timeOut() {
