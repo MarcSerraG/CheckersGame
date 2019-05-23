@@ -4,6 +4,7 @@ import java.sql.Statement;
 import java.util.Set;
 
 import CapaDomini.Partida;
+import CapaDomini.Taulell;
 import CapaDomini.Usuari;
 
 public class PartidesSQLOracle {
@@ -25,8 +26,8 @@ public class PartidesSQLOracle {
 			if (ptPd.retainAll(ptCd))
 				return false;
 		}
-		sql += "partides VALUES (getDate,null,0,null,null,0)";
-		//sql2 += "usuaripartides ("
+		sql += "partides VALUES (sysdate,null,0,null,null,'"+jugador+"')";
+		
 		return true;
 	}
 	
@@ -36,6 +37,28 @@ public class PartidesSQLOracle {
 	}
 	
 	public Set<Partida> getPartidesPendents(Usuari jugador){
+		
 		return null;
+	}
+	
+	private String getStringTaulellNou() {
+		
+		String 	a =  "0,x,0;x,0;x,0;x,0,x;";
+				a += "x,0,x,0,x,0,x,0,x,0;";
+				a += "0,x,0;x,0;x,0;x,0,x;";
+				a += "x,0,x,0,x,0,x,0,x,0;";
+				a += "0,0,0,0,0,0,0,0,0,0;";
+				a += "0,0,0,0,0,0,0,0,0,0;";
+				a += "0,x,0;x,0;x,0;x,0,x;";
+				a += "x,0,x,0,x,0,x,0,x,0;";
+				a += "0,x,0;x,0;x,0;x,0,x;";
+				a += "x,0,x,0,x,0,x,0,x,0;";
+		return a;
+	}
+	
+	private Taulell carregaPartida(String idPartida) {
+		Taulell tb = null;
+		
+		return tb;
 	}
 }
