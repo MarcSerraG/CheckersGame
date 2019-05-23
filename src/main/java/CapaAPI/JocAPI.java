@@ -52,17 +52,19 @@ public class JocAPI {
 				boolean passwordMatch = SCryptUtil.check(password, BDPassword);
 				if (!passwordMatch)
 					json.put("err", "User-password incorrecte");
+				else {
 
-				boolean connexioCorrecte = this.userSQL.canviarSessio(user, true);
-				if (!connexioCorrecte)
-					json.put("sErr", "No s'ha pogut crear la sessio");
+					boolean connexioCorrecte = this.userSQL.canviarSessio(user, true);
+					if (!connexioCorrecte)
+						json.put("sErr", "No s'ha pogut crear la sessio");
 
-				try {
-					this.sessio = new Sessio(user, new HashSet<Partida>(), 0, "g3geilab1", "g3geilab1");
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} // TEMPORAL
+					try {
+						this.sessio = new Sessio(user, new HashSet<Partida>(), 0, "g3geilab1", "g3geilab1");
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} // TEMPORAL
+				}
 			}
 		}
 

@@ -58,9 +58,9 @@ public class Login extends JPanel implements ActionListener {
 		labelMessage.setFont(new Font("SansSerif", Font.BOLD, 12));
 
 		labelMain.setBounds(210, 100, 400, 50);
-		labelUsername.setBounds(-225, 220, 500, 30);
+		labelUsername.setBounds(-230, 220, 500, 30);
 		tfUsuari.setBounds(210, 250, 500, 30);
-		labelPassword.setBounds(-230, 320, 500, 30);
+		labelPassword.setBounds(-235, 320, 500, 30);
 		fPassword.setBounds(210, 350, 500, 30);
 		bEntrar.setBounds(210, 450, 500, 40);
 		labelMessage.setBounds(450, 625, 500, 40);
@@ -82,6 +82,8 @@ public class Login extends JPanel implements ActionListener {
 		labelPassword.setForeground(new Color(237, 215, 178));
 		labelRepeatPassword.setForeground(new Color(237, 215, 178));
 		labelMessage.setForeground(new Color(237, 215, 178));
+		bEntrar.setOpaque(true);
+		bRegistrar.setOpaque(true);
 
 		bEntrar.addActionListener(this);
 		bRegistrar.addActionListener(this);
