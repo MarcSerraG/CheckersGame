@@ -9,16 +9,15 @@ public class Casella {
 	private Fitxa fitxa;
 	
 	//Constructor
-	public Casella(int x, int y, boolean teFitxa){
+	public Casella(int x, int y, boolean teFitxa, int tipus, int color){
 	
 		this.intPosicioX = x;
 		this.intPosicioY = y;
 		this.boolTeFitxa = teFitxa;
 		
 		if(teFitxa) {
-			if (x < 4) fitxa = new Peo(1);
-			else fitxa = new Peo(0);
-		}
+			fitxa = tipus == 0 ? new Peo(color) : new Dama(color);
+			}
 	}
 	//Gets & Sets
 	public Fitxa getFitxa() {return fitxa;}
@@ -42,8 +41,8 @@ public class Casella {
 	//Retorna el valor de la fitxa envoltat per la casella
 	public String toString() {
 		
-		if(this.boolTeFitxa) return "["+fitxa+"]";
-		else return "[ ]";
+		if(this.boolTeFitxa) return fitxa.toString();
+		else return "x";
 	}
 	public boolean equals(Object o) {
 		

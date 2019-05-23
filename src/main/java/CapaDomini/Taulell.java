@@ -1,5 +1,6 @@
 package CapaDomini;
 import java.util.List;
+import java.util.Stack;
 
 public class Taulell {
 	
@@ -39,7 +40,6 @@ public class Taulell {
 		//Find out if the destination position is within possible movements
 		for(int i = 0; i<moviments.size();i++) {
 			if(moviments.get(i)[0] == casDesti.getX() && moviments.get(i)[1] == casDesti.getY()) trobat = true;
-			System.out.println(moviments.get(i)[0] + " "+ moviments.get(i)[1]);
 		}
 		if(!trobat) throw new IllegalArgumentException("destination out of range");
 		//Find if we can kill any token
@@ -229,41 +229,63 @@ public class Taulell {
 			casMatCaselles[casella.getX()][casella.getY()].setFitxa(new Dama(1));
 		}
 	}
-	//Recorre el taulell i fa new de les caselles
+	//Recorre el taulell i fa new de les caselles per iniciar la partida
 	private void omplirTaulell(int llarg, int ample) {
 		boolean toca = false;
+		int color = 0;
 		
 		for (int i = 0; i <= llarg - 1; i++) {
 			for(int j = 0; j <= ample - 1; j++) {
 				if ((i%2 == 0 && j%2 != 0)||(i%2 != 0 && j%2 == 0)) {
 					if (i <= 3) {
 						toca = true;
+						color = 1;
 						intNumNegres++;
+						
 					}
 					if(i >= llarg - 4) {
 						toca = true;
+						color = 0;
 						intNumBlanques++;
 					}
 				}
 				else toca = false;
-				casMatCaselles[i][j] = new Casella(i,j,toca);
+				casMatCaselles[i][j] = new Casella(i,j,toca,0, color);
 			}
+		}
+	}
+	//Omplena la matriu segons el parametre String
+	public void reconstruirTaulell(String text) {
+		
+		String[] taula = text.split("\n");
+		String [] casella;;
+		int fil = 0, col = 0;
+		
+		for(String fila : taula) {
+			casella = fila.split(",");
+			for(String posicio : casella) {
+				 new Casella(fil,col,true,0,0);
+				if(posicio.equals("0"))casMatCaselles[fil][col] = new Casella(fil, col,true, 0, 0);
+				if(posicio.equals("1"))casMatCaselles[fil][col] = new Casella(fil,col,true,0,1);
+				if(posicio.equals("x"))casMatCaselles[fil][col] = new Casella(fil, col, false,0,0);
+				if(posicio.equals("D"))casMatCaselles[fil][col] = new Casella(fil, col, true,1,0);
+				if(posicio.equals("d"))casMatCaselles[fil][col] = new Casella(fil, col, true,1,1);
+				col++;
+			}
+			fil++;
 		}
 	}
 	//Retorna el taulell dibuixat amb la disposicio de les fitxes
 	public String toString() {
 		
-		int fila = 0;
-		String text = "  0  1  2  3  4  5  6  7  8  9 ";
+		String text = "";
 		
 		for(int i = 0; i <= 9; i++ ) {
-			text += "\n" + fila;
-			fila ++;
 			for (int j = 0; j <= 9; j++) {
-				text += casMatCaselles[i][j];
+				if(j != 9) text += casMatCaselles[i][j] + ",";
+				else text += casMatCaselles[i][j] + "\n";
 			}
 		}
-		
-		return text + "\n";
+		return text;
 	}
 }
