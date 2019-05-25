@@ -2,10 +2,6 @@ package CapaPersistencia;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Set;
-
-import CapaDomini.Sessio;
-import CapaDomini.Usuari;
 
 public class UsuariSQLOracle {
 
@@ -44,7 +40,7 @@ public class UsuariSQLOracle {
 	/**
 	 * Torna un resultset de nom usuaris conectats
 	 * 
-	 * @return 
+	 * @return
 	 */
 	public String retornaUsuaris() {
 
@@ -55,18 +51,18 @@ public class UsuariSQLOracle {
 		try {
 			rs = conn.ferSelect(sql);
 			while (rs.next()) {
-				
-				sortida += rs.getString(0);
+				sortida += rs.getString(1);
 				sortida += ";";
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.print(e);
+			return null;
 
 		}
 		return sortida;
 
 	}
-	
+
 	public boolean getConnectat(String nomUsu) {
 		int con = 0;
 		String sql = ConnectionSQLOracle.SQLSELECT;
@@ -101,8 +97,8 @@ public class UsuariSQLOracle {
 			sql = ConnectionSQLOracle.SQLUPDATE + " USUARIS SET connectat = 1";
 		else
 			sql = ConnectionSQLOracle.SQLUPDATE + " USUARIS SET connectat = 0";
-		sql += " WHERE NOM = '"+nomUsu+"'";
-		
+		sql += " WHERE NOM = '" + nomUsu + "'";
+
 		try {
 			if (conn == null)
 				return false;

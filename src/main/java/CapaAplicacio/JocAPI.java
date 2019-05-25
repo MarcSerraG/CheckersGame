@@ -143,15 +143,20 @@ public class JocAPI {
 	public String getCandidatsSol(String idSessio) {
 		JSONObject json = new JSONObject();
 		String res = "";
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
 		res = this.userSQL.retornaUsuaris();
 		if (res == null)
-			return json.put("sErr", "Hi ha hagut un problema de connexió.").toString();
+			json.put("sErr", "Hi ha hagut un problema de connexió.");
 		else {
 			if (res == "")
-				return json.put("sErr", "No hi han usuaris connectats.").toString();
+				json.put("sErr", "No hi han usuaris connectats.");
 			else
-				return res;
+				json.put("res", res).toString();
 		}
+
+		return json.toString();
 	}
 
 	public void enviaSol(String idSessio, String usuari) {

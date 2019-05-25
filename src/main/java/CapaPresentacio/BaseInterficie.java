@@ -58,6 +58,10 @@ public class BaseInterficie extends JFrame implements ActionListener {
 
 	}
 
+	public String getPlayerID() {
+		return log.user;
+	}
+
 	private Login CenterLogin() {
 
 		// Creem la pantalla de login i la situem en el contre de la applicacio
@@ -127,7 +131,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 
 		// Bloquejem tots els botons de tal manera que l'usuari tingui de entrar avans
 		// de poder cambiar de pantalla
-		this.bNewGame.setEnabled(false);
+		this.bNewGame.setEnabled(true);// TODO cambiar a False
 		this.bContinue_Game.setEnabled(false);
 		this.bStatistics.setEnabled(false);
 		this.bEvents.setEnabled(false);
@@ -255,7 +259,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bEvents.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
 
-		NewGame newGame = new NewGame(this);
+		NewGame newGame = new NewGame(this, api);
 		centerPanel = newGame.NewGameCreate();
 		newGame.setVisible(true);
 		getContentPane().add(centerPanel, BorderLayout.CENTER);
