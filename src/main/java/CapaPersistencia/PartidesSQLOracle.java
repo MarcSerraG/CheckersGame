@@ -23,7 +23,10 @@ public class PartidesSQLOracle {
 	 * @param contrincant
 	 * @return
 	 */
-	public String crearPartidaNova(Usuari jugador, Usuari contrincant) {
+	
+	
+	
+	public String crearPartidaNova(String jugador, String contrincant) {
 
 		String id = null;
 		ResultSet rs = null;
@@ -31,14 +34,18 @@ public class PartidesSQLOracle {
 		try {
 			conn.setAutocommit(false);
 		} catch (SQLException e) {
+			System.out.println("Error de SQL partidaNova: "+e);
 			return id;
+		}catch (Exception e) {
+			System.out.println("Error de getValue:  "+e);
+			return null;
 		}
 		String sql = ConnectionSQLOracle.SQLINSERT;
 		String sql2 = ConnectionSQLOracle.SQLSELECT;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
 		sqlcompro += "(id) from partides where ";
-		sqlcompro += " jugador = '" + jugador + " and contrincant = '" + contrincant + "' and "
+		sqlcompro += "jugador = '" + jugador + "' and contrincant = '" + contrincant + "' and "
 				+ " estat between 0 AND 2";
 
 		try {
@@ -46,13 +53,15 @@ public class PartidesSQLOracle {
 			if (rsc.next())
 				return null;
 		} catch (SQLException e) {
-
+			System.out.println("Error de SQL partidaNova: "+e);
+			return null;
 		}
 
 		// Option 0 no acceptat
 		// Option 1 jugan
 		// Option 3 acabat
 		// Option 2 proposat taules
+		//Option 4 rechasada
 		// Comprovar partida no existent amb el usuari
 		//
 
@@ -67,15 +76,20 @@ public class PartidesSQLOracle {
 			rs = conn.ferSelect(sql2);
 
 			while (rs.next()) {
-				id += "" + rs.getInt(0);
+				id += "" + rs.getInt("currval");
 			}
 
 			conn.ferCommit();
 			conn.setAutocommit(true);
 
 		} catch (SQLException e) {
+			System.out.println("Error de SQL crearPartidaNova dual: "+e);
+			return null;
+		} catch (Exception e) {
+			System.out.println("Error de getValue dual:  "+e);
 			return null;
 		}
+		
 		return id;
 	}
 
@@ -102,6 +116,7 @@ public class PartidesSQLOracle {
 			if (rsc.next())
 				res = rsc.getString(0);
 		} catch (SQLException e) {
+			System.out.println("Error SQL continaurPartida: "+e);
 			return null;
 		}
 		return res;
@@ -120,17 +135,17 @@ public class PartidesSQLOracle {
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro += "(id) from partides where ";
-		sqlcompro += " jugador = '" + jugador + " and torn = '" + jugador + "'";
+		sqlcompro += "(contrincant) from partides where ";
+		sqlcompro += "jugador = '" + jugador + "' and torn = '" + jugador + "'";
 
 		try {
 			rs = conn.ferSelect(sqlcompro);
 			while (rs.next()) {
-				res.add(rs.getString(0));
+				res.add(rs.getString(1));
 			}
 		} catch (SQLException e) {
 			System.out.println("Error SQL getPartidesTorn: " + e);
-			return null;
+			return res;
 		} catch (Exception e) {
 			System.out.println("Error getPartidesTorn: " + e);
 		}
@@ -150,13 +165,13 @@ public class PartidesSQLOracle {
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro += "(id) from partides where ";
-		sqlcompro += " jugador = '" + jugador + " and torn != '" + jugador + "'";
+		sqlcompro += "(contrincant) from partides where ";
+		sqlcompro += "jugador = '" + jugador + "' and torn != '" + jugador + "'";
 
 		try {
 			rs = conn.ferSelect(sqlcompro);
 			while (rs.next()) {
-				res.add(rs.getString(0));
+				res.add(rs.getString(1));
 			}
 		} catch (SQLException e) {
 			System.out.println("Error SQL getPartidesNoTorn: " + e);
@@ -168,7 +183,7 @@ public class PartidesSQLOracle {
 	}
 
 	/**
-	 * retorna null si no hi ha, retorna string
+	 * retorna null si no hi ha, retorna Liststring
 	 * 
 	 * @param usuari
 	 * @return
@@ -181,12 +196,12 @@ public class PartidesSQLOracle {
 		String nomguanyador = "";
 
 		sqlcompro += "(nom_guanyador) from partides where ";
-		sqlcompro += " jugador = '" + usuari + " and estat = 3";
+		sqlcompro += "jugador = '" + usuari + "' and estat = 3";
 
 		try {
 			rs = conn.ferSelect(sqlcompro);
 			while (rs.next()) {
-				nomguanyador = rs.getString(0);
+				nomguanyador = rs.getString(1);
 				if (nomguanyador.equals(usuari))
 					res.add(nomguanyador + ",guanya");
 				else
@@ -223,12 +238,13 @@ public class PartidesSQLOracle {
 			if (rs.next())
 				res = rs.getString(0);
 		} catch (SQLException e) {
+			System.out.println("Error sql getPartida: "+e);
 			return null;
 		}
 		return res;
 	}
 
-	private Taulell getTaullelnou() {
+	public Taulell getTaullelnou() {
 
 		Taulell p = new Taulell();
 		return p;

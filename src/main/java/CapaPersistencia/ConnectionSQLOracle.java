@@ -90,8 +90,12 @@ public class ConnectionSQLOracle {
 			UsuariSQLOracle usu =  new UsuariSQLOracle(cn);
 			//usu.insertUsuari("Marc", "1234", "msg@gmail.com","0");
 			System.out.println(usu.getConnectat("Marc"));
-
-		} catch (Exception e) {
+			PartidesSQLOracle pat = new PartidesSQLOracle(cn);
+			//pat.crearPartidaNova("Marc", "Narcis");
+			//System.out.println(pat.getPartidesTorn("Marc").toString());
+			System.out.println(pat.getTaullelnou().toString());
+			
+			} catch (Exception e) {
 			System.out.println(e);
 		}
 	}

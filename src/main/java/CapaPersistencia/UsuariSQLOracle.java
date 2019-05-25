@@ -51,7 +51,7 @@ public class UsuariSQLOracle {
 		try {
 			rs = conn.ferSelect(sql);
 			while (rs.next()) {
-				sortida += rs.getString(1);
+				sortida += rs.getString("nom");
 				sortida += ";";
 			}
 		} catch (SQLException e) {
