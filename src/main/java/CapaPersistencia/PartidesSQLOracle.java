@@ -230,15 +230,40 @@ public class PartidesSQLOracle {
 	}
 
 	
-	
+	/**
+	 * String amb blanc/negre, color del qui juga
+	 * @param idSessio
+	 * @param idPartida
+	 * @return
+	 */
 	public String getColor(String idSessio, String idPartida) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	/**
+	 * String amb el tauler anterior al torn actual
+	 * @param idSessio
+	 * @param idPartida
+	 * @return
+	 */
 	public String getTaulerAnt(String idSessio, String idPartida) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public String getTaulerRes(String idSessio, String idPartida) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Guarda l'estat nou al tauler, posant l'estat actual a anterior
+	 * @param idPartida
+	 * @param string
+	 */
+	public void guardarEstatTauler(String idPartida, String estatNou) {
+		String estatActual = this.continuarPartida(idPartida);
+		// TODO
 	}	
 	
 }

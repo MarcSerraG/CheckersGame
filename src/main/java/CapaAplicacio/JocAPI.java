@@ -8,9 +8,7 @@ import org.json.JSONObject;
 
 import com.lambdaworks.crypto.SCryptUtil;
 
-import CapaDomini.Partida;
-import CapaDomini.Sessio;
-import CapaDomini.Usuari;
+import CapaDomini.*;
 import CapaPersistencia.ConnectionSQLOracle;
 import CapaPersistencia.PartidesSQLOracle;
 import CapaPersistencia.UsuariSQLOracle;
@@ -284,31 +282,86 @@ public class JocAPI {
 	}
 
 	public String obtenirTaulerAct(String idSessio, String idPartida) {
-		return null;
+		JSONObject json = new JSONObject();
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+		
+		String tauler = this.partSQL.continuarPartida(idPartida);
+		
+		if (tauler == null)
+			json.put("err", "No s'ha trobat partida o sessio");
+		else 
+			json.put("res", tauler);
+		
+		return json.toString();
 	}
-
+	
+	// Posiblement no sigui necessari o no el podem implementar?
 	public String obtenirTaulerRes(String idSessio, String idPartida) {
-		return null;
+		JSONObject json = new JSONObject();
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+		
+		String tauler = this.partSQL.getTaulerRes(idSessio, idPartida);
+		
+		if (tauler == null)
+			json.put("err", "No s'ha trobat partida o sessio");
+		else 
+			json.put("res", tauler);
+		
+		return json.toString();
 	}
 
+	// NO ES POT IMPLEMENTAR PER ARA...
 	public String obtenirMovsAnt(String idSessio, String idPartida) {
 		return null;
 	}
-
+	
+	// NO ES POT IMPLEMENTAR PER ARA...
 	public String grabarTirada(String idSessio, String idPartida) {
 		return null;
 	}
-
+	
+	// NO ES POT IMPLEMENTAR PER ARA...
 	public String obtenirMovimentsPossibles(String idSessio, String idPartida) {
 		return null;
 	}
 
 	public String ferMoviment(String idSessio, String idPartida, String posIni, String posFi) {
-		return null;
+		JSONObject json = new JSONObject();
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+		
+		String estatTauler = this.partSQL.continuarPartida(idPartida);
+		if (estatTauler == null) {
+			json.put("err", "No s'ha pogut carregar la partida");
+			return json.toString();
+		}
+		
+		Taulell tauler = new Taulell();
+		tauler.reconstruirTaulell(estatTauler);
+		
+		int xIni = Integer.parseInt(posIni.split("\t")[0]);
+		int yIni =Integer.parseInt(posIni.split("\t")[1]);
+		int xFi = Integer.parseInt(posFi.split("\t")[0]);
+		int yFi =Integer.parseInt(posFi.split("\t")[1]);
+		
+		Casella casIni = tauler.seleccionarCasella(xIni, yIni);
+		Casella casFi = tauler.seleccionarCasella(xFi, yFi);
+		
+		boolean moviment = tauler.moviment(casIni, casFi);
+		if (moviment) json.put("res", "true");
+		else json.put("res", "false");
+		
+		this.partSQL.guardarEstatTauler(idPartida, tauler.toString());
+		
+		return json.toString();
 	}
 
 	public String ferDama(String idSessio, String idPartida, String pos) {
-
 		return null;
 	}
 
