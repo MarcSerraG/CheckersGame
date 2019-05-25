@@ -190,6 +190,7 @@ public class Login extends JPanel implements ActionListener {
 		interficieBase.bContinue_Game.setEnabled(true);
 		interficieBase.bStatistics.setEnabled(false); // TODO posar a true
 		interficieBase.bLogOut.setEnabled(true);
+		interficieBase.bRequests.setEnabled(true);
 	}
 
 	private void canviPantalla() {

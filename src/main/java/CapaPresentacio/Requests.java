@@ -11,7 +11,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,30 +27,26 @@ import org.json.JSONObject;
 
 import CapaAplicacio.JocAPI;
 
-public class ContinueGame extends JPanel implements ActionListener, ListSelectionListener {
+public class Requests extends JPanel implements ActionListener, ListSelectionListener {
 
 	static BaseInterficie interficieBase;
-	JPanel panelContinueGame, panelCentral, panelNord, panelSud, panelEst, panelOest;
+	JPanel panelRequests, panelCentral, panelNord, panelSud, panelEst, panelOest;
 	JLabel labelMessage, labelErrorMessage;
 	JocAPI api;
-	JButton bPlayGame, bRefresh, bYourTurn, bRivalTurn, bFinishedMatches;
-
+	JButton bPlayGame;
+	JButton bRefresh;
 	JList<String> listPartides;
 	JScrollPane scrollPanel;
 	JLabel icon;
 
-	public ContinueGame(BaseInterficie base, JocAPI API) {
+	public Requests(BaseInterficie base, JocAPI API) {
 		interficieBase = base;
 		api = API;
-		Dimension size = new Dimension(150, 25);
 
 		panelNord = new JPanel();
 		panelSud = new JPanel();
 		panelEst = new JPanel();
 		panelOest = new JPanel();
-		bYourTurn = createButton("Your Turn", size);
-		bRivalTurn = createButton("Rival's Turn", size);
-		bFinishedMatches = createButton("Finished Matches", size);
 		listPartides = new JList<String>();
 		panelCentral = new JPanel();
 		labelMessage = new JLabel();
@@ -60,9 +55,9 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 	}
 
 	public JPanel ContinueGameCreate() {
-		panelContinueGame = new JPanel();
+		panelRequests = new JPanel();
 
-		panelContinueGame.setLayout(new BorderLayout());
+		panelRequests.setLayout(new BorderLayout());
 
 		labelErrorMessage.setFont(new Font("SansSerif", Font.BOLD, 20));
 		labelErrorMessage.setForeground(new Color(237, 215, 178));
@@ -70,37 +65,24 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 		AjustaPantalla(panelNord, panelSud, panelEst, panelOest);
 		listPartides.setBackground(Color.GRAY);
 		panelCentral.setBackground(Color.GRAY);
-		panelContinueGame.add(panelCentral, BorderLayout.CENTER);
+		panelRequests.add(panelCentral, BorderLayout.CENTER);
 
 		listPartides.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		scrollPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
 		panelCentral.setLayout(null);
 		BotonsSud(panelSud);
-		BotonsEst(panelEst);
-		YourTurn();
+		addPlayers();
 
-		return panelContinueGame;
-	}
-
-	private JButton createButton(String text, Dimension size) {
-
-		// Metode propi, crea un Jbutton amb el text indicat i de la mida indicada i el
-		// retorna
-
-		JButton button = new JButton(text);
-		button.setPreferredSize(size);
-		button.setMinimumSize(size);
-		button.setMaximumSize(size);
-		return button;
+		return panelRequests;
 	}
 
 	private void AjustaPantalla(JPanel panelNord, JPanel panelSud, JPanel panelEst, JPanel panelOest) {
 
-		panelContinueGame.add(panelNord, BorderLayout.NORTH);
-		panelContinueGame.add(panelSud, BorderLayout.SOUTH);
-		panelContinueGame.add(panelEst, BorderLayout.EAST);
-		panelContinueGame.add(panelOest, BorderLayout.WEST);
+		panelRequests.add(panelNord, BorderLayout.NORTH);
+		panelRequests.add(panelSud, BorderLayout.SOUTH);
+		panelRequests.add(panelEst, BorderLayout.EAST);
+		panelRequests.add(panelOest, BorderLayout.WEST);
 
 		panelNord.setBackground(Color.DARK_GRAY);
 		panelSud.setBackground(Color.DARK_GRAY);
@@ -109,7 +91,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 		panelNord.add(Box.createRigidArea(new Dimension(0, 150)));
 		panelSud.add(Box.createRigidArea(new Dimension(0, 170)));
-		panelEst.add(Box.createRigidArea(new Dimension(10, 0)));
+		panelEst.add(Box.createRigidArea(new Dimension(200, 0)));
 		panelOest.add(Box.createRigidArea(new Dimension(200, 0)));
 
 		TitolNord(panelNord);
@@ -150,39 +132,8 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 	}
 
-	private void BotonsEst(JPanel panelEst) {
-
-		JPanel menu = new JPanel();
-
-		menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
-		menu.setBackground(Color.DARK_GRAY);
-
-		bYourTurn.addActionListener(this);
-		bRivalTurn.addActionListener(this);
-		bFinishedMatches.addActionListener(this);
-
-		bYourTurn.setBackground(new Color(237, 215, 178));
-		bRivalTurn.setBackground(Color.GRAY);
-		bFinishedMatches.setBackground(Color.GRAY);
-
-		bYourTurn.setOpaque(true);
-		bRivalTurn.setOpaque(true);
-		bFinishedMatches.setOpaque(true);
-
-		bYourTurn.setForeground(Color.BLACK);
-		bRivalTurn.setForeground(Color.WHITE);
-		bFinishedMatches.setForeground(Color.WHITE);
-
-		menu.add(bYourTurn);
-		menu.add(Box.createRigidArea(new Dimension(0, 15)));
-		menu.add(bRivalTurn);
-		menu.add(Box.createRigidArea(new Dimension(0, 15)));
-		menu.add(bFinishedMatches);
-		menu.add(Box.createRigidArea(new Dimension(40, 0)));
-		panelEst.add(menu);
-	}
-
-	private void addPlayers(String APIplayers) {
+	private void addPlayers() {
+		String APIplayers = api.getCandidatsSol(interficieBase.getPlayerID());
 
 		JSONObject json = new JSONObject(APIplayers);
 
@@ -194,8 +145,8 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 			panelCentral.setVisible(false);
 			listPartides.setVisible(true);
 			scrollPanel.setVisible(true);
-			panelContinueGame.add(scrollPanel, BorderLayout.CENTER);
-			panelContinueGame.repaint();
+			panelRequests.add(scrollPanel, BorderLayout.CENTER);
+			panelRequests.repaint();
 			validate();
 
 			DefaultListCellRenderer renderer = (DefaultListCellRenderer) listPartides.getCellRenderer();
@@ -226,8 +177,8 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 		scrollPanel.setVisible(false);
 		if (icon != null)
 			panelCentral.remove(icon);
-		panelContinueGame.add(panelCentral, BorderLayout.CENTER);
-		panelContinueGame.repaint();
+		panelRequests.add(panelCentral, BorderLayout.CENTER);
+		panelRequests.repaint();
 		validate();
 		Image myImage;
 		try {
@@ -250,37 +201,9 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		int presButton = 0;
 
 		if (e.getSource() == bRefresh) {
-			switch (presButton) {
-			case 0:
-				YourTurn();
-				break;
-			case 1:
-				RivalTurn();
-				break;
-			case 2:
-				FineshedMaches();
-				break;
-			}
-		} else {
-			if (e.getSource() == bYourTurn) {
-				YourTurn();
-				presButton = 0;
-			} else {
-				if (e.getSource() == bRivalTurn) {
-					RivalTurn();
-					presButton = 1;
-				} else {
-					if (e.getSource() == bFinishedMatches) {
-						FineshedMaches();
-						presButton = 2;
-					} else {
-
-					}
-				}
-			}
+			addPlayers();
 		}
 	}
 
@@ -288,52 +211,8 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 		String str = (String) listPartides.getSelectedValue();
 		bPlayGame.setEnabled(true);
 
-		bPlayGame.setText("Continue playing with " + str);
+		bPlayGame.setText("Accept game with " + str);
 
 	}
 
-	public void YourTurn() {
-		String APIplayers = api.getPartidesTorn(interficieBase.getPlayerID());
-		addPlayers(APIplayers);
-
-		this.bYourTurn.setBackground(new Color(237, 215, 178));
-		this.bYourTurn.setForeground(Color.BLACK);
-
-		this.bRivalTurn.setBackground(Color.GRAY);
-		this.bFinishedMatches.setBackground(Color.GRAY);
-
-		this.bRivalTurn.setForeground(Color.WHITE);
-		this.bFinishedMatches.setForeground(Color.WHITE);
-
-	}
-
-	public void RivalTurn() {
-		String APIplayers = api.getPartidesNoTorn(interficieBase.getPlayerID());
-		addPlayers(APIplayers);
-
-		this.bRivalTurn.setBackground(new Color(237, 215, 178));
-		this.bRivalTurn.setForeground(Color.BLACK);
-
-		this.bYourTurn.setBackground(Color.GRAY);
-		this.bFinishedMatches.setBackground(Color.GRAY);
-
-		this.bYourTurn.setForeground(Color.WHITE);
-		this.bFinishedMatches.setForeground(Color.WHITE);
-
-	}
-
-	public void FineshedMaches() {
-		String APIplayers = api.getPartidesAcabades(interficieBase.getPlayerID());
-		addPlayers(APIplayers);
-
-		this.bFinishedMatches.setBackground(new Color(237, 215, 178));
-		this.bFinishedMatches.setForeground(Color.BLACK);
-
-		this.bYourTurn.setBackground(Color.GRAY);
-		this.bRivalTurn.setBackground(Color.GRAY);
-
-		this.bYourTurn.setForeground(Color.WHITE);
-		this.bRivalTurn.setForeground(Color.WHITE);
-
-	}
 }
