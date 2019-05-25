@@ -228,6 +228,17 @@ public class PartidesSQLOracle {
 		//tb.reconstruirTaulell(text);
 		return tb;
 	}
+
 	
+	
+	public String getColor(String idSessio, String idPartida) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getTaulerAnt(String idSessio, String idPartida) {
+		// TODO Auto-generated method stub
+		return null;
+	}	
 	
 }
