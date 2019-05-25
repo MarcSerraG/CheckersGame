@@ -3,6 +3,7 @@ package CapaPersistencia;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Set;
 
 import CapaDomini.Partida;
@@ -93,17 +94,18 @@ public class PartidesSQLOracle {
 	 * @param jugador
 	 * @return
 	 */
-	public Set<Partida> getPartidesPendents(Usuari jugador){	
+	public List<String> getPartidesTorn(Usuari jugador){
 		return null;
 	}
 	
 	/**
-	 * Retorna totes les partides en curs de l'usuari,
+	 * Retorn un string de usuaris
 	 * independentment de si es el seu torn o no
 	 * @param jugador
 	 * @return
 	 */
-	public Set<Partida> getPartidesEnCurs(Usuari jugador){	
+	public List<String> getPartidesNoTorn(Usuari jugador){
+		
 		return null;
 	}
 	
@@ -114,8 +116,12 @@ public class PartidesSQLOracle {
 	}
 	
 	private Taulell carregaPartida(String idPartida) {
-		Taulell tb = null;
+		Taulell tb = new Taulell();
 		
+		//recontstruir taulell a partir dstring
+		//tb.reconstruirTaulell(text);
 		return tb;
 	}
+	
+	
 }
