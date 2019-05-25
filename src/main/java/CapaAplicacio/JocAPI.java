@@ -176,6 +176,7 @@ public class JocAPI {
 
 	}
 
+	// TODO: Mala Implementada, llegir API
 	public String getPartidesTorn(String idSessio) {
 		JSONObject json = new JSONObject();
 		json.put("res", "");
@@ -197,6 +198,7 @@ public class JocAPI {
 		return json.toString();
 	}
 
+	// TODO: Mala Implementada, llegir API
 	public String getPartidesNoTorn(String idSessio) {
 		JSONObject json = new JSONObject();
 		json.put("res", "");
@@ -218,6 +220,7 @@ public class JocAPI {
 		return json.toString();
 	}
 
+	// TODO: Mala Implementada, llegir API
 	public String getPartidesAcabades(String idSessio) {
 
 		JSONObject json = new JSONObject();
@@ -235,6 +238,7 @@ public class JocAPI {
 		return json.toString();
 	}
 
+	// TODO: Mala Implementada, llegir API
 	public String triaPartida(String idSessio, String usuari) {
 		JSONObject json = new JSONObject();
 
