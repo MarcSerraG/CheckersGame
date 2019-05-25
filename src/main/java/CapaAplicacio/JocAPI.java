@@ -1,6 +1,7 @@
 package CapaAplicacio;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.json.JSONObject;
@@ -182,10 +183,11 @@ public class JocAPI {
 		json.put("sErr", "");
 
 		String nomsUsuaris = "";
-		Set<Partida> setPartides = this.partSQL.getPartidesEnCurs(new Usuari(idSessio));
-		for (Partida part : setPartides) {
-			if (part.getUsuariTorn().getNom().equals(idSessio))
-				nomsUsuaris += part.getContrincant().getNom() + ";";
+		List<String> partides = this.partSQL.getPartidesTorn(new Usuari(idSessio));
+		if (partides == null) return json.toString();
+		
+		for (String nom : partides) {
+			nomsUsuaris += nom + ";";
 		}
 
 		nomsUsuaris = nomsUsuaris.substring(0, nomsUsuaris.length() - 2); // Borrar ultim ;
@@ -201,10 +203,11 @@ public class JocAPI {
 		json.put("sErr", "");
 
 		String nomsUsuaris = "";
-		Set<Partida> setPartides = this.partSQL.getPartidesEnCurs(new Usuari(idSessio));
-		for (Partida part : setPartides) {
-			if (!part.getUsuariTorn().getNom().equals(idSessio))
-				nomsUsuaris += part.getContrincant().getNom() + ";";
+		List<String> partides = this.partSQL.getPartidesNoTorn(new Usuari(idSessio));
+		if (partides == null) return json.toString();
+		
+		for (String nom : partides) {
+			nomsUsuaris += nom + ";";
 		}
 
 		nomsUsuaris = nomsUsuaris.substring(0, nomsUsuaris.length() - 2); // Borrar ultim ;
@@ -216,17 +219,40 @@ public class JocAPI {
 	public String getPartidesAcabades(String idSessio) {
 		return null;
 	}
-
-	public void tiraPartida(String idSessio, String usuari) {
-
+	
+	public String triaPartida(String idSessio, String usuari) {
 	}
 
 	public String obtenirColor(String idSessio, String idPartida) {
-		return null;
+		JSONObject json = new JSONObject();
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+		
+		String color = this.partSQL.getColor(idSessio, idPartida);
+		
+		if (color == null)
+			json.put("err", "No s'ha trobat partida o sessio");
+		else 
+			json.put("res", color);
+		
+		return json.toString();
 	}
 
 	public String obtenirTaulerAnt(String idSessio, String idPartida) {
-		return null;
+		JSONObject json = new JSONObject();
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+		
+		String tauler = this.partSQL.getTaulerAnt(idSessio, idPartida);
+		
+		if (tauler == null)
+			json.put("err", "No s'ha trobat partida o sessio, o no hi ha tauler anterior");
+		else 
+			json.put("res", tauler);
+		
+		return json.toString();
 	}
 
 	public String obtenirTaulerAct(String idSessio, String idPartida) {
