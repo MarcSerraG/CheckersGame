@@ -4,9 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import CapaDomini.Taulell;
-import CapaDomini.Usuari;
 
 public class PartidesSQLOracle {
 
@@ -17,15 +15,16 @@ public class PartidesSQLOracle {
 	}
 
 	/**
-	 * Return ID sino null
 	 * 
+	 * // Option 0 no acceptat
+	 * // Option 1 jugan
+	 * // Option 2 proposat taules
+	 * // Option 3 acabat
+	 * // Option 4 rebutada
 	 * @param jugador
 	 * @param contrincant
 	 * @return
-	 */
-	
-	
-	
+	 */	
 	public String crearPartidaNova(String jugador, String contrincant) {
 
 		String id = null;
@@ -50,18 +49,15 @@ public class PartidesSQLOracle {
 
 		try {
 			rsc = conn.ferSelect(sqlcompro);
-			if (rsc.next())
+			if (rsc.next()) {
+				System.out.println("Hi han partides amb aquest contrincant.");
 				return null;
+			}
 		} catch (SQLException e) {
 			System.out.println("Error de SQL partidaNova: "+e);
 			return null;
 		}
 
-		// Option 0 no acceptat
-		// Option 1 jugan
-		// Option 3 acabat
-		// Option 2 proposat taules
-		//Option 4 rechasada
 		// Comprovar partida no existent amb el usuari
 		//
 
@@ -95,7 +91,7 @@ public class PartidesSQLOracle {
 
 	/**
 	 * Retorna null si no ha pogut carregar la partida de bbdd retorna string amb la
-	 * partida
+	 * partida /TODO falta comprovar
 	 * 
 	 * @param idPartida
 	 * @return
@@ -122,6 +118,57 @@ public class PartidesSQLOracle {
 		return res;
 	}
 
+	
+	/**
+	 * 
+	 * @param jugador
+	 * @return
+	 */
+	public List<String> getSolicitudsPendents(String jugador) {
+		
+		List<String> res = new ArrayList<String>();
+
+		ResultSet rs = null;
+		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
+
+		sqlcompro += "(jugador) from partides where ";
+		sqlcompro += "contrincant = '" + jugador + "' and estat = 0";
+
+		try {
+			rs = conn.ferSelect(sqlcompro);
+			while (rs.next()) {
+				res.add(rs.getString("JUGADOR"));
+			}
+		} catch (SQLException e) {
+			System.out.println("Error SQL getSolicitudsPendents: " + e);
+			return res;
+		} catch (Exception e) {
+			System.out.println("Error getSolicitudsPendents: " + e);
+		}
+		return res;		
+	}
+	
+	/**
+	 * TODO comprovar
+	 * @param jugador
+	 * @param contrincant
+	 * @return
+	 */
+	public boolean acceptarSolicitud(String jugador, String contrincant) {
+		
+		String sql;
+			sql = ConnectionSQLOracle.SQLUPDATE + " partides SET connectat = 1"
+					+ " WHERE jugador = '" + contrincant + "' and contrincant = '"+jugador+"'";
+			try {
+				if (conn == null)
+					return false;
+				return conn.crearInsert(sql);
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return false;
+			}
+	}
+	
 	/**
 	 * Retorna les partides en curs de l'usuari que necessiten la seva atenció
 	 * 
@@ -141,7 +188,7 @@ public class PartidesSQLOracle {
 		try {
 			rs = conn.ferSelect(sqlcompro);
 			while (rs.next()) {
-				res.add(rs.getString(1));
+				res.add(rs.getString("CONTRINCANT"));
 			}
 		} catch (SQLException e) {
 			System.out.println("Error SQL getPartidesTorn: " + e);
@@ -153,7 +200,7 @@ public class PartidesSQLOracle {
 	}
 
 	/**
-	 * Retorn un string de usuaris independentment de si es el seu torn o no
+	 * Retorn un string de usuaris
 	 * 
 	 * @param jugador
 	 * @return
@@ -171,7 +218,7 @@ public class PartidesSQLOracle {
 		try {
 			rs = conn.ferSelect(sqlcompro);
 			while (rs.next()) {
-				res.add(rs.getString(1));
+				res.add(rs.getString("CONTRINCANT"));
 			}
 		} catch (SQLException e) {
 			System.out.println("Error SQL getPartidesNoTorn: " + e);
@@ -244,12 +291,12 @@ public class PartidesSQLOracle {
 		return res;
 	}
 
-	public Taulell getTaullelnou() {
+	private Taulell getTaullelnou() {
 
 		Taulell p = new Taulell();
 		return p;
 	}
-
+	
 	private Taulell carregaPartida(String idPartida) {
 		Taulell tb = new Taulell();
 

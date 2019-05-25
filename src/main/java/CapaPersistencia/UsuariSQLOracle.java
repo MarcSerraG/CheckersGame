@@ -42,12 +42,12 @@ public class UsuariSQLOracle {
 	 * 
 	 * @return
 	 */
-	public String retornaUsuaris() {
+	public String retornaUsuaris(String nomUsu) {
 
 		ResultSet rs = null;
 		String sortida = "";
 		String sql = ConnectionSQLOracle.SQLSELECT;
-		sql += "(nom) FROM USUARIS where connectat = 1";
+		sql += "(nom) FROM USUARIS where connectat = 1 and nom != '"+nomUsu+"'";
 		try {
 			rs = conn.ferSelect(sql);
 			while (rs.next()) {

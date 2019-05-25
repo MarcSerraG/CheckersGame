@@ -89,11 +89,14 @@ public class ConnectionSQLOracle {
 			ConnectionSQLOracle cn =  new ConnectionSQLOracle("g3geilab1", "g3geilab1");
 			UsuariSQLOracle usu =  new UsuariSQLOracle(cn);
 			//usu.insertUsuari("Marc", "1234", "msg@gmail.com","0");
-			System.out.println(usu.getConnectat("Marc"));
+			//System.out.println(usu.getConnectat("Marc"));
 			PartidesSQLOracle pat = new PartidesSQLOracle(cn);
-			//pat.crearPartidaNova("Marc", "Narcis");
+			pat.crearPartidaNova("Marc", "Narcis");
+			pat.crearPartidaNova("Marc", "Narcis");
+			pat.crearPartidaNova("Ricard", "Marc");
+			pat.crearPartidaNova("Ricard", "Narcis");
 			//System.out.println(pat.getPartidesTorn("Marc").toString());
-			System.out.println(pat.getTaullelnou().toString());
+			//System.out.println(pat.getTaullelnou().toString());
 			
 			} catch (Exception e) {
 			System.out.println(e);

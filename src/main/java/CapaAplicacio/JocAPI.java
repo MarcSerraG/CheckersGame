@@ -147,7 +147,7 @@ public class JocAPI {
 		json.put("res", "");
 		json.put("err", "");
 		json.put("sErr", "");
-		res = this.userSQL.retornaUsuaris();
+		res = this.userSQL.retornaUsuaris(idSessio);
 		if (res == null)
 			json.put("sErr", "Hi ha hagut un problema de connexió.");
 		else {
@@ -160,14 +160,40 @@ public class JocAPI {
 		return json.toString();
 	}
 
+	//CreaPartida esta comprovat que funciona a la part de SQL
 	public void enviaSol(String idSessio, String usuari) {
-
+		
+		String res = "";
+		res = this.partSQL.crearPartidaNova(idSessio, usuari);
+		if (res == null)
+			System.out.println("Hi ha hagut un problema de connexió.");
+		else {
+			if (res.equals(""))
+				System.out.println("No sa pogut afegir la partida a la BBDD.");
+			else
+				System.out.println(res);
+		}
 	}
-
+	
+	/**
+	 * TODO
+	 * @param idSessio
+	 * @return
+	 */
 	public String solicituds(String idSessio) {
-		return null;
+		String res = "";
+		//res = this.partSQL.getSolicitudsPendents(idSessio);
+		/*if (res == null)
+			System.out.println("Hi ha hagut un problema de connexió.");
+		else {
+			if (res.equals(""))
+				System.out.println("No sa pogut afegir la partida a la BBDD.");
+			else
+				System.out.println(res);
+		}*/
+		return res;
 	}
-
+	
 	public void acceptaSol(String idSessio, String usuari) {
 
 	}
