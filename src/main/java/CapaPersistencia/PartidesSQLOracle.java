@@ -159,6 +159,62 @@ public class PartidesSQLOracle {
 		return res;
 	}
 	
+	/**
+	 * retorna null si no hi ha, retorna string
+	 * @param usuari
+	 * @return
+	 */
+	public List<String> getPartidesAcabada(String usuari) {
+		List<String> res = new ArrayList<String>();
+		
+		ResultSet rs = null;
+		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
+		String nomguanyador = "";
+		
+		sqlcompro += "(nom_guanyador) from partides where ";
+		sqlcompro += " jugador = '"+usuari+" and estat = 3";
+		
+		try {
+			rs = conn.ferSelect(sqlcompro);
+			while (rs.next()) {
+				nomguanyador = rs.getString(0);
+				if (nomguanyador.equals(usuari))
+					res.add(nomguanyador+",guanya");
+				else 
+					res.add(nomguanyador+",perdut");
+			}
+		} catch (SQLException e) {
+			return null;
+		}
+		return res;
+	}
+	
+	/**
+	 * retorna null si no exiteix retorna id si hi ha sense acabar
+	 * @param idUsuari
+	 * @param idContrincat
+	 * @return
+	 */
+	public String getPartida(String jugador, String contrincant) {
+		
+		String res =  null;
+		ResultSet rs = null;
+		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
+		
+		sqlcompro += "(id) from partides where ";
+		sqlcompro += " jugador = '"+jugador+" and contrincant = '"+contrincant+"' and "
+				+ " estat between 0 AND 2";
+		
+		try {
+			rs = conn.ferSelect(sqlcompro);
+			if (rs.next())
+				res = rs.getString(0);
+		} catch (SQLException e) {
+			return null;
+		}
+		return res;
+	}
+	
 	private Taulell getTaullelnou() {
 		
 		Taulell p = new Taulell();

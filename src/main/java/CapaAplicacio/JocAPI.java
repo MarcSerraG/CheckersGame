@@ -1,6 +1,7 @@
 package CapaAplicacio;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.json.JSONObject;
@@ -214,11 +215,38 @@ public class JocAPI {
 	}
 
 	public String getPartidesAcabades(String idSessio) {
-		return null;
+		
+		JSONObject json = new JSONObject();
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+		
+		List<String> res = this.partSQL.getPartidesAcabada(idSessio);
+		
+		if (res.isEmpty())
+			json.put("err","No hi han partides acabades." );
+		else 
+			json.put("res", res);
+		
+		return json.toString();
 	}
 
-	public void tiraPartida(String idSessio, String usuari) {
-
+	public String triaPartida(String idSessio, String usuari) {
+		JSONObject json = new JSONObject();
+		
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+		
+		String id = this.partSQL.getPartida(idSessio, usuari);
+		
+		if (id == null)
+			json.put("err", "No hi ha partida disponible.");
+		else 
+			json.put("res", id);
+		
+		return json.toString();
+		
 	}
 
 	public String obtenirColor(String idSessio, String idPartida) {
