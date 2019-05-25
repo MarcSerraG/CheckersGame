@@ -27,19 +27,19 @@ import org.json.JSONObject;
 
 import CapaAplicacio.JocAPI;
 
-public class NewGame extends JPanel implements ActionListener, ListSelectionListener {
+public class ContinueGame extends JPanel implements ActionListener, ListSelectionListener {
 
 	static BaseInterficie interficieBase;
-	JPanel panelNewGame, panelCentral, panelNord, panelSud, panelEst, panelOest;
+	JPanel panelContinueGame, panelCentral, panelNord, panelSud, panelEst, panelOest;
 	JLabel labelMessage, labelErrorMessage;
 	JocAPI api;
-	JButton bRefresh;
 	JButton bPlayGame;
-	JList<String> listUsuaris;
+	JButton bRefresh;
+	JList<String> listPartides;
 	JScrollPane scrollPanel;
 	JLabel icon;
 
-	public NewGame(BaseInterficie base, JocAPI API) {
+	public ContinueGame(BaseInterficie base, JocAPI API) {
 		interficieBase = base;
 		api = API;
 
@@ -47,39 +47,39 @@ public class NewGame extends JPanel implements ActionListener, ListSelectionList
 		panelSud = new JPanel();
 		panelEst = new JPanel();
 		panelOest = new JPanel();
-		listUsuaris = new JList<String>();
+		listPartides = new JList<String>();
 		panelCentral = new JPanel();
 		labelMessage = new JLabel();
 		labelErrorMessage = new JLabel();
-		scrollPanel = new JScrollPane(listUsuaris);
+		scrollPanel = new JScrollPane(listPartides);
 	}
 
-	public JPanel NewGameCreate() {
-		panelNewGame = new JPanel();
+	public JPanel ContinueGameCreate() {
+		panelContinueGame = new JPanel();
 
-		panelNewGame.setLayout(new BorderLayout());
+		panelContinueGame.setLayout(new BorderLayout());
 
 		labelErrorMessage.setFont(new Font("SansSerif", Font.BOLD, 20));
 		labelErrorMessage.setForeground(new Color(237, 215, 178));
 
 		AjustaPantalla(panelNord, panelSud, panelEst, panelOest);
-		listUsuaris.setBackground(Color.GRAY);
+		listPartides.setBackground(Color.GRAY);
 		panelCentral.setBackground(Color.GRAY);
-		panelNewGame.add(panelCentral, BorderLayout.CENTER);
+		panelContinueGame.add(panelCentral, BorderLayout.CENTER);
 
 		panelCentral.setLayout(null);
 		BotonsSud(panelSud);
 		addPlayers();
 
-		return panelNewGame;
+		return panelContinueGame;
 	}
 
 	private void AjustaPantalla(JPanel panelNord, JPanel panelSud, JPanel panelEst, JPanel panelOest) {
 
-		panelNewGame.add(panelNord, BorderLayout.NORTH);
-		panelNewGame.add(panelSud, BorderLayout.SOUTH);
-		panelNewGame.add(panelEst, BorderLayout.EAST);
-		panelNewGame.add(panelOest, BorderLayout.WEST);
+		panelContinueGame.add(panelNord, BorderLayout.NORTH);
+		panelContinueGame.add(panelSud, BorderLayout.SOUTH);
+		panelContinueGame.add(panelEst, BorderLayout.EAST);
+		panelContinueGame.add(panelOest, BorderLayout.WEST);
 
 		panelNord.setBackground(Color.DARK_GRAY);
 		panelSud.setBackground(Color.DARK_GRAY);
@@ -95,7 +95,7 @@ public class NewGame extends JPanel implements ActionListener, ListSelectionList
 	}
 
 	private void TitolNord(JPanel panelNord) {
-		JLabel TitolUsuaris = new JLabel("New Game");
+		JLabel TitolUsuaris = new JLabel("Continue Game");
 		TitolUsuaris.setForeground(new Color(237, 215, 178));
 		TitolUsuaris.setFont(new Font("Monospaced", Font.BOLD, 60));
 
@@ -104,7 +104,7 @@ public class NewGame extends JPanel implements ActionListener, ListSelectionList
 
 	private void BotonsSud(JPanel panelSud) {
 		bRefresh = new JButton("Refresh");
-		bPlayGame = new JButton("Play");
+		bPlayGame = new JButton("Continue gaming");
 		bPlayGame.setEnabled(false);
 
 		bRefresh.setBackground(Color.GRAY);
@@ -140,25 +140,25 @@ public class NewGame extends JPanel implements ActionListener, ListSelectionList
 		if (!Mss.equals("")) {
 			String player[] = Mss.split(";");
 			panelCentral.setVisible(false);
-			listUsuaris.setVisible(true);
+			listPartides.setVisible(true);
 			scrollPanel.setVisible(true);
-			panelNewGame.add(scrollPanel, BorderLayout.CENTER);
-			panelNewGame.repaint();
+			panelContinueGame.add(scrollPanel, BorderLayout.CENTER);
+			panelContinueGame.repaint();
 			validate();
 
-			DefaultListCellRenderer renderer = (DefaultListCellRenderer) listUsuaris.getCellRenderer();
+			DefaultListCellRenderer renderer = (DefaultListCellRenderer) listPartides.getCellRenderer();
 			renderer.setHorizontalAlignment(SwingConstants.CENTER);
 
-			listUsuaris.setFont(new Font("SansSerif", Font.BOLD, 18));
-			listUsuaris.setForeground(Color.white);
-			listUsuaris.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			listUsuaris.addListSelectionListener(this);
+			listPartides.setFont(new Font("SansSerif", Font.BOLD, 18));
+			listPartides.setForeground(Color.white);
+			listPartides.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			listPartides.addListSelectionListener(this);
 
-			listUsuaris.setListData(player);
+			listPartides.setListData(player);
 		} else {
 			if (sErr.equals("No hi han usuaris connectats.")) {
 
-				Error("Sorry. Nobody is playing", "/NoPlayers.png", 180, 200, 500, 30);
+				Error("You don't have friends? Start a New Game Now!", "/NoPlayers.png", 70, 200, 500, 30);
 
 			} else { // ServerError.png
 
@@ -170,12 +170,12 @@ public class NewGame extends JPanel implements ActionListener, ListSelectionList
 
 	private void Error(String mess, String imag, int x, int y, int w, int h) {
 		panelCentral.setVisible(true);
-		listUsuaris.setVisible(false);
+		listPartides.setVisible(false);
 		scrollPanel.setVisible(false);
 		if (icon != null)
 			panelCentral.remove(icon);
-		panelNewGame.add(panelCentral, BorderLayout.CENTER);
-		panelNewGame.repaint();
+		panelContinueGame.add(panelCentral, BorderLayout.CENTER);
+		panelContinueGame.repaint();
 		validate();
 		Image myImage;
 		try {
@@ -205,10 +205,10 @@ public class NewGame extends JPanel implements ActionListener, ListSelectionList
 	}
 
 	public void valueChanged(ListSelectionEvent e) {
-		String str = (String) listUsuaris.getSelectedValue();
+		String str = (String) listPartides.getSelectedValue();
 		bPlayGame.setEnabled(true);
 
-		bPlayGame.setText("Play with " + str);
+		bPlayGame.setText("Continue playing with " + str);
 
 	}
 

@@ -22,12 +22,13 @@ import CapaAplicacio.JocAPI;
 
 public class BaseInterficie extends JFrame implements ActionListener {
 
-	public JButton bLogin, bNewGame, bContinue_Game, bStatistics, bEvents, bLogOut;
+	public JButton bLogin, bNewGame, bContinue_Game, bStatistics, bLogOut;
 	public JPanel centerPanel;
 	private JLabel versio;
 	private JocAPI api;
 	private Login log;
 	private Partida par;
+	private static NewGame newGame;
 
 	public BaseInterficie() {
 
@@ -92,11 +93,10 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bNewGame = createButton("New Game", size);
 		this.bContinue_Game = createButton("Continue Game", size);
 		this.bStatistics = createButton("Statistics", size);
-		this.bEvents = createButton("Events", size);
 		this.bLogOut = createButton("Log Out", size);
 
 		// Versio
-		this.versio = new JLabel("Version: 0.0.1 (Alpha)");
+		this.versio = new JLabel("Version: 0.0.2 (Alpha)");
 
 		// Definim el color de fons dels colors a gris menys el de login ja que sera el
 		// seleccionat sempre la primera vegada
@@ -104,7 +104,6 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bNewGame.setBackground(Color.GRAY);
 		this.bContinue_Game.setBackground(Color.GRAY);
 		this.bStatistics.setBackground(Color.GRAY);
-		this.bEvents.setBackground(Color.GRAY);
 		this.bLogOut.setBackground(Color.GRAY);
 
 		// Solucio error color Mac: (No funciona...)
@@ -113,7 +112,6 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bNewGame.setOpaque(true);
 		this.bContinue_Game.setOpaque(true);
 		this.bStatistics.setOpaque(true);
-		this.bEvents.setOpaque(true);
 		this.bLogOut.setOpaque(true);
 
 		// Definim el color de les lletres dels botons a blanc menys la de login que
@@ -122,7 +120,6 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bNewGame.setForeground(Color.WHITE);
 		this.bContinue_Game.setForeground(Color.WHITE);
 		this.bStatistics.setForeground(Color.WHITE);
-		this.bEvents.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
 		this.versio.setForeground(Color.WHITE);
 
@@ -131,7 +128,6 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bNewGame.addActionListener(this);
 		this.bContinue_Game.addActionListener(this);
 		this.bStatistics.addActionListener(this);
-		this.bEvents.addActionListener(this);
 		this.bLogOut.addActionListener(this);
 
 		// Bloquejem tots els botons de tal manera que l'usuari tingui de entrar avans
@@ -139,7 +135,6 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bNewGame.setEnabled(false);
 		this.bContinue_Game.setEnabled(false);
 		this.bStatistics.setEnabled(false);
-		this.bEvents.setEnabled(false);
 		this.bLogOut.setEnabled(false);
 
 		// carreguem el logo del joc que esta situat adalt a la dreta
@@ -165,9 +160,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 			menu.add(bContinue_Game);
 			menu.add(Box.createRigidArea(new Dimension(0, 15)));
 			menu.add(bStatistics);
-			menu.add(Box.createRigidArea(new Dimension(0, 15)));
-			menu.add(bEvents);
-			menu.add(Box.createRigidArea(new Dimension(0, 195)));
+			menu.add(Box.createRigidArea(new Dimension(0, 230)));
 			menu.add(bLogOut);
 			menu.add(Box.createRigidArea(new Dimension(0, 50)));
 			menu.add(versio);
@@ -220,12 +213,8 @@ public class BaseInterficie extends JFrame implements ActionListener {
 						actionStatics();
 
 					} else {
+						actionLogOut();
 
-						if (e.getSource() == this.bEvents) {
-							actionEvents();
-						} else {
-							actionLogOut();
-						}
 					}
 				}
 			}
@@ -239,17 +228,15 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bNewGame.setBackground(Color.GRAY);
 		this.bContinue_Game.setBackground(Color.GRAY);
 		this.bStatistics.setBackground(Color.GRAY);
-		this.bEvents.setBackground(Color.GRAY);
 		this.bLogOut.setBackground(Color.GRAY);
 
 		this.bNewGame.setForeground(Color.WHITE);
 		this.bContinue_Game.setForeground(Color.WHITE);
 		this.bStatistics.setForeground(Color.WHITE);
-		this.bEvents.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
 	}
 
-	private void actionNewGame() {
+	public void actionNewGame() {
 		centerPanel.setVisible(false);
 		this.bNewGame.setBackground(new Color(237, 215, 178));
 		this.bNewGame.setForeground(Color.BLACK);
@@ -257,17 +244,16 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bLogin.setBackground(Color.GRAY);
 		this.bContinue_Game.setBackground(Color.GRAY);
 		this.bStatistics.setBackground(Color.GRAY);
-		this.bEvents.setBackground(Color.GRAY);
 		this.bLogOut.setBackground(Color.GRAY);
 
 		this.bLogin.setForeground(Color.WHITE);
 		this.bContinue_Game.setForeground(Color.WHITE);
 		this.bStatistics.setForeground(Color.WHITE);
-		this.bEvents.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
 
-		NewGame newGame = new NewGame(this, api);
+		newGame = new NewGame(this, api);
 		centerPanel = newGame.NewGameCreate();
+
 		newGame.setVisible(true);
 		getContentPane().add(centerPanel, BorderLayout.CENTER);
 		getContentPane().repaint();
@@ -284,21 +270,27 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bLogin.setBackground(Color.GRAY);
 		this.bNewGame.setBackground(Color.GRAY);
 		this.bStatistics.setBackground(Color.GRAY);
-		this.bEvents.setBackground(Color.GRAY);
 		this.bLogOut.setBackground(Color.GRAY);
 
 		this.bLogin.setForeground(Color.WHITE);
 		this.bNewGame.setForeground(Color.WHITE);
 		this.bStatistics.setForeground(Color.WHITE);
-		this.bEvents.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
 
-		Partida partida = new Partida(this);
-		centerPanel = partida.partidaCreate();
-		partida.setVisible(true);
+		ContinueGame ContinueGame = new ContinueGame(this, api);
+		centerPanel = ContinueGame.ContinueGameCreate();
+
+		centerPanel.setVisible(true);
 		getContentPane().add(centerPanel, BorderLayout.CENTER);
 		getContentPane().repaint();
 		validate();
+
+		/*
+		 * 
+		 * Partida partida = new Partida(this); centerPanel = partida.partidaCreate();
+		 * partida.setVisible(true); getContentPane().add(centerPanel,
+		 * BorderLayout.CENTER); getContentPane().repaint(); validate();
+		 */
 
 	}
 
@@ -309,30 +301,11 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bLogin.setBackground(Color.GRAY);
 		this.bNewGame.setBackground(Color.GRAY);
 		this.bContinue_Game.setBackground(Color.GRAY);
-		this.bEvents.setBackground(Color.GRAY);
 		this.bLogOut.setBackground(Color.GRAY);
 
 		this.bLogin.setForeground(Color.WHITE);
 		this.bNewGame.setForeground(Color.WHITE);
 		this.bContinue_Game.setForeground(Color.WHITE);
-		this.bEvents.setForeground(Color.WHITE);
-		this.bLogOut.setForeground(Color.WHITE);
-	}
-
-	private void actionEvents() {
-		this.bEvents.setBackground(new Color(237, 215, 178));
-		this.bEvents.setForeground(Color.BLACK);
-
-		this.bLogin.setBackground(Color.GRAY);
-		this.bNewGame.setBackground(Color.GRAY);
-		this.bContinue_Game.setBackground(Color.GRAY);
-		this.bStatistics.setBackground(Color.GRAY);
-		this.bLogOut.setBackground(Color.GRAY);
-
-		this.bLogin.setForeground(Color.WHITE);
-		this.bNewGame.setForeground(Color.WHITE);
-		this.bContinue_Game.setForeground(Color.WHITE);
-		this.bStatistics.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
 	}
 
@@ -350,19 +323,16 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bNewGame.setBackground(Color.GRAY);
 		this.bContinue_Game.setBackground(Color.GRAY);
 		this.bStatistics.setBackground(Color.GRAY);
-		this.bEvents.setBackground(Color.GRAY);
 
 		this.bLogOut.setForeground(Color.WHITE);
 		this.bNewGame.setForeground(Color.WHITE);
 		this.bContinue_Game.setForeground(Color.WHITE);
 		this.bStatistics.setForeground(Color.WHITE);
-		this.bEvents.setForeground(Color.WHITE);
 
 		this.bLogin.setEnabled(true);
 		this.bNewGame.setEnabled(false);
 		this.bContinue_Game.setEnabled(false);
 		this.bStatistics.setEnabled(false);
-		this.bEvents.setEnabled(false);
 		this.bLogOut.setEnabled(false);
 
 		log = CenterLogin();

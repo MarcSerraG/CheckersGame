@@ -188,15 +188,13 @@ public class Login extends JPanel implements ActionListener {
 		interficieBase.bLogin.setEnabled(false);
 		interficieBase.bNewGame.setEnabled(true);
 		interficieBase.bContinue_Game.setEnabled(true);
-		interficieBase.bStatistics.setEnabled(true);
-		interficieBase.bEvents.setEnabled(true);
+		interficieBase.bStatistics.setEnabled(false); // TODO posar a true
 		interficieBase.bLogOut.setEnabled(true);
 	}
 
 	private void canviPantalla() {
 		interficieBase.centerPanel.setVisible(false);
-		interficieBase.bEvents.setBackground(new Color(237, 215, 178));
-		interficieBase.bEvents.setForeground(Color.BLACK);
+		interficieBase.actionNewGame();
 		interficieBase.bLogin.setBackground(Color.GRAY);
 		interficieBase.bLogin.setForeground(Color.WHITE);
 	}
