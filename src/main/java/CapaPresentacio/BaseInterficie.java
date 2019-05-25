@@ -24,6 +24,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 
 	public JButton bLogin, bNewGame, bContinue_Game, bStatistics, bEvents, bLogOut;
 	public JPanel centerPanel;
+	private JLabel versio;
 	private JocAPI api;
 	private Login log;
 	private Partida par;
@@ -94,6 +95,9 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bEvents = createButton("Events", size);
 		this.bLogOut = createButton("Log Out", size);
 
+		// Versio
+		this.versio = new JLabel("Version: 0.0.1 (Alpha)");
+
 		// Definim el color de fons dels colors a gris menys el de login ja que sera el
 		// seleccionat sempre la primera vegada
 		this.bLogin.setBackground(new Color(237, 215, 178));
@@ -120,6 +124,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bStatistics.setForeground(Color.WHITE);
 		this.bEvents.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
+		this.versio.setForeground(Color.WHITE);
 
 		// Definim que els botons "llancin" una accio al ser premuts
 		this.bLogin.addActionListener(this);
@@ -131,7 +136,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 
 		// Bloquejem tots els botons de tal manera que l'usuari tingui de entrar avans
 		// de poder cambiar de pantalla
-		this.bNewGame.setEnabled(true);// TODO cambiar a False
+		this.bNewGame.setEnabled(false);
 		this.bContinue_Game.setEnabled(false);
 		this.bStatistics.setEnabled(false);
 		this.bEvents.setEnabled(false);
@@ -164,6 +169,8 @@ public class BaseInterficie extends JFrame implements ActionListener {
 			menu.add(bEvents);
 			menu.add(Box.createRigidArea(new Dimension(0, 195)));
 			menu.add(bLogOut);
+			menu.add(Box.createRigidArea(new Dimension(0, 50)));
+			menu.add(versio);
 
 			// afegim el panell menu a la esquerra del panell principal
 			getContentPane().add(menu, BorderLayout.WEST);
