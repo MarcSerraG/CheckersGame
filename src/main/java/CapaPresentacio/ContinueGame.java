@@ -67,6 +67,9 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 		panelCentral.setBackground(Color.GRAY);
 		panelContinueGame.add(panelCentral, BorderLayout.CENTER);
 
+		listPartides.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		scrollPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+
 		panelCentral.setLayout(null);
 		BotonsSud(panelSud);
 		addPlayers();

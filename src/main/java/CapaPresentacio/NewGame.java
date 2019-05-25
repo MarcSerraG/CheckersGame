@@ -64,6 +64,8 @@ public class NewGame extends JPanel implements ActionListener, ListSelectionList
 
 		AjustaPantalla(panelNord, panelSud, panelEst, panelOest);
 		listUsuaris.setBackground(Color.GRAY);
+		listUsuaris.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		scrollPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		panelCentral.setBackground(Color.GRAY);
 		panelNewGame.add(panelCentral, BorderLayout.CENTER);
 

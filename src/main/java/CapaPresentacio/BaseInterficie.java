@@ -96,7 +96,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bLogOut = createButton("Log Out", size);
 
 		// Versio
-		this.versio = new JLabel("Version: 0.0.2 (Alpha)");
+		this.versio = new JLabel("Version: 0.0.2.1 (Alpha)");
 
 		// Definim el color de fons dels colors a gris menys el de login ja que sera el
 		// seleccionat sempre la primera vegada
