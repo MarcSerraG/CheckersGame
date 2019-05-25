@@ -2,11 +2,9 @@ package CapaPersistencia;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import CapaDomini.Partida;
 import CapaDomini.Taulell;
 import CapaDomini.Usuari;
 
@@ -76,17 +74,36 @@ public class PartidesSQLOracle {
 			conn.setAutocommit(true);
 			
 		} catch (SQLException e){
-			return id;
+			return null;
 		}
 		return id;
 	}
 	
-	public Taulell continuarPartida(String idPartida) {
+	/**
+	 * Retorna null si no ha pogut carregar la partida de bbdd
+	 * retorna string amb la partida
+	 * @param idPartida
+	 * @return
+	 */
+	public String continuarPartida(String idPartida) {
+		String res = null;
 		
-		Taulell tb = new Taulell();
+		String id = null;
+		ResultSet rsc = null;
 		
+		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 		
-		return tb;
+		sqlcompro += "(salvat) from partides where ";
+		sqlcompro += " id = "+id+"'";
+		
+		try {
+			rsc = conn.ferSelect(sqlcompro);
+			if (rsc.next())
+				res = rsc.getString(0);
+		} catch (SQLException e) {
+			return null;
+		}
+		return res;
 	}
 	
 	/**
@@ -95,7 +112,24 @@ public class PartidesSQLOracle {
 	 * @return
 	 */
 	public List<String> getPartidesTorn(Usuari jugador){
-		return null;
+		
+		List<String> res = new ArrayList<String>();
+		
+		ResultSet rs = null;
+		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
+		
+		sqlcompro += "(id) from partides where ";
+		sqlcompro += " jugador = '"+jugador+" and torn = '"+jugador+"'";
+		
+		try {
+			rs = conn.ferSelect(sqlcompro);
+			while (rs.next()) {
+				res.add(rs.getString(0));
+			}
+		} catch (SQLException e) {
+			return null;
+		}
+		return res;
 	}
 	
 	/**
@@ -106,7 +140,23 @@ public class PartidesSQLOracle {
 	 */
 	public List<String> getPartidesNoTorn(Usuari jugador){
 		
-		return null;
+		List<String> res = new ArrayList<String>();
+		
+		ResultSet rs = null;
+		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
+		
+		sqlcompro += "(id) from partides where ";
+		sqlcompro += " jugador = '"+jugador+" and torn != '"+jugador+"'";
+		
+		try {
+			rs = conn.ferSelect(sqlcompro);
+			while (rs.next()) {
+				res.add(rs.getString(0));
+			}
+		} catch (SQLException e) {
+			return null;
+		}
+		return res;
 	}
 	
 	private Taulell getTaullelnou() {
