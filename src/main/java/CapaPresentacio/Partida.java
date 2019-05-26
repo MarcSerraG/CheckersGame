@@ -182,6 +182,10 @@ public class Partida extends JPanel implements ActionListener {
 				System.out.println(posInicial + " " + posFinal);
 				String moviment = interficieBase.getAPI().ferMoviment(interficieBase.getPlayerID(), "26", posInicial,
 						posFinal);
+
+				if (Boolean.parseBoolean(moviment)) {
+					System.out.print("polla!");
+				}
 			}
 		}
 	}
