@@ -49,6 +49,7 @@ public class ConnectionSQLOracle {
 			rs = st.executeQuery(sql);
 			return rs;
 		} catch (SQLException e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -64,7 +65,6 @@ public class ConnectionSQLOracle {
 	public boolean crearInsert(String sql) throws SQLException {
 		Statement st = null;
 		try {
-			System.out.println(sql);
 			st = conn.createStatement();
 			st.executeUpdate(sql);
 			return true;
@@ -82,6 +82,7 @@ public class ConnectionSQLOracle {
 		conn.setAutoCommit(opt);
 	}
 	
+	//proves TODO treure
 	public static void main(String[] args) {
 		// Sa dimportar odbc.jar
 		try {

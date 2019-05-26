@@ -36,7 +36,6 @@ public class UsuariSQLOracle {
 		}
 	}
 
-	// Insert usuari
 	/**
 	 * Torna un resultset de nom usuaris conectats
 	 * 
@@ -62,7 +61,12 @@ public class UsuariSQLOracle {
 		return sortida;
 
 	}
-
+	
+	/**
+	 * Retorna si el usuari esta connectat true si no esta conectat false
+	 * @param nomUsu
+	 * @return
+	 */
 	public boolean getConnectat(String nomUsu) {
 		int con = 0;
 		String sql = ConnectionSQLOracle.SQLSELECT;
@@ -133,4 +137,5 @@ public class UsuariSQLOracle {
 			return false;
 		}
 	}
+
 }
