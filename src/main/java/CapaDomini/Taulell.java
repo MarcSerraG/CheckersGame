@@ -8,6 +8,7 @@ public class Taulell {
 	private Casella casMatCaselles[][];
 	private int intNumNegres;
 	private int intNumBlanques;
+	private Taulell taulellAnterior;
 	private final int UPRIGHT = 0;
 	private final int DOWNRIGHT = 1;
 	private final int DOWNLEFT = 2;
@@ -21,27 +22,17 @@ public class Taulell {
 		casMatCaselles = new Casella[10][10];
 		this.omplirTaulell(10, 10);
 	}
-
-	// Retorna si algun jugador no te fitxes per moure
-	public boolean comprovarFitxes() {
-		return (intNumNegres == 0 || intNumBlanques == 0);
-	}
-
-	public Casella seleccionarCasella(int x, int y) {
-		return this.casMatCaselles[x][y];
-	}
-
-	// Comprova si es factible realitzar el moviment, el fa, mata si cal i retorna
-	// si ha matat o no
-	public boolean moviment(Casella casOrigen, Casella casDesti) throws IllegalArgumentException {
-
-		if (casOrigen.equals(casDesti))
-			throw new IllegalArgumentException("origin and destination are the same");
-		if (!casOrigen.getTeFitxa())
-			throw new IllegalArgumentException("origin empty");
-		if (casDesti.getTeFitxa())
-			throw new IllegalArgumentException("destination full");
-
+	public Casella[][] getMatriu(){return casMatCaselles;}
+	//Retorna si algun jugador no te fitxes per moure
+	public boolean comprovarFitxes(){return (intNumNegres == 0 || intNumBlanques == 0);}
+	public Casella seleccionarCasella(int x, int y){return this.casMatCaselles[x][y];}
+	//Comprova si es factible realitzar el moviment, el fa, mata si cal i retorna si ha matat o no
+	public boolean moviment (Casella casOrigen, Casella casDesti) throws IllegalArgumentException{
+		
+		if(casOrigen.equals(casDesti)) throw new IllegalArgumentException("origin and destination are the same");
+		if(!casOrigen.getTeFitxa()) throw new IllegalArgumentException("origin empty");
+		if(casDesti.getTeFitxa()) throw new IllegalArgumentException("destination full");
+		
 		Casella casMatar = null;
 		boolean trobat = false;
 		boolean haMatat = false;
@@ -330,8 +321,7 @@ public class Taulell {
 			fil++;
 		}
 	}
-
-	// Retorna el taulell dibuixat amb la disposicio de les fitxes
+	//Retorna el taulell dibuixat amb la disposicio de les fitxes
 	public String toString() {
 
 		String text = "";
