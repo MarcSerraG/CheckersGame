@@ -442,6 +442,7 @@ public class JocAPI {
 
 		int xIni = Integer.parseInt(pos.split("\t")[0]);
 		int yIni = Integer.parseInt(pos.split("\t")[1]);
+		
 
 		Casella cas = tauler.seleccionarCasella(xIni, yIni);
 		Peo p = (Peo) cas.getFitxa();

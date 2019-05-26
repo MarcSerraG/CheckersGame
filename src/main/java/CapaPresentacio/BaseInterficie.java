@@ -338,6 +338,8 @@ public class BaseInterficie extends JFrame implements ActionListener {
 	}
 
 	private void actionStatics() {
+		System.out.println("Hola");
+		centerPanel.setVisible(false);
 		this.bStatistics.setBackground(new Color(237, 215, 178));
 		this.bStatistics.setForeground(Color.BLACK);
 
@@ -352,6 +354,14 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bContinue_Game.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
 		this.bRequests.setForeground(Color.WHITE);
+		
+		Estadistica stat = new Estadistica(this, api);
+		centerPanel = stat.StaticsCreate();
+
+		centerPanel.setVisible(true);
+		getContentPane().add(centerPanel, BorderLayout.CENTER);
+		getContentPane().repaint();
+		validate();
 	}
 
 	private void actionLogOut() {

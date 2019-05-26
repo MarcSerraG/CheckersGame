@@ -188,7 +188,7 @@ public class Login extends JPanel implements ActionListener {
 		interficieBase.bLogin.setEnabled(false);
 		interficieBase.bNewGame.setEnabled(true);
 		interficieBase.bContinue_Game.setEnabled(true);
-		interficieBase.bStatistics.setEnabled(false); // TODO posar a true
+		interficieBase.bStatistics.setEnabled(true);
 		interficieBase.bLogOut.setEnabled(true);
 		interficieBase.bRequests.setEnabled(true);
 	}
