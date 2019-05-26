@@ -8,6 +8,7 @@ public class Taulell {
 	private Casella casMatCaselles[][];
 	private int intNumNegres;
 	private int intNumBlanques;
+	private Taulell taulellAnterior;
 	private final int UPRIGHT = 0;
 	private final int DOWNRIGHT = 1;
 	private final int DOWNLEFT = 2;
@@ -21,6 +22,7 @@ public class Taulell {
 		casMatCaselles = new Casella [10][10];
 		this.omplirTaulell(10,10);
 	}
+	public Casella[][] getMatriu(){return casMatCaselles;}
 	//Retorna si algun jugador no te fitxes per moure
 	public boolean comprovarFitxes(){return (intNumNegres == 0 || intNumBlanques == 0);}
 	public Casella seleccionarCasella(int x, int y){return this.casMatCaselles[x][y];}
@@ -277,6 +279,21 @@ public class Taulell {
 				col++;
 			}
 			fil++;
+		}
+	}
+	public boolean bufar(Casella posicio) {
+		
+		if (posicio.getFitxa() == null) throw new IllegalArgumentException("Empty position");
+		
+		Casella[][] matriu = taulellAnterior.getMatriu();
+		
+		for(int i = 0; i < 10; i++) {
+			for(int j = 0; j < 10; j ++) {
+				if (posicio.getFitxa().iID == matriu[i][j].getFitxa().iID) {
+					if (posicio.getX() == matriu[i][j].getX() && posicio.getY() == matriu[i][j].getY()) throw new IllegalArgumentException("same position");
+					
+				}
+			}
 		}
 	}
 	//Retorna el taulell dibuixat amb la disposicio de les fitxes
