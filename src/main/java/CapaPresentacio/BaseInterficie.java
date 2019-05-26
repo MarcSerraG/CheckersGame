@@ -64,6 +64,10 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		return log.user;
 	}
 
+	public JocAPI getAPI() {
+		return api;
+	}
+
 	private Login CenterLogin() {
 
 		// Creem la pantalla de login i la situem en el contre de la applicacio

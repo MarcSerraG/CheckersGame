@@ -132,8 +132,7 @@ public class JocAPI {
 		}
 		return json.toString();
 	}
-	
-	//TODO
+
 	public String getEstadistics(String idSessio) {
 		return null;
 	}
@@ -185,7 +184,29 @@ public class JocAPI {
 	 * @return
 	 */
 	public String solicituds(String idSessio) {
-		String res = "";
+		JSONObject json = new JSONObject();
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+
+		List<String> solicituds = this.partSQL.getSolicitudsPendents(idSessio);
+		if (solicituds == null) {
+			json.put("err", "No s'han pogut carregar les solicituds");
+			return json.toString();
+		}
+
+		if (solicituds.isEmpty()) {
+			json.put("err", "No hi ha cap partida");
+			return json.toString();
+		}
+		String nomsUsuaris = "";
+		for (String nom : solicituds) {
+			nomsUsuaris += nom + ";";
+		}
+
+		nomsUsuaris = nomsUsuaris.substring(0, nomsUsuaris.length()); // Borrar ultim ;
+		json.put("res", nomsUsuaris);
+
 		// res = this.partSQL.getSolicitudsPendents(idSessio);
 		/*
 		 * if (res == null) System.out.println("Hi ha hagut un problema de connexió.");
@@ -193,11 +214,11 @@ public class JocAPI {
 		 * System.out.println("No sa pogut afegir la partida a la BBDD."); else
 		 * System.out.println(res); }
 		 */
-		return res;
+		return json.toString();
 	}
 
 	public void acceptaSol(String idSessio, String usuari) {
-
+		this.partSQL.acceptarSolicitud(idSessio, usuari);
 	}
 
 	public void rebutjaSol(String idSessio, String usuari) {
@@ -266,17 +287,19 @@ public class JocAPI {
 		json.put("res", "");
 		json.put("err", "");
 		json.put("sErr", "");
-		String res = "";
-		
-		for (String partida : this.partSQL.getPartidesAcabada(idSessio)) {
-			res += partida+";";
+
+		List<String> res = this.partSQL.getPartidesAcabada(idSessio);
+
+		if (res == null) {
+			json.put("sErr", "Error amb el servidor");
+			return json.toString();
 		}
 
 		if (res.isEmpty()) {
 			json.put("err", "No hi ha cap partida");
 			return json.toString();
-		} 
-		json.put("res", res);
+		} else
+			json.put("res", res);
 
 		return json.toString();
 	}
@@ -315,12 +338,6 @@ public class JocAPI {
 		return json.toString();
 	}
 
-	/**
-	 * retorna tauler anterior
-	 * @param idSessio
-	 * @param idPartida
-	 * @return
-	 */
 	public String obtenirTaulerAnt(String idSessio, String idPartida) {
 		JSONObject json = new JSONObject();
 		json.put("res", "");
@@ -336,13 +353,7 @@ public class JocAPI {
 
 		return json.toString();
 	}
-	
-	/**
-	 * Torna tauler amb estat actual
-	 * @param idSessio
-	 * @param idPartida
-	 * @return
-	 */
+
 	public String obtenirTaulerAct(String idSessio, String idPartida) {
 		JSONObject json = new JSONObject();
 		json.put("res", "");
@@ -406,10 +417,10 @@ public class JocAPI {
 		Taulell tauler = new Taulell();
 		tauler.reconstruirTaulell(estatTauler);
 
-		int xIni = Integer.parseInt(posIni.split("\t")[0]);
-		int yIni = Integer.parseInt(posIni.split("\t")[1]);
-		int xFi = Integer.parseInt(posFi.split("\t")[0]);
-		int yFi = Integer.parseInt(posFi.split("\t")[1]);
+		int xIni = Integer.parseInt(posIni.split(";")[0]);
+		int yIni = Integer.parseInt(posIni.split(";")[1]);
+		int xFi = Integer.parseInt(posFi.split(";")[0]);
+		int yFi = Integer.parseInt(posFi.split(";")[1]);
 
 		Casella casIni = tauler.seleccionarCasella(xIni, yIni);
 		Casella casFi = tauler.seleccionarCasella(xFi, yFi);
@@ -440,13 +451,12 @@ public class JocAPI {
 		Taulell tauler = new Taulell();
 		tauler.reconstruirTaulell(estatTauler);
 
-		int xIni = Integer.parseInt(pos.split("\t")[0]);
-		int yIni = Integer.parseInt(pos.split("\t")[1]);
-		
+		int xIni = Integer.parseInt(pos.split(";")[0]);
+		int yIni = Integer.parseInt(pos.split(";")[1]);
 
 		Casella cas = tauler.seleccionarCasella(xIni, yIni);
 		Peo p = (Peo) cas.getFitxa();
-		boolean damaFeta = tauler.canviDama(p.getColor(),cas);
+		boolean damaFeta = tauler.canviDama(p.getColor(), cas);
 		if (damaFeta)
 			json.put("res", "true");
 		else
@@ -470,7 +480,7 @@ public class JocAPI {
 	}
 
 	public String movsPessa(String idSessio, String idPartida, String Pos) {
-		
+
 		JSONObject json = new JSONObject();
 		json.put("res", "");
 		json.put("err", "");
@@ -485,19 +495,22 @@ public class JocAPI {
 		Taulell tauler = new Taulell();
 		tauler.reconstruirTaulell(estatTauler);
 
-		int xIni = Integer.parseInt(Pos.split("\t")[0]);
-		int yIni = Integer.parseInt(Pos.split("\t")[1]);
+		int xIni = Integer.parseInt(Pos.split(";")[0]);
+		int yIni = Integer.parseInt(Pos.split(";")[1]);
 
 		Casella cas = tauler.seleccionarCasella(xIni, yIni);
-		if(cas.getFitxa() instanceof Peo) {Peo p = (Peo)cas.getFitxa();}
-		else if(cas.getFitxa() instanceof Dama) {Dama d = (Dama)cas.getFitxa();}
-		else {
+		if (cas.getFitxa() instanceof Peo) {
+			Peo p = (Peo) cas.getFitxa();
+		} else if (cas.getFitxa() instanceof Dama) {
+			Dama d = (Dama) cas.getFitxa();
+		} else {
 			json.put("err", "No hi ha fitxa a la posicio donada");
 		}
 		List<int[]> moviments = tauler.veurePossiblesMoviments(cas);
 		String cadena = "";
-		for (int i = 0; i < moviments.size() - 1; i++) cadena = moviments.get(i)[0] + "-" + moviments.get(i)[1] + ";";
-		cadena += moviments.get(moviments.size()-1)[0] + "-" + moviments.get(moviments.size()-1)[0];
+		for (int i = 0; i < moviments.size() - 1; i++)
+			cadena = moviments.get(i)[0] + "-" + moviments.get(i)[1] + ";";
+		cadena += moviments.get(moviments.size() - 1)[0] + "-" + moviments.get(moviments.size() - 1)[0];
 		json.put("res", cadena);
 		return json.toString();
 	}
