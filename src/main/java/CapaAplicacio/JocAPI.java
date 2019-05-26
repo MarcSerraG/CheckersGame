@@ -188,14 +188,13 @@ public class JocAPI {
 		json.put("res", "");
 		json.put("err", "");
 		json.put("sErr", "");
-		
-		
+
 		List<String> solicituds = this.partSQL.getSolicitudsPendents(idSessio);
 		if (solicituds == null) {
 			json.put("err", "No s'han pogut carregar les solicituds");
 			return json.toString();
 		}
-		
+
 		if (solicituds.isEmpty()) {
 			json.put("err", "No hi ha cap partida");
 			return json.toString();
@@ -207,7 +206,7 @@ public class JocAPI {
 
 		nomsUsuaris = nomsUsuaris.substring(0, nomsUsuaris.length()); // Borrar ultim ;
 		json.put("res", nomsUsuaris);
-		
+
 		// res = this.partSQL.getSolicitudsPendents(idSessio);
 		/*
 		 * if (res == null) System.out.println("Hi ha hagut un problema de connexió.");
@@ -457,7 +456,7 @@ public class JocAPI {
 
 		Casella cas = tauler.seleccionarCasella(xIni, yIni);
 		Peo p = (Peo) cas.getFitxa();
-		boolean damaFeta = tauler.canviDama(p.getColor(),cas);
+		boolean damaFeta = tauler.canviDama(p.getColor(), cas);
 		if (damaFeta)
 			json.put("res", "true");
 		else
@@ -481,7 +480,7 @@ public class JocAPI {
 	}
 
 	public String movsPessa(String idSessio, String idPartida, String Pos) {
-		
+
 		JSONObject json = new JSONObject();
 		json.put("res", "");
 		json.put("err", "");
@@ -500,15 +499,18 @@ public class JocAPI {
 		int yIni = Integer.parseInt(Pos.split(";")[1]);
 
 		Casella cas = tauler.seleccionarCasella(xIni, yIni);
-		if(cas.getFitxa() instanceof Peo) {Peo p = (Peo)cas.getFitxa();}
-		else if(cas.getFitxa() instanceof Dama) {Dama d = (Dama)cas.getFitxa();}
-		else {
+		if (cas.getFitxa() instanceof Peo) {
+			Peo p = (Peo) cas.getFitxa();
+		} else if (cas.getFitxa() instanceof Dama) {
+			Dama d = (Dama) cas.getFitxa();
+		} else {
 			json.put("err", "No hi ha fitxa a la posicio donada");
 		}
 		List<int[]> moviments = tauler.veurePossiblesMoviments(cas);
 		String cadena = "";
-		for (int i = 0; i < moviments.size() - 1; i++) cadena = moviments.get(i)[0] + "-" + moviments.get(i)[1] + ";";
-		cadena += moviments.get(moviments.size()-1)[0] + "-" + moviments.get(moviments.size()-1)[0];
+		for (int i = 0; i < moviments.size() - 1; i++)
+			cadena = moviments.get(i)[0] + "-" + moviments.get(i)[1] + ";";
+		cadena += moviments.get(moviments.size() - 1)[0] + "-" + moviments.get(moviments.size() - 1)[0];
 		json.put("res", cadena);
 		return json.toString();
 	}
