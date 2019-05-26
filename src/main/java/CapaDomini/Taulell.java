@@ -219,15 +219,19 @@ public class Taulell {
 		return casMatar;
 	}
 	//Canvia a dama una fitxa que hagi arribat al final del taulell
-	public void canviDama(int color, Casella casella) {
+	public boolean canviDama(int color, Casella casella) {
 		//White 
 		if(color == 0 && casella.getX()== 0) {
 			casMatCaselles[casella.getX()][casella.getY()].setFitxa(new Dama(0));
+			return true;
 		}
+		else
 		//Black
 		if(color == 1 && casella.getX()== 9) {
 			casMatCaselles[casella.getX()][casella.getY()].setFitxa(new Dama(1));
+			return true;
 		}
+		return false;
 	}
 	//Recorre el taulell i fa new de les caselles per iniciar la partida
 	private void omplirTaulell(int llarg, int ample) {

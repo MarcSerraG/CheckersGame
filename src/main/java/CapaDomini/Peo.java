@@ -14,6 +14,7 @@ public class Peo extends Fitxa{
 		this.iID = this.hashCode();
 		this.iColor = iColor;
 	}
+	public int getColor() {return this.iColor;}
 	//Torna una llista de moviments possibles de peo
 	public List<int[]> possiblesMoviments(int x, int y) throws IllegalArgumentException{
 		
