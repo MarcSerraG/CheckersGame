@@ -8,7 +8,9 @@ import org.json.JSONObject;
 import com.lambdaworks.crypto.SCryptUtil;
 
 import CapaDomini.Casella;
+import CapaDomini.Dama;
 import CapaDomini.Partida;
+import CapaDomini.Peo;
 import CapaDomini.Sessio;
 import CapaDomini.Taulell;
 import CapaPersistencia.ConnectionSQLOracle;
@@ -391,7 +393,7 @@ public class JocAPI {
 		}
 
 		Taulell tauler = new Taulell();
-		// TODO tauler.reconstruirTaulell(estatTauler);
+		tauler.reconstruirTaulell(estatTauler);
 
 		int xIni = Integer.parseInt(posIni.split("\t")[0]);
 		int yIni = Integer.parseInt(posIni.split("\t")[1]);
@@ -423,33 +425,23 @@ public class JocAPI {
 			json.put("err", "No s'ha pogut carregar la partida");
 			return json.toString();
 		}
-		String colorJugador = this.partSQL.getColor(idSessio, idPartida);
-		int color;
-		if (colorJugador == null) {
-			json.put("err", "No s'ha pogut trobar el color del jugador");
-			return json.toString();
-		}
-		else if (colorJugador.equalsIgnoreCase("blanc"))
-			color = 0;
-		else
-			color = 1;
 
 		Taulell tauler = new Taulell();
-		// TODO tauler.reconstruirTaulell(estatTauler);
+		tauler.reconstruirTaulell(estatTauler);
 
-		int x = Integer.parseInt(pos.split("\t")[0]);
-		int y = Integer.parseInt(pos.split("\t")[1]);
+		int xIni = Integer.parseInt(pos.split("\t")[0]);
+		int yIni = Integer.parseInt(pos.split("\t")[1]);
 
-		Casella cas = tauler.seleccionarCasella(x, y);
-
-		tauler.canviDama(color, cas); // Should return a bool?
-		json.put("res", "true");
-		/*if (canviDama)
+		Casella cas = tauler.seleccionarCasella(xIni, yIni);
+		Peo p = (Peo) cas.getFitxa();
+		boolean damaFeta = tauler.canviDama(p.getColor(),cas);
+		if (damaFeta)
 			json.put("res", "true");
 		else
-			json.put("res", "false");*/
+			json.put("res", "false");
 
 		this.partSQL.guardarEstatTauler(idPartida, tauler.toString());
+
 		return json.toString();
 	}
 
@@ -466,6 +458,35 @@ public class JocAPI {
 	}
 
 	public String movsPessa(String idSessio, String idPartida, String Pos) {
-		return null;
+		
+		JSONObject json = new JSONObject();
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+
+		String estatTauler = this.partSQL.continuarPartida(idPartida);
+		if (estatTauler == null) {
+			json.put("err", "No s'ha pogut carregar la partida");
+			return json.toString();
+		}
+
+		Taulell tauler = new Taulell();
+		tauler.reconstruirTaulell(estatTauler);
+
+		int xIni = Integer.parseInt(Pos.split("\t")[0]);
+		int yIni = Integer.parseInt(Pos.split("\t")[1]);
+
+		Casella cas = tauler.seleccionarCasella(xIni, yIni);
+		if(cas.getFitxa() instanceof Peo) {Peo p = (Peo)cas.getFitxa();}
+		else if(cas.getFitxa() instanceof Dama) {Dama d = (Dama)cas.getFitxa();}
+		else {
+			json.put("err", "No hi ha fitxa a la posicio donada");
+		}
+		List<int[]> moviments = tauler.veurePossiblesMoviments(cas);
+		String cadena = "";
+		for (int i = 0; i < moviments.size() - 1; i++) cadena = moviments.get(i)[0] + "-" + moviments.get(i)[1] + ";";
+		cadena += moviments.get(moviments.size()-1)[0] + "-" + moviments.get(moviments.size()-1)[0];
+		json.put("res", cadena);
+		return json.toString();
 	}
 }
