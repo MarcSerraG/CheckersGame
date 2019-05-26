@@ -413,9 +413,44 @@ public class JocAPI {
 	}
 
 	public String ferDama(String idSessio, String idPartida, String pos) {
-		
-		
-		return null;
+		JSONObject json = new JSONObject();
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+
+		String estatTauler = this.partSQL.continuarPartida(idPartida);
+		if (estatTauler == null) {
+			json.put("err", "No s'ha pogut carregar la partida");
+			return json.toString();
+		}
+		String colorJugador = this.partSQL.getColor(idSessio, idPartida);
+		int color;
+		if (colorJugador == null) {
+			json.put("err", "No s'ha pogut trobar el color del jugador");
+			return json.toString();
+		}
+		else if (colorJugador.equalsIgnoreCase("blanc"))
+			color = 0;
+		else
+			color = 1;
+
+		Taulell tauler = new Taulell();
+		// TODO tauler.reconstruirTaulell(estatTauler);
+
+		int x = Integer.parseInt(pos.split("\t")[0]);
+		int y = Integer.parseInt(pos.split("\t")[1]);
+
+		Casella cas = tauler.seleccionarCasella(x, y);
+
+		tauler.canviDama(color, cas); // Should return a bool?
+		json.put("res", "true");
+		/*if (canviDama)
+			json.put("res", "true");
+		else
+			json.put("res", "false");*/
+
+		this.partSQL.guardarEstatTauler(idPartida, tauler.toString());
+		return json.toString();
 	}
 
 	public String ferBufa(String idSessio, String idPartida, String pos) {
