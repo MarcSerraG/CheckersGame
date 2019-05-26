@@ -432,8 +432,8 @@ public class PartidesSQLOracle {
 		String sql1 = "", sql2 = "";
 		ResultSet rs = null;
 		String salvat = "";
-
-		sql1 = ConnectionSQLOracle.SQLSELECT + " (salvat) partides where id = " + idPartida;
+		
+		sql1 = ConnectionSQLOracle.SQLSELECT + " (salvat) from partides where id = " + idPartida;
 		try {
 			rs = conn.ferSelect(sql1);
 			if (rs.next())
