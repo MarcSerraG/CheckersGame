@@ -413,6 +413,8 @@ public class JocAPI {
 	}
 
 	public String ferDama(String idSessio, String idPartida, String pos) {
+		
+		
 		return null;
 	}
 
