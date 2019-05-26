@@ -132,7 +132,8 @@ public class JocAPI {
 		}
 		return json.toString();
 	}
-
+	
+	//TODO
 	public String getEstadistics(String idSessio) {
 		return null;
 	}
@@ -265,19 +266,17 @@ public class JocAPI {
 		json.put("res", "");
 		json.put("err", "");
 		json.put("sErr", "");
-
-		List<String> res = this.partSQL.getPartidesAcabada(idSessio);
-
-		if (res == null) {
-			json.put("sErr", "Error amb el servidor");
-			return json.toString();
+		String res = "";
+		
+		for (String partida : this.partSQL.getPartidesAcabada(idSessio)) {
+			res += partida+";";
 		}
 
 		if (res.isEmpty()) {
 			json.put("err", "No hi ha cap partida");
 			return json.toString();
-		} else
-			json.put("res", res);
+		} 
+		json.put("res", res);
 
 		return json.toString();
 	}
@@ -316,6 +315,12 @@ public class JocAPI {
 		return json.toString();
 	}
 
+	/**
+	 * retorna tauler anterior
+	 * @param idSessio
+	 * @param idPartida
+	 * @return
+	 */
 	public String obtenirTaulerAnt(String idSessio, String idPartida) {
 		JSONObject json = new JSONObject();
 		json.put("res", "");
@@ -331,7 +336,13 @@ public class JocAPI {
 
 		return json.toString();
 	}
-
+	
+	/**
+	 * Torna tauler amb estat actual
+	 * @param idSessio
+	 * @param idPartida
+	 * @return
+	 */
 	public String obtenirTaulerAct(String idSessio, String idPartida) {
 		JSONObject json = new JSONObject();
 		json.put("res", "");
