@@ -186,7 +186,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 		JSONObject json = new JSONObject(APIplayers);
 
-		String sErr = json.getString("sErr");
+		String err = json.getString("err");
 		String Mss = json.getString("res");
 
 		if (!Mss.equals("")) {
@@ -208,7 +208,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 			listPartides.setListData(player);
 		} else {
-			if (sErr.equals("No hi han usuaris connectats.")) {
+			if (err.equals("No hi ha cap partida")) {
 
 				Error("You don't have friends? Start a New Game Now!", "/NoPlayers.png", 70, 200, 500, 30);
 

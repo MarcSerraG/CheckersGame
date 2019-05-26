@@ -160,9 +160,9 @@ public class JocAPI {
 		return json.toString();
 	}
 
-	//CreaPartida esta comprovat que funciona a la part de SQL
+	// CreaPartida esta comprovat que funciona a la part de SQL
 	public void enviaSol(String idSessio, String usuari) {
-		
+
 		String res = "";
 		res = this.partSQL.crearPartidaNova(idSessio, usuari);
 		if (res == null)
@@ -174,26 +174,25 @@ public class JocAPI {
 				System.out.println(res);
 		}
 	}
-	
+
 	/**
 	 * TODO
+	 * 
 	 * @param idSessio
 	 * @return
 	 */
 	public String solicituds(String idSessio) {
 		String res = "";
-		//res = this.partSQL.getSolicitudsPendents(idSessio);
-		/*if (res == null)
-			System.out.println("Hi ha hagut un problema de connexió.");
-		else {
-			if (res.equals(""))
-				System.out.println("No sa pogut afegir la partida a la BBDD.");
-			else
-				System.out.println(res);
-		}*/
+		// res = this.partSQL.getSolicitudsPendents(idSessio);
+		/*
+		 * if (res == null) System.out.println("Hi ha hagut un problema de connexió.");
+		 * else { if (res.equals(""))
+		 * System.out.println("No sa pogut afegir la partida a la BBDD."); else
+		 * System.out.println(res); }
+		 */
 		return res;
 	}
-	
+
 	public void acceptaSol(String idSessio, String usuari) {
 
 	}
@@ -202,7 +201,6 @@ public class JocAPI {
 
 	}
 
-	// TODO: Mala Implementada, llegir API
 	public String getPartidesTorn(String idSessio) {
 		JSONObject json = new JSONObject();
 		json.put("res", "");
@@ -211,8 +209,15 @@ public class JocAPI {
 
 		String nomsUsuaris = "";
 		List<String> partides = this.partSQL.getPartidesTorn(idSessio);
-		if (partides == null)
+		if (partides == null) {
+			json.put("sErr", "Error amb el servidor");
 			return json.toString();
+		}
+
+		if (partides.isEmpty()) {
+			json.put("err", "No hi ha cap partida");
+			return json.toString();
+		}
 
 		for (String nom : partides) {
 			nomsUsuaris += nom + ";";
@@ -224,7 +229,6 @@ public class JocAPI {
 		return json.toString();
 	}
 
-	// TODO: Mala Implementada, llegir API
 	public String getPartidesNoTorn(String idSessio) {
 		JSONObject json = new JSONObject();
 		json.put("res", "");
@@ -233,8 +237,15 @@ public class JocAPI {
 
 		String nomsUsuaris = "";
 		List<String> partides = this.partSQL.getPartidesNoTorn(idSessio);
-		if (partides == null)
+		if (partides == null) {
+			json.put("sErr", "Error amb el servidor");
 			return json.toString();
+		}
+
+		if (partides.isEmpty()) {
+			json.put("err", "No hi ha cap partida");
+			return json.toString();
+		}
 
 		for (String nom : partides) {
 			nomsUsuaris += nom + ";";
@@ -246,7 +257,6 @@ public class JocAPI {
 		return json.toString();
 	}
 
-	// TODO: Mala Implementada, llegir API
 	public String getPartidesAcabades(String idSessio) {
 
 		JSONObject json = new JSONObject();
@@ -256,15 +266,20 @@ public class JocAPI {
 
 		List<String> res = this.partSQL.getPartidesAcabada(idSessio);
 
-		if (res.isEmpty())
-			json.put("err", "No hi han partides acabades.");
-		else
+		if (res == null) {
+			json.put("sErr", "Error amb el servidor");
+			return json.toString();
+		}
+
+		if (res.isEmpty()) {
+			json.put("err", "No hi ha cap partida");
+			return json.toString();
+		} else
 			json.put("res", res);
 
 		return json.toString();
 	}
 
-	// TODO: Mala Implementada, llegir API
 	public String triaPartida(String idSessio, String usuari) {
 		JSONObject json = new JSONObject();
 

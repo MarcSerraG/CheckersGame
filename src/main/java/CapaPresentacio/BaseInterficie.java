@@ -368,6 +368,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bNewGame.setEnabled(false);
 		this.bContinue_Game.setEnabled(false);
 		this.bStatistics.setEnabled(false);
+		this.bRequests.setEnabled(false);
 		this.bLogOut.setEnabled(false);
 
 		log = CenterLogin();
