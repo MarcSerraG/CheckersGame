@@ -305,6 +305,8 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 		this.bRivalTurn.setForeground(Color.WHITE);
 		this.bFinishedMatches.setForeground(Color.WHITE);
 
+		bPlayGame.setText("Play");
+
 	}
 
 	public void RivalTurn() {
@@ -319,6 +321,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 		this.bYourTurn.setForeground(Color.WHITE);
 		this.bFinishedMatches.setForeground(Color.WHITE);
+		bPlayGame.setText("Play");
 
 	}
 
@@ -334,6 +337,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 		this.bYourTurn.setForeground(Color.WHITE);
 		this.bRivalTurn.setForeground(Color.WHITE);
+		bPlayGame.setText("Play");
 
 	}
 }

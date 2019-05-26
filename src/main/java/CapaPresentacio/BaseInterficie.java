@@ -311,6 +311,9 @@ public class BaseInterficie extends JFrame implements ActionListener {
 	}
 
 	private void actionRequest() {
+
+		centerPanel.setVisible(false);
+
 		this.bRequests.setBackground(new Color(237, 215, 178));
 		this.bRequests.setForeground(Color.BLACK);
 
@@ -325,6 +328,13 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bContinue_Game.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
 		this.bStatistics.setForeground(Color.WHITE);
+
+		Partida partida = new Partida(this);
+		centerPanel = partida.partidaCreate();
+		partida.setVisible(true);
+		getContentPane().add(centerPanel, BorderLayout.CENTER);
+		getContentPane().repaint();
+		validate();
 	}
 
 	private void actionStatics() {
@@ -354,15 +364,16 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bLogin.setForeground(Color.BLACK);
 
 		this.bLogOut.setBackground(Color.GRAY);
-
 		this.bNewGame.setBackground(Color.GRAY);
 		this.bContinue_Game.setBackground(Color.GRAY);
 		this.bStatistics.setBackground(Color.GRAY);
+		this.bRequests.setBackground(Color.GRAY);
 
 		this.bLogOut.setForeground(Color.WHITE);
 		this.bNewGame.setForeground(Color.WHITE);
 		this.bContinue_Game.setForeground(Color.WHITE);
 		this.bStatistics.setForeground(Color.WHITE);
+		this.bRequests.setForeground(Color.WHITE);
 
 		this.bLogin.setEnabled(true);
 		this.bNewGame.setEnabled(false);
