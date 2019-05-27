@@ -13,6 +13,11 @@ public class EstadistiquesSQLOracle {
 		this.conn = connection;
 	}
 	
+	/**
+	 * Return string amb les dades de stadistiques del usuari i un ranking
+	 * @param idUsuari
+	 * @return
+	 */
 	public String getEstadistiquesUsuari(String idUsuari) {
 		
 		String res = "";
@@ -61,7 +66,7 @@ public class EstadistiquesSQLOracle {
 		ranksql = "SELECT nom_guanyador FROM (SELECT count(*) as repes, p.nom_guanyador "
 				+ "FROM partides p WHERE nom_guanyador IS NOT NULL AND estat = 3 " + 
 				"GROUP BY p.nom_guanyador ORDER BY repes DESC) " + 
-				"WHERE ROWNUM <= 5";
+				"WHERE ROWNUM <= 10";
 		try {
 			rs = this.conn.ferSelect(ranksql);
 			while (rs.next()) {

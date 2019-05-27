@@ -143,8 +143,12 @@ public class JocAPI {
 		json.put("sErr", "");
 		System.out.println("idSessio"+idSessio);
 		res = this.statSQL.getEstadistiquesUsuari(idSessio);
-		
-		json.put("res", res);
+		if (res == null)
+			json.put("err", "Sql error no hi han dades suficients.");
+		else if (res.equals(""))
+			json.put("err", "La base de dades ha retornat sense dades.");
+		else
+			json.put("res", res);
 		
 		return json.toString();
 	}

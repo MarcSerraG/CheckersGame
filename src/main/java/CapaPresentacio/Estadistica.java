@@ -59,8 +59,8 @@ public class Estadistica extends JPanel {
 		labelTaules = new JLabel("Draws:    "+taules, JLabel.TRAILING);
 		labelTaules.setBounds(0,a=a+60,400,50);
 		
-		labelRank = new JLabel("Top players:", JLabel.TRAILING);
-		labelRank.setBounds(340,90,400,50);
+		labelRank = new JLabel("Top Global Players:", JLabel.TRAILING);
+		labelRank.setBounds(460,90,400,50);
 		
 		
 		panStatics.add(labelUsername);
@@ -101,6 +101,7 @@ public class Estadistica extends JPanel {
 		listRank.setBackground(Color.gray);
 		listRank.setBounds(500, 150, 400, 400);
 		listRank.setListData(rank);
+		listRank.setSelectedIndex(0);
 		
 		panStatics.add(listRank);
 		
