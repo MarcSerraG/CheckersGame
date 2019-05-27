@@ -49,6 +49,7 @@ public class ConnectionSQLOracle {
 			rs = st.executeQuery(sql);
 			return rs;
 		} catch (SQLException e) {
+			System.out.println("Error en Select de "+sql+" tipus de error "+e);
 			return null;
 		}
 	}
@@ -69,7 +70,7 @@ public class ConnectionSQLOracle {
 			st.executeUpdate(sql);
 			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("Error en Select de "+sql+" tipus de error "+e);
 			return false;
 		}
 	}
@@ -91,10 +92,7 @@ public class ConnectionSQLOracle {
 			//usu.insertUsuari("Marc", "1234", "msg@gmail.com","0");
 			//System.out.println(usu.getConnectat("Marc"));
 			PartidesSQLOracle pat = new PartidesSQLOracle(cn);
-			pat.crearPartidaNova("Marc", "Narcis");
-			pat.crearPartidaNova("Marc", "Narcis");
-			pat.crearPartidaNova("Ricard", "Marc");
-			pat.crearPartidaNova("Ricard", "Narcis");
+			pat.canviarTorn("41", "Prova1");
 			//System.out.println(pat.getPartidesTorn("Marc").toString());
 			//System.out.println(pat.getTaullelnou().toString());
 			
