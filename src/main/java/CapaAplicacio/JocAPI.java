@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import com.lambdaworks.crypto.SCryptUtil;
 
 import CapaDomini.Casella;
-import CapaDomini.Dama;
 import CapaDomini.Partida;
 import CapaDomini.Peo;
 import CapaDomini.Sessio;
@@ -431,10 +430,20 @@ public class JocAPI {
 			else
 				json.put("res", "false");
 
-			this.partSQL.guardarEstatTauler(idPartida, tauler.toString());
-		} catch (IllegalArgumentException e) {
-			json.put("err", e);
+		boolean moviment = tauler.moviment(casIni, casFi);
+		if (moviment)
+			json.put("res", "true");
+		else
+			json.put("res", "false");
+		
+		// tindria que ser contrincant, no idSessio!!
+		boolean canviTorn = this.partSQL.canviarTorn(idPartida, idSessio);
+		if (!canviTorn) {
+			json.put("err", "Error al fer canvi de torn, no s'ha guardat el nou estat del taulell");
+			return json.toString();
 		}
+		
+		this.partSQL.guardarEstatTauler(idPartida, tauler.toString());
 
 		return json.toString();
 	}
@@ -525,12 +534,9 @@ public class JocAPI {
 		int yIni = Integer.parseInt(Pos.split(";")[1]);
 
 		Casella cas = tauler.seleccionarCasella(xIni, yIni);
-		if (cas.getFitxa() instanceof Peo) {
-			Peo p = (Peo) cas.getFitxa();
-		} else if (cas.getFitxa() instanceof Dama) {
-			Dama d = (Dama) cas.getFitxa();
-		} else {
+		if(!cas.getTeFitxa()) {
 			json.put("err", "No hi ha fitxa a la posicio donada");
+			return json.toString();
 		}
 		List<int[]> moviments = tauler.veurePossiblesMoviments(cas);
 		String cadena = "";

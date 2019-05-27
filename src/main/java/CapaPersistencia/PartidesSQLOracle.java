@@ -95,9 +95,40 @@ public class PartidesSQLOracle {
 	 * @param usuariTorn
 	 * @return
 	 */
-	public boolean canviarTorn(String idPartida, String usuariTorn) {
+	public boolean canviarTorn(String idPartida, String usuari) {
+		
+		//
+		String sqlsel = ConnectionSQLOracle.SQLSELECT;
+		String usuariTorn = "";
+		String contrincant = "";
 		String sql = null;
-
+		sqlsel += " (contrincant,torn) FROM partides where id = "+idPartida;
+		
+		ResultSet rs = null;
+		try {
+			rs = conn.ferSelect(sqlsel);
+			if (rs.next()) {
+				usuariTorn = rs.getString("torn");
+				contrincant = rs.getString("contrincant");
+			}
+			else {
+				System.out.println("Erro sql no hi ha dades");
+				return false;
+			}
+		} catch (SQLException e) {
+			System.out.println("Error sql canviarTorn: "+e);
+			return false;
+		} catch (Exception e) {
+			System.out.println("Error canviarTorn: "+e);
+			return false;
+		}
+		
+		if (usuariTorn.equals(usuari)) {
+			usuariTorn = contrincant;
+		}else {
+			usuariTorn = usuari;
+		}
+		
 		sql = ConnectionSQLOracle.SQLUPDATE + " partides SET torn = '" + usuariTorn + "'";
 		sql += " WHERE id = " + idPartida + "";
 
