@@ -410,7 +410,7 @@ public class JocAPI {
 
 		String estatTauler = this.partSQL.continuarPartida(idPartida);
 		if (estatTauler == null) {
-			json.put("err", "No s'ha pogut carregar la partida");
+			json.put("sErr", "No s'ha pogut carregar la partida");
 			return json.toString();
 		}
 
@@ -424,14 +424,17 @@ public class JocAPI {
 
 		Casella casIni = tauler.seleccionarCasella(xIni, yIni);
 		Casella casFi = tauler.seleccionarCasella(xFi, yFi);
+		try {
+			boolean moviment = tauler.moviment(casIni, casFi);
+			if (moviment)
+				json.put("res", "true");
+			else
+				json.put("res", "false");
 
-		boolean moviment = tauler.moviment(casIni, casFi);
-		if (moviment)
-			json.put("res", "true");
-		else
-			json.put("res", "false");
-
-		this.partSQL.guardarEstatTauler(idPartida, tauler.toString());
+			this.partSQL.guardarEstatTauler(idPartida, tauler.toString());
+		} catch (IllegalArgumentException e) {
+			json.put("err", e);
+		}
 
 		return json.toString();
 	}
@@ -486,8 +489,8 @@ public class JocAPI {
 		int yIni = Integer.parseInt(pos.split(";")[1]);
 
 		Casella cas = tauler.seleccionarCasella(xIni, yIni);
-		if(tauler.bufar(cas)) {
-			json.put("res","true");
+		if (tauler.bufar(cas)) {
+			json.put("res", "true");
 			return json.toString();
 		}
 		json.put("res", "false");
