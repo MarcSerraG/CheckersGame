@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import com.lambdaworks.crypto.SCryptUtil;
 
 import CapaDomini.Casella;
-import CapaDomini.Dama;
 import CapaDomini.Partida;
 import CapaDomini.Peo;
 import CapaDomini.Sessio;
@@ -522,12 +521,9 @@ public class JocAPI {
 		int yIni = Integer.parseInt(Pos.split(";")[1]);
 
 		Casella cas = tauler.seleccionarCasella(xIni, yIni);
-		if (cas.getFitxa() instanceof Peo) {
-			Peo p = (Peo) cas.getFitxa();
-		} else if (cas.getFitxa() instanceof Dama) {
-			Dama d = (Dama) cas.getFitxa();
-		} else {
+		if(!cas.getTeFitxa()) {
 			json.put("err", "No hi ha fitxa a la posicio donada");
+			return json.toString();
 		}
 		List<int[]> moviments = tauler.veurePossiblesMoviments(cas);
 		String cadena = "";
