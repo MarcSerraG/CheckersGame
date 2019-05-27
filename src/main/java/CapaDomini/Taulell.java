@@ -327,15 +327,16 @@ public class Taulell {
 		
 		Casella[][] matriu = taulellAnterior.getMatriu();
 		Casella casMatar = null;
+		Casella posAnterior = null;
 		
 		for(int i = 0; i < 10; i++) {
 			for(int j = 0; j < 10; j ++) {
 				if (posicio.getFitxa().iID == matriu[i][j].getFitxa().iID) {
 					if (posicio.getX() == matriu[i][j].getX() && posicio.getY() == matriu[i][j].getY()) throw new IllegalArgumentException("same position");
+					posAnterior = matriu[i][j];
 					List<int[]> moviments = matriu[i][j].getFitxa().possiblesMoviments(matriu[i][j].getX(), matriu[i][j].getY());
 					for(int[] mov : moviments) casMatar = taulellAnterior.potMatar(matriu[i][j], taulellAnterior.seleccionarCasella(mov[0], mov[1]));
-					if (casMatar == null) return false;
-					else {
+					if (casMatar != null) {
 						
 						posicio.eliminarFitxa();
 						return true;
@@ -343,6 +344,7 @@ public class Taulell {
 				}
 			}
 		}
+		if(taulellAnterior.taulellAnterior != null) return taulellAnterior.bufar(posAnterior);
 		return false;
 	}
 	//Retorna el taulell dibuixat amb la disposicio de les fitxes
