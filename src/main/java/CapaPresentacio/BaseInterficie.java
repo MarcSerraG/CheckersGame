@@ -334,7 +334,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bStatistics.setForeground(Color.WHITE);
 
 		Partida partida = new Partida(this);
-		centerPanel = partida.partidaCreate();
+		centerPanel = partida.partidaCreate("26");
 		partida.setVisible(true);
 		getContentPane().add(centerPanel, BorderLayout.CENTER);
 		getContentPane().repaint();
@@ -358,7 +358,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bContinue_Game.setForeground(Color.WHITE);
 		this.bLogOut.setForeground(Color.WHITE);
 		this.bRequests.setForeground(Color.WHITE);
-		
+
 		Estadistica stat = new Estadistica(this, api);
 		centerPanel = stat.StaticsCreate();
 
