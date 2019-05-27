@@ -30,7 +30,7 @@ public class Partida extends JPanel implements ActionListener {
 	JButton bTaules, bSeleccioInicial;
 	JLabel lMessage, lPlayerBlancas, lPlayerNegras; // (Blancas=0, Negras = 1)
 	Map<String, JButton> taulell;
-	String posInicial = "", posFinal = "";
+	String posInicial = "", posFinal = "", idPartida = "26";
 
 	public Partida(BaseInterficie base) {
 		interficieBase = base;
@@ -172,6 +172,14 @@ public class Partida extends JPanel implements ActionListener {
 			myImage2 = myImage2.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
 			ImageIcon peoBlanca = new ImageIcon(myImage2);
 
+			Image myImage3 = ImageIO.read(getClass().getResource("/DamaBlanca.png"));
+			myImage3 = myImage3.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
+			ImageIcon DamaBlanca = new ImageIcon(myImage3);
+
+			Image myImage4 = ImageIO.read(getClass().getResource("/DamaNegra.png"));
+			myImage4 = myImage4.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
+			ImageIcon DamaNegra = new ImageIcon(myImage4);
+
 			for (int x = 0; x < 10; x++) {
 				if (color == 0 || color == -1)
 					color++;
@@ -180,15 +188,19 @@ public class Partida extends JPanel implements ActionListener {
 				for (int y = 0; y < 10; y++) {
 					if (divisioTaulell[contador].equals("1")) {
 						taulell.put(x + ";" + y, createButton("", size, color, peoNegre));
-						System.out.print("1");
 					} else {
-
 						if (divisioTaulell[contador].equals("0")) {
 							taulell.put(x + ";" + y, createButton("", size, color, peoBlanca));
-							System.out.print("0");
 						} else {
-							taulell.put(x + ";" + y, createButton("", size, color, null));
-							System.out.print("x");
+							if (divisioTaulell[contador].equals("d")) {
+								taulell.put(x + ";" + y, createButton("", size, color, DamaNegra));
+							} else {
+								if (divisioTaulell[contador].equals("D")) {
+									taulell.put(x + ";" + y, createButton("", size, color, DamaBlanca));
+								} else {
+									taulell.put(x + ";" + y, createButton("", size, color, null));
+								}
+							}
 						}
 					}
 					contador++;
@@ -275,6 +287,7 @@ public class Partida extends JPanel implements ActionListener {
 			posInicial = pessa.getKey();
 			bSeleccioInicial = pessa.getValue();
 			bSeleccioInicial.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+			VeurePossiblesMoviments(pessa.getKey());
 		} else {
 			if (posFinal.equals("")) {
 				posFinal = pessa.getKey();
@@ -308,8 +321,6 @@ public class Partida extends JPanel implements ActionListener {
 						if (!err.equals("")) {
 							lMessage.setText(err);
 						} else {
-
-							System.out.println("Taulell: " + mss);
 							setAnticTaulell(mss);
 						}
 
@@ -327,4 +338,15 @@ public class Partida extends JPanel implements ActionListener {
 		}
 	}
 
+	private void VeurePossiblesMoviments(String pos) {
+		// movsPessa(String idSessio, String idPartida, String Pos)
+		String moviments = interficieBase.getAPI().movsPessa(interficieBase.getName(), idPartida, pos);
+		JSONObject json = new JSONObject(moviments);
+
+		String err = json.getString("err");
+		String mss = json.getString("res");
+		String sErr = json.getString("sErr");
+
+		System.out.println(mss);
+	}
 }

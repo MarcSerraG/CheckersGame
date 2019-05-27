@@ -432,13 +432,14 @@ public class JocAPI {
 				json.put("res", "false");
 
 			// tindria que ser contrincant, no idSessio!!
-			boolean canviTorn = this.partSQL.canviarTorn(idPartida, idSessio);
-			if (!canviTorn) {
-				json.put("err", "Error al fer canvi de torn, no s'ha guardat el nou estat del taulell");
-				return json.toString();
-			} else {
-				this.partSQL.guardarEstatTauler(idPartida, tauler.toString());
-			}
+			// boolean canviTorn = this.partSQL.canviarTorn(idPartida, idSessio);
+			// if (!canviTorn) {
+			// json.put("err", "Error al fer canvi de torn, no s'ha guardat el nou estat del
+			// taulell");
+			// return json.toString();
+			// } else {
+			this.partSQL.guardarEstatTauler(idPartida, tauler.toString());
+			// }
 
 		} catch (Exception e) {
 			json.put("err", e);
