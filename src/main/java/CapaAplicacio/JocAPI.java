@@ -13,6 +13,7 @@ import CapaDomini.Peo;
 import CapaDomini.Sessio;
 import CapaDomini.Taulell;
 import CapaPersistencia.ConnectionSQLOracle;
+import CapaPersistencia.EstadistiquesSQLOracle;
 import CapaPersistencia.PartidesSQLOracle;
 import CapaPersistencia.UsuariSQLOracle;
 
@@ -21,12 +22,14 @@ public class JocAPI {
 	private ConnectionSQLOracle connSQL;
 	private UsuariSQLOracle userSQL;
 	private PartidesSQLOracle partSQL;
+	private EstadistiquesSQLOracle statSQL;
 	private Sessio sessio;
 
 	public JocAPI(String user, String password) throws Exception {
 		connSQL = new ConnectionSQLOracle(user, password);
 		userSQL = new UsuariSQLOracle(connSQL);
 		partSQL = new PartidesSQLOracle(connSQL);
+		statSQL = new EstadistiquesSQLOracle(connSQL);
 	}
 
 	/**
@@ -133,7 +136,17 @@ public class JocAPI {
 	}
 
 	public String getEstadistics(String idSessio) {
-		return null;
+		JSONObject json = new JSONObject();
+		String res = "";
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+		System.out.println("idSessio"+idSessio);
+		res = this.statSQL.getEstadistiquesUsuari(idSessio);
+		
+		json.put("res", res);
+		
+		return json.toString();
 	}
 
 	/**
