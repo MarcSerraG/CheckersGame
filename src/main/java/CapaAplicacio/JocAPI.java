@@ -424,26 +424,25 @@ public class JocAPI {
 		Casella casIni = tauler.seleccionarCasella(xIni, yIni);
 		Casella casFi = tauler.seleccionarCasella(xFi, yFi);
 		try {
+
 			boolean moviment = tauler.moviment(casIni, casFi);
 			if (moviment)
 				json.put("res", "true");
 			else
 				json.put("res", "false");
 
-		boolean moviment = tauler.moviment(casIni, casFi);
-		if (moviment)
-			json.put("res", "true");
-		else
-			json.put("res", "false");
-		
-		// tindria que ser contrincant, no idSessio!!
-		boolean canviTorn = this.partSQL.canviarTorn(idPartida, idSessio);
-		if (!canviTorn) {
-			json.put("err", "Error al fer canvi de torn, no s'ha guardat el nou estat del taulell");
-			return json.toString();
+			// tindria que ser contrincant, no idSessio!!
+			boolean canviTorn = this.partSQL.canviarTorn(idPartida, idSessio);
+			if (!canviTorn) {
+				json.put("err", "Error al fer canvi de torn, no s'ha guardat el nou estat del taulell");
+				return json.toString();
+			} else {
+				this.partSQL.guardarEstatTauler(idPartida, tauler.toString());
+			}
+
+		} catch (Exception e) {
+			json.put("err", e);
 		}
-		
-		this.partSQL.guardarEstatTauler(idPartida, tauler.toString());
 
 		return json.toString();
 	}
@@ -534,7 +533,7 @@ public class JocAPI {
 		int yIni = Integer.parseInt(Pos.split(";")[1]);
 
 		Casella cas = tauler.seleccionarCasella(xIni, yIni);
-		if(!cas.getTeFitxa()) {
+		if (!cas.getTeFitxa()) {
 			json.put("err", "No hi ha fitxa a la posicio donada");
 			return json.toString();
 		}
