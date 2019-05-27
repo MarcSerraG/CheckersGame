@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import CapaDomini.Taulell;
-
 public class PartidesSQLOracle {
 
 	private ConnectionSQLOracle conn;
@@ -61,7 +59,7 @@ public class PartidesSQLOracle {
 		//
 
 		sql += "partides " + "(jugador,contrincant,data_inici,salvat,estat,torn) " + "VALUES ('" + jugador + "','"
-				+ contrincant + "',sysdate,'" + new Taulell().toString() + "',0,'" + jugador + "')";
+				+ contrincant + "',sysdate,'" + new CapaDomini.Taulell().toString() + "',0,'" + jugador + "')";
 
 		// select nomseq.currval from dual;
 		sql2 += "partides_sequence.currval from dual";
@@ -96,39 +94,38 @@ public class PartidesSQLOracle {
 	 * @return
 	 */
 	public boolean canviarTorn(String idPartida, String usuari) {
-		
+
 		//
 		String sqlsel = ConnectionSQLOracle.SQLSELECT;
 		String usuariTorn = "";
 		String contrincant = "";
 		String sql = null;
-		sqlsel += " (contrincant,torn) FROM partides where id = "+idPartida;
-		
+		sqlsel += " (contrincant,torn) FROM partides where id = " + idPartida;
+
 		ResultSet rs = null;
 		try {
 			rs = conn.ferSelect(sqlsel);
 			if (rs.next()) {
 				usuariTorn = rs.getString("torn");
 				contrincant = rs.getString("contrincant");
-			}
-			else {
-				System.out.println("Erro sql no hi ha dades");
+			} else {
+				System.out.println("Error sql no hi ha dades");
 				return false;
 			}
 		} catch (SQLException e) {
-			System.out.println("Error sql canviarTorn: "+e);
+			System.out.println("Error sql canviarTorn: " + e);
 			return false;
 		} catch (Exception e) {
-			System.out.println("Error canviarTorn: "+e);
+			System.out.println("Error canviarTorn: " + e);
 			return false;
 		}
-		
+
 		if (usuariTorn.equals(usuari)) {
 			usuariTorn = contrincant;
-		}else {
+		} else {
 			usuariTorn = usuari;
 		}
-		
+
 		sql = ConnectionSQLOracle.SQLUPDATE + " partides SET torn = '" + usuariTorn + "'";
 		sql += " WHERE id = " + idPartida + "";
 
@@ -463,7 +460,7 @@ public class PartidesSQLOracle {
 		String sql1 = "", sql2 = "";
 		ResultSet rs = null;
 		String salvat = "";
-		
+
 		sql1 = ConnectionSQLOracle.SQLSELECT + " (salvat) from partides where id = " + idPartida;
 		try {
 			rs = conn.ferSelect(sql1);
