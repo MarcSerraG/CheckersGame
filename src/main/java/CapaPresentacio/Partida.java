@@ -28,6 +28,7 @@ public class Partida extends JPanel implements ActionListener {
 	JButton bTaules;
 	JLabel lMessage, lPlayerBlancas, lPlayerNegras; // (Blancas=0, Negras = 1)
 	Map<String, JButton> taulell;
+	String posInicial = "", posFinal = "";
 
 	public Partida(BaseInterficie base) {
 		interficieBase = base;
@@ -95,11 +96,13 @@ public class Partida extends JPanel implements ActionListener {
 				else
 					color--;
 				for (int y = 0; y < 10; y++) {
-					if ((x == 0 && y % 2 != 0) || (x == 1 && y % 2 == 0) || (x == 2 && y % 2 != 0))
+					if ((x == 0 && y % 2 != 0) || (x == 1 && y % 2 == 0) || (x == 2 && y % 2 != 0)
+							|| (x == 3 && y % 2 == 0))
 						taulell.put(x + ";" + y, createButton("", size, color, peoNegre));
 					else {
 
-						if ((x == 7 && y % 2 == 0) || (x == 8 && y % 2 != 0) || (x == 9 && y % 2 == 0))
+						if ((x == 7 && y % 2 == 0) || (x == 8 && y % 2 != 0) || (x == 9 && y % 2 == 0)
+								|| (x == 6 && y % 2 != 0))
 							taulell.put(x + ";" + y, createButton("", size, color, peoBlanca));
 						else
 							taulell.put(x + ";" + y, createButton("", size, color, null));
@@ -161,10 +164,32 @@ public class Partida extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == taulell.get("00")) {
-			System.out.print("pene");
+
+		for (Map.Entry<String, JButton> entry : taulell.entrySet()) {
+			if (entry.getValue() == e.getSource()) {
+				MourePessa(entry);
+			}
 		}
 
+	}
+
+	private void MourePessa(Map.Entry<String, JButton> pessa) { // id26
+		if (posInicial.equals("")) {
+			posInicial = pessa.getKey();
+		} else {
+			if (posFinal.equals("")) {
+				posFinal = pessa.getKey();
+				System.out.println(posInicial + " " + posFinal);
+				String moviment = interficieBase.getAPI().ferMoviment(interficieBase.getPlayerID(), "26", posInicial,
+						posFinal);
+				System.out.println(moviment);
+				if (Boolean.parseBoolean(moviment)) {
+					System.out.println("polla!");
+				} else {
+					System.out.println("polla2!");
+				}
+			}
+		}
 	}
 
 }

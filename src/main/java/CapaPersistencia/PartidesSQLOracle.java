@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import CapaDomini.Taulell;
 
 public class PartidesSQLOracle {
@@ -16,15 +17,13 @@ public class PartidesSQLOracle {
 
 	/**
 	 * 
-	 * // Option 0 no acceptat
-	 * // Option 1 jugan
-	 * // Option 2 proposat taules
-	 * // Option 3 acabat
-	 * // Option 4 rebutada
+	 * // Option 0 no acceptat // Option 1 jugan // Option 2 proposat taules //
+	 * Option 3 acabat // Option 4 rebutada
+	 * 
 	 * @param jugador
 	 * @param contrincant
 	 * @return
-	 */	
+	 */
 	public String crearPartidaNova(String jugador, String contrincant) {
 
 		String id = null;
@@ -33,10 +32,10 @@ public class PartidesSQLOracle {
 		try {
 			conn.setAutocommit(false);
 		} catch (SQLException e) {
-			System.out.println("Error de SQL partidaNova: "+e);
+			System.out.println("Error de SQL partidaNova: " + e);
 			return id;
-		}catch (Exception e) {
-			System.out.println("Error de getValue:  "+e);
+		} catch (Exception e) {
+			System.out.println("Error de getValue:  " + e);
 			return null;
 		}
 		String sql = ConnectionSQLOracle.SQLINSERT;
@@ -54,7 +53,7 @@ public class PartidesSQLOracle {
 				return null;
 			}
 		} catch (SQLException e) {
-			System.out.println("Error de SQL partidaNova: "+e);
+			System.out.println("Error de SQL partidaNova: " + e);
 			return null;
 		}
 
@@ -79,26 +78,27 @@ public class PartidesSQLOracle {
 			conn.setAutocommit(true);
 
 		} catch (SQLException e) {
-			System.out.println("Error de SQL crearPartidaNova dual: "+e);
+			System.out.println("Error de SQL crearPartidaNova dual: " + e);
 			return null;
 		} catch (Exception e) {
-			System.out.println("Error de getValue dual:  "+e);
+			System.out.println("Error de getValue dual:  " + e);
 			return null;
 		}
-		
+
 		return id;
 	}
-	
+
 	/**
 	 * retorna true si sa fet be el canvi, retorna false si hi ha hagut algun error
+	 * 
 	 * @param idPartida
 	 * @param usuariTorn
 	 * @return
 	 */
 	public boolean canviarTorn(String idPartida, String usuariTorn) {
 		String sql = null;
-		
-		sql = ConnectionSQLOracle.SQLUPDATE + " partides SET torn = '"+usuariTorn+"'";
+
+		sql = ConnectionSQLOracle.SQLUPDATE + " partides SET torn = '" + usuariTorn + "'";
 		sql += " WHERE id = " + idPartida + "";
 
 		try {
@@ -110,7 +110,7 @@ public class PartidesSQLOracle {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Retorna null si no ha pogut carregar la partida de bbdd retorna string amb la
 	 * partida /TODO falta comprovar
@@ -121,33 +121,35 @@ public class PartidesSQLOracle {
 	public String continuarPartida(String idPartida) {
 		String res = null;
 
-		String id = null;
+		String id = idPartida;
 		ResultSet rsc = null;
 
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
 		sqlcompro += "(salvat) from partides where ";
-		sqlcompro += " id = " + id + "'";
+		sqlcompro += " id = " + id + "";
 
 		try {
 			rsc = conn.ferSelect(sqlcompro);
 			if (rsc.next())
-				res = rsc.getString(0);
+				res = rsc.getString("salvat");
 		} catch (SQLException e) {
-			System.out.println("Error SQL continaurPartida: "+e);
+			System.out.println("Error SQL continaurPartida: " + e);
+			return null;
+		} catch (Exception e) {
+			System.out.println("Error continaurPartida: " + e);
 			return null;
 		}
 		return res;
 	}
 
-	
 	/**
 	 * 
 	 * @param jugador
 	 * @return
 	 */
 	public List<String> getSolicitudsPendents(String jugador) {
-		
+
 		List<String> res = new ArrayList<String>();
 
 		ResultSet rs = null;
@@ -167,30 +169,31 @@ public class PartidesSQLOracle {
 		} catch (Exception e) {
 			System.out.println("Error getSolicitudsPendents: " + e);
 		}
-		return res;		
+		return res;
 	}
-	
+
 	/**
 	 * TODO comprovar
+	 * 
 	 * @param jugador
 	 * @param contrincant
 	 * @return
 	 */
 	public boolean acceptarSolicitud(String jugador, String contrincant) {
-		
+
 		String sql;
-			sql = ConnectionSQLOracle.SQLUPDATE + " partides SET connectat = 1"
-					+ " WHERE jugador = '" + contrincant + "' and contrincant = '"+jugador+"'";
-			try {
-				if (conn == null)
-					return false;
-				return conn.crearInsert(sql);
-			} catch (SQLException e) {
-				e.printStackTrace();
+		sql = ConnectionSQLOracle.SQLUPDATE + " partides SET connectat = 1" + " WHERE jugador = '" + contrincant
+				+ "' and contrincant = '" + jugador + "'";
+		try {
+			if (conn == null)
 				return false;
-			}
+			return conn.crearInsert(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-	
+
 	/**
 	 * Retorna les partides en curs de l'usuari que necessiten la seva atenció
 	 * 
@@ -307,15 +310,16 @@ public class PartidesSQLOracle {
 			if (rs.next())
 				res = rs.getString(0);
 		} catch (SQLException e) {
-			System.out.println("Error sql getPartida: "+e);
+			System.out.println("Error sql getPartida: " + e);
 			return null;
 		}
 		return res;
 	}
 
 	/**
-	 * String amb blanc/negre, color del qui juga
-	 * retorna null si hi ha hagut algun problema
+	 * String amb blanc/negre, color del qui juga retorna null si hi ha hagut algun
+	 * problema
+	 * 
 	 * @param idSessio
 	 * @param idPartida
 	 * @return
@@ -323,24 +327,24 @@ public class PartidesSQLOracle {
 	public String getColor(String idSessio, String idPartida) {
 		String sql = null;
 		ResultSet rs = null;
-		sql = ConnectionSQLOracle.SQLSELECT+ "(jugador, contrincant) partides where id = "+idPartida;
+		sql = ConnectionSQLOracle.SQLSELECT + "(jugador, contrincant) partides where id = " + idPartida;
 		try {
 			rs = conn.ferSelect(sql);
-			
+
 			if (rs.next())
 				if (rs.getString("jugador").equals(idSessio))
 					return "blanc";
 				else if (rs.getString("contrincant").equals(idSessio))
 					return "negre";
-				
-		}catch (SQLException e){
-			System.out.println("Error SQL getColor: "+e);
+
+		} catch (SQLException e) {
+			System.out.println("Error SQL getColor: " + e);
 			return null;
-			
+
 		} catch (Exception e) {
-			System.out.println("Error getColor: "+e);
+			System.out.println("Error getColor: " + e);
 			return null;
-			
+
 		}
 		return null;
 	}
@@ -352,49 +356,49 @@ public class PartidesSQLOracle {
 	 * @param idPartida
 	 * @return
 	 */
-	public String getTaulerAnt(String idSessio, String idPartida) {		
+	public String getTaulerAnt(String idSessio, String idPartida) {
 		String res = null;
 		String sql = null;
 		ResultSet rs = null;
-		sql = ConnectionSQLOracle.SQLSELECT+ "(santerio) partides where id = "+idPartida;
+		sql = ConnectionSQLOracle.SQLSELECT + "(santerio) partides where id = " + idPartida;
 		try {
 			rs = conn.ferSelect(sql);
-			
+
 			if (rs.next())
 				res = rs.getString("santerio");
-				
-		}catch (SQLException e){
-			System.out.println("Error SQL getTaulerAnt: "+e);
+
+		} catch (SQLException e) {
+			System.out.println("Error SQL getTaulerAnt: " + e);
 			return null;
-			
+
 		} catch (Exception e) {
-			System.out.println("Error getTaulerAnt: "+e);
+			System.out.println("Error getTaulerAnt: " + e);
 			return null;
-			
+
 		}
 		return res;
 	}
 
 	public String getTaulerRes(String idSessio, String idPartida) {
-		
+
 		String res = null;
 		String sql = null;
 		ResultSet rs = null;
-		sql = ConnectionSQLOracle.SQLSELECT+ "(salva) partides where id = "+idPartida;
+		sql = ConnectionSQLOracle.SQLSELECT + "(salva) partides where id = " + idPartida;
 		try {
 			rs = conn.ferSelect(sql);
-			
+
 			if (rs.next())
 				res = rs.getString("salva");
-				
-		}catch (SQLException e){
-			System.out.println("Error SQL getTaulerRes: "+e);
+
+		} catch (SQLException e) {
+			System.out.println("Error SQL getTaulerRes: " + e);
 			return null;
-			
+
 		} catch (Exception e) {
-			System.out.println("Error getTaulerRes: "+e);
+			System.out.println("Error getTaulerRes: " + e);
 			return null;
-			
+
 		}
 		return res;
 	}
@@ -409,52 +413,47 @@ public class PartidesSQLOracle {
 		if (!this.actualitzarTaulell(idPartida, estatNou))
 			System.out.println("No s'ha pogut guardar el nou estat.");
 	}
-	
-	
-	
+
 	/**
 	 * PRIVATES
 	 */
-	
-	
+
 	/**
-	 * retorna true si ha pogut fer update del tauler de la partida
-	 * retorna false si ha succeit algun problema
+	 * retorna true si ha pogut fer update del tauler de la partida retorna false si
+	 * ha succeit algun problema
+	 * 
 	 * @param jugador
 	 * @param tauler
 	 * @return
 	 */
 	private boolean actualitzarTaulell(String idPartida, String tauler) {
-		
+
 		// String sql
 		String sql1 = "", sql2 = "";
 		ResultSet rs = null;
 		String salvat = "";
 		
-		sql1 = ConnectionSQLOracle.SQLSELECT+ "(salvat) partides where id = "+idPartida;
+		sql1 = ConnectionSQLOracle.SQLSELECT + " (salvat) from partides where id = " + idPartida;
 		try {
 			rs = conn.ferSelect(sql1);
 			if (rs.next())
-				salvat = rs.getString("SALVAT");
-			else 
-			{
+				salvat = rs.getString("salvat");
+			else {
 				System.out.println("Error actualitzarTaulell no hi ha dades compatibles");
 				return false;
 			}
-		}catch (SQLException e){
-			System.out.println("Error SQL actualitzarTaulell: "+e);
+		} catch (SQLException e) {
+			System.out.println("Error SQL actualitzarTaulell: " + e);
 			return false;
-			
+
 		} catch (Exception e) {
-			System.out.println("Error actualitzarTaulell: "+e);
+			System.out.println("Error actualitzarTaulell: " + e);
 			return false;
-			
+
 		}
-		
-		
-		sql2 = ConnectionSQLOracle.SQLUPDATE + " partides SET "
-				+ "salvat = '"+tauler+"'"
-						+ ", santerio = '"+salvat+"'";
+
+		sql2 = ConnectionSQLOracle.SQLUPDATE + " partides SET " + "salvat = '" + tauler + "'" + ", santerio = '"
+				+ salvat + "'";
 		sql2 += " WHERE id = " + idPartida + "";
 
 		try {
@@ -465,6 +464,6 @@ public class PartidesSQLOracle {
 			e.printStackTrace();
 			return false;
 		}
-		
+
 	}
 }
