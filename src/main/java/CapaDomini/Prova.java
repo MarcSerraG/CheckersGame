@@ -1,6 +1,5 @@
 package CapaDomini;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class Prova {
@@ -12,7 +11,6 @@ public class Prova {
 		Partida partida = new Partida("0000", u1, u2);
 		Scanner keyboard = new Scanner(System.in);
 		int fOrigen, cOrigen, fDesti, cDesti, decisio;
-		List<int[]> movimentsTaules;
 		
 		while (!partida.getTaulell().comprovarFitxes() && partida.getPartidaEnCurs()) {
 			System.out.println("Que vols fer? (0 = tirar 1 = porposar taules 2 = finalitzar partida)");
@@ -52,23 +50,21 @@ public class Prova {
 						fDesti = keyboard.nextInt();
 						System.out.println("A quina columna vols moure?");
 						cDesti = keyboard.nextInt();
-						movimentsTaules = partida.getTaulell().veurePossiblesMoviments(partida.getTaulell().seleccionarCasella(fOrigen, cOrigen));
-						
-						for (int i = 0; i < movimentsTaules.size(); i++) {
+						if(partida.comprovarTaules(partida.getTaulell().seleccionarCasella(fOrigen, cOrigen), partida.getTaulell().seleccionarCasella(fDesti, cDesti))) {
 							
-							if(movimentsTaules.get(i)[0] == fDesti && movimentsTaules.get(i)[1] == cDesti) {
 							System.out.println("El contrincant podia fer un moviment, tu guanyes");
 							partida.acabarPartida();
 							System.out.println("Fi de joc");
 							keyboard.close();
 							System.exit(0);
 							}
-						}
+						else {
 							System.out.println("El contrincant no podia fer mes moviments, empat");
 							partida.acabarPartida();
 							keyboard.close();
 							System.exit(0);
 						}
+					}
 				case 2:
 					partida.acabarPartida();
 					keyboard.close();

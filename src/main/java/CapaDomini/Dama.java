@@ -16,7 +16,7 @@ public class Dama extends Fitxa{
 	//Torna una llista de moviments possibles de dama
 	public List<int[]> possiblesMoviments(int x, int y) throws IllegalArgumentException{
 		
-		if (x < 0 || x > 9 || y < 0 || y > 9) throw new IllegalArgumentException("Position out of bounds");
+		if (x < 0 || x > 7 || y < 0 || y > 7) throw new IllegalArgumentException("Position out of bounds");
 			
 		Vector <int[]> llista = new Vector<int[]>();
 			
@@ -26,10 +26,10 @@ public class Dama extends Fitxa{
 		int[] mov4 = {x+1,y-1};
 		
 		//Select only positions inside the game
-		if(!(mov1[0]<0 || mov1[0]>9 || mov1[1]<0 || mov1[1]>9)) llista.add(mov1);
-		if(!(mov2[0]<0 || mov2[0]>9 || mov2[1]<0 || mov2[1]>9)) llista.add(mov2);
-		if(!(mov3[0]<0 || mov3[0]>9 || mov3[1]<0 || mov3[1]>9)) llista.add(mov3);
-		if(!(mov4[0]<0 || mov4[0]>9 || mov4[1]<0 || mov4[1]>9)) llista.add(mov4);
+		if(!(mov1[0]<0 || mov1[0]>7 || mov1[1]<0 || mov1[1]>7)) llista.add(mov1);
+		if(!(mov2[0]<0 || mov2[0]>7 || mov2[1]<0 || mov2[1]>7)) llista.add(mov2);
+		if(!(mov3[0]<0 || mov3[0]>7 || mov3[1]<0 || mov3[1]>7)) llista.add(mov3);
+		if(!(mov4[0]<0 || mov4[0]>7 || mov4[1]<0 || mov4[1]>7)) llista.add(mov4);
 		return llista;
 	}
 	//Retorna D per dama blanca i d per dama negra

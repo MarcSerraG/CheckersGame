@@ -414,7 +414,7 @@ public class JocAPI {
 			return json.toString();
 		}
 
-		Taulell tauler = new Taulell();
+		Taulell tauler = new Taulell(10);
 		tauler.reconstruirTaulell(estatTauler);
 
 		int xIni = Integer.parseInt(posIni.split(";")[0]);
@@ -448,7 +448,7 @@ public class JocAPI {
 			return json.toString();
 		}
 
-		Taulell tauler = new Taulell();
+		Taulell tauler = new Taulell(10);
 		tauler.reconstruirTaulell(estatTauler);
 
 		int xIni = Integer.parseInt(pos.split(";")[0]);
@@ -468,7 +468,30 @@ public class JocAPI {
 	}
 
 	public String ferBufa(String idSessio, String idPartida, String pos) {
-		return null;
+		JSONObject json = new JSONObject();
+		json.put("res", "");
+		json.put("err", "");
+		json.put("sErr", "");
+
+		String estatTauler = this.partSQL.continuarPartida(idPartida);
+		if (estatTauler == null) {
+			json.put("err", "No s'ha pogut carregar la partida");
+			return json.toString();
+		}
+
+		Taulell tauler = new Taulell(10);
+		tauler.reconstruirTaulell(estatTauler);
+
+		int xIni = Integer.parseInt(pos.split(";")[0]);
+		int yIni = Integer.parseInt(pos.split(";")[1]);
+
+		Casella cas = tauler.seleccionarCasella(xIni, yIni);
+		if(tauler.bufar(cas)) {
+			json.put("res","true");
+			return json.toString();
+		}
+		json.put("res", "false");
+		return json.toString();
 	}
 
 	public String acceptaTaules(String idSessio, String idPartida) {
@@ -492,7 +515,7 @@ public class JocAPI {
 			return json.toString();
 		}
 
-		Taulell tauler = new Taulell();
+		Taulell tauler = new Taulell(10);
 		tauler.reconstruirTaulell(estatTauler);
 
 		int xIni = Integer.parseInt(Pos.split(";")[0]);

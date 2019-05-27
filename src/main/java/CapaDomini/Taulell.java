@@ -8,6 +8,7 @@ public class Taulell {
 	private Casella casMatCaselles[][];
 	private int intNumNegres;
 	private int intNumBlanques;
+	private int mida;
 	private Taulell taulellAnterior;
 	private final int UPRIGHT = 0;
 	private final int DOWNRIGHT = 1;
@@ -15,14 +16,16 @@ public class Taulell {
 	private final int UPLEFT = 3;
 
 	// Constructor
-	public Taulell() {
+	public Taulell(int mida) {
 
 		intNumBlanques = 0;
 		intNumNegres = 0;
-		casMatCaselles = new Casella[10][10];
-		this.omplirTaulell(10, 10);
+		this.mida = mida;
+		casMatCaselles = new Casella[mida][mida];
+		this.omplirTaulell(mida, mida);
 	}
 	public Casella[][] getMatriu(){return casMatCaselles;}
+	public int getMida() {return mida;}
 	//Retorna si algun jugador no te fitxes per moure
 	public boolean comprovarFitxes(){return (intNumNegres == 0 || intNumBlanques == 0);}
 	public Casella seleccionarCasella(int x, int y){return this.casMatCaselles[x][y];}
@@ -132,7 +135,7 @@ public class Taulell {
 					break;
 				}
 				// If the new movement is inside the game and it is empty
-				if (!(newMov[0] < 0 || newMov[0] > 9 || newMov[1] < 0 || newMov[1] > 9)
+				if (!(newMov[0] < 0 || newMov[0] > casMatCaselles.length - 1 || newMov[1] < 0 || newMov[1] > casMatCaselles.length - 1)
 						&& !(casMatCaselles[newMov[0]][newMov[1]].getTeFitxa())) {
 					return newMov;
 				}
@@ -178,7 +181,7 @@ public class Taulell {
 					}
 				}
 				// If the new movement is inside the game and it is empty
-				if (!(newMov[0] < 0 || newMov[0] > 9 || newMov[1] < 0 || newMov[1] > 9)
+				if (!(newMov[0] < 0 || newMov[0] > casMatCaselles.length -1 || newMov[1] < 0 || newMov[1] > casMatCaselles.length - 1)
 						&& !(casMatCaselles[newMov[0]][newMov[1]].getTeFitxa())) {
 					return newMov;
 				}
@@ -259,7 +262,7 @@ public class Taulell {
 			return true;
 		} else
 		// Black
-		if (color == 1 && casella.getX() == 9) {
+		if (color == 1 && casella.getX() == casMatCaselles.length - 1) {
 			casMatCaselles[casella.getX()][casella.getY()].setFitxa(new Dama(1));
 			return true;
 		}
@@ -329,8 +332,8 @@ public class Taulell {
 		Casella casMatar = null;
 		Casella posAnterior = null;
 		
-		for(int i = 0; i < 10; i++) {
-			for(int j = 0; j < 10; j ++) {
+		for(int i = 0; i < casMatCaselles.length; i++) {
+			for(int j = 0; j < casMatCaselles[i].length; j ++) {
 				if (posicio.getFitxa().iID == matriu[i][j].getFitxa().iID) {
 					if (posicio.getX() == matriu[i][j].getX() && posicio.getY() == matriu[i][j].getY()) throw new IllegalArgumentException("same position");
 					posAnterior = matriu[i][j];
@@ -352,9 +355,9 @@ public class Taulell {
 
 		String text = "";
 
-		for (int i = 0; i <= 9; i++) {
-			for (int j = 0; j <= 9; j++) {
-				if (j != 9)
+		for (int i = 0; i < this.mida; i++) {
+			for (int j = 0; j < this.mida; j++) {
+				if (j != mida - 1)
 					text += casMatCaselles[i][j] + ",";
 				else
 					text += casMatCaselles[i][j] + "\n";
