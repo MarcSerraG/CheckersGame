@@ -84,6 +84,8 @@ public class EstadistiquesSQLOracle {
 			ratio = ((float)numWin);
 		else
 			ratio = (float)numWin/(float)numLose;
+		
+		numT = numPar - (numWin+numLose);
 		res = ""+numPar+";"+numWin+";"+numLose+";"+numT+";"+ratio;
 		if (rank.size()>0) {
 			res += ";"+rank.size();
