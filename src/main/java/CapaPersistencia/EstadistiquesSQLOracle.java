@@ -80,9 +80,10 @@ public class EstadistiquesSQLOracle {
 			System.out.println("Error SQL getEstadistiquesUsuari: "+e);
 		}
 		
-		
-		ratio = ((float)numWin)/(float)numPar*100;
-		System.out.println("ratio"+ratio);
+		if (numLose==0)
+			ratio = ((float)numWin);
+		else
+			ratio = (float)numWin/(float)numLose;
 		res = ""+numPar+";"+numWin+";"+numLose+";"+numT+";"+ratio;
 		if (rank.size()>0) {
 			res += ";"+rank.size();
