@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import CapaDomini.Taulell;
+
 public class ConnectionSQLOracle {
 
 	private Connection conn;
@@ -91,6 +93,7 @@ public class ConnectionSQLOracle {
 			UsuariSQLOracle usu =  new UsuariSQLOracle(cn);
 			//usu.insertUsuari("Marc", "1234", "msg@gmail.com","0");
 			//System.out.println(usu.getConnectat("Marc"));
+			//System.out.println(tb.toString());
 			PartidesSQLOracle pat = new PartidesSQLOracle(cn);
 			pat.canviarTorn("41", "Prova1");
 			//System.out.println(pat.getPartidesTorn("Marc").toString());

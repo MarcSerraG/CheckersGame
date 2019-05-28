@@ -40,7 +40,7 @@ public class PartidesSQLOracle {
 		String sql2 = ConnectionSQLOracle.SQLSELECT;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro += "(id) from partides where ";
+		sqlcompro += "id from partides where ";
 		sqlcompro += "jugador = '" + jugador + "' and contrincant = '" + contrincant + "' and "
 				+ " estat between 0 AND 2";
 
@@ -59,7 +59,7 @@ public class PartidesSQLOracle {
 		//
 
 		sql += "partides " + "(jugador,contrincant,data_inici,salvat,estat,torn) " + "VALUES ('" + jugador + "','"
-				+ contrincant + "',sysdate,'" + new CapaDomini.Taulell().toString() + "',0,'" + jugador + "')";
+				+ contrincant + "',sysdate,'" + new CapaDomini.Taulell(10).toString() + "',0,'" + jugador + "')";
 
 		// select nomseq.currval from dual;
 		sql2 += "partides_sequence.currval from dual";
@@ -100,7 +100,7 @@ public class PartidesSQLOracle {
 		String usuariTorn = "";
 		String contrincant = "";
 		String sql = null;
-		sqlsel += " (contrincant,torn) FROM partides where id = " + idPartida;
+		sqlsel += "contrincant,torn FROM partides where id = " + idPartida;
 
 		ResultSet rs = null;
 		try {
@@ -154,7 +154,7 @@ public class PartidesSQLOracle {
 
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro += "(salvat) from partides where ";
+		sqlcompro += "salvat from partides where ";
 		sqlcompro += " id = " + id + "";
 
 		try {
@@ -183,7 +183,7 @@ public class PartidesSQLOracle {
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro += "(jugador) from partides where ";
+		sqlcompro += "jugador from partides where ";
 		sqlcompro += "contrincant = '" + jugador + "' and estat = 0";
 
 		try {
@@ -235,7 +235,7 @@ public class PartidesSQLOracle {
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro += "(contrincant) from partides where ";
+		sqlcompro += "contrincant from partides where ";
 		sqlcompro += "jugador = '" + jugador + "' and torn = '" + jugador + "'";
 
 		try {
@@ -265,7 +265,7 @@ public class PartidesSQLOracle {
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro += "(contrincant) from partides where ";
+		sqlcompro += "contrincant from partides where ";
 		sqlcompro += "jugador = '" + jugador + "' and torn != '" + jugador + "'";
 
 		try {
@@ -295,7 +295,7 @@ public class PartidesSQLOracle {
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 		String nomguanyador = "";
 
-		sqlcompro += "(nom_guanyador) from partides where ";
+		sqlcompro += "nom_guanyador from partides where ";
 		sqlcompro += "jugador = '" + usuari + "' and estat = 3";
 
 		try {
@@ -329,7 +329,7 @@ public class PartidesSQLOracle {
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro += "(id) from partides where ";
+		sqlcompro += "id from partides where ";
 		sqlcompro += " jugador = '" + jugador + " and contrincant = '" + contrincant + "' and "
 				+ " estat between 0 AND 2";
 
@@ -355,7 +355,7 @@ public class PartidesSQLOracle {
 	public String getColor(String idSessio, String idPartida) {
 		String sql = null;
 		ResultSet rs = null;
-		sql = ConnectionSQLOracle.SQLSELECT + "(jugador, contrincant) partides where id = " + idPartida;
+		sql = ConnectionSQLOracle.SQLSELECT + "jugador, contrincant FROM partides where id = " + idPartida;
 		try {
 			rs = conn.ferSelect(sql);
 
@@ -388,7 +388,7 @@ public class PartidesSQLOracle {
 		String res = null;
 		String sql = null;
 		ResultSet rs = null;
-		sql = ConnectionSQLOracle.SQLSELECT + "(santerio) partides where id = " + idPartida;
+		sql = ConnectionSQLOracle.SQLSELECT + "santerio partides where id = " + idPartida;
 		try {
 			rs = conn.ferSelect(sql);
 
@@ -412,7 +412,7 @@ public class PartidesSQLOracle {
 		String res = null;
 		String sql = null;
 		ResultSet rs = null;
-		sql = ConnectionSQLOracle.SQLSELECT + "(salva) partides where id = " + idPartida;
+		sql = ConnectionSQLOracle.SQLSELECT + "salvat partides where id = " + idPartida;
 		try {
 			rs = conn.ferSelect(sql);
 
@@ -461,7 +461,7 @@ public class PartidesSQLOracle {
 		ResultSet rs = null;
 		String salvat = "";
 
-		sql1 = ConnectionSQLOracle.SQLSELECT + " (salvat) from partides where id = " + idPartida;
+		sql1 = ConnectionSQLOracle.SQLSELECT + " salvat from partides where id = " + idPartida;
 		try {
 			rs = conn.ferSelect(sql1);
 			if (rs.next())
