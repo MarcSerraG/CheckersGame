@@ -558,8 +558,8 @@ public class JocAPI {
 		List<int[]> moviments = tauler.veurePossiblesMoviments(cas);
 		String cadena = "";
 		for (int i = 0; i < moviments.size() - 1; i++)
-			cadena = moviments.get(i)[0] + "-" + moviments.get(i)[1] + ";";
-		cadena += moviments.get(moviments.size() - 1)[0] + "-" + moviments.get(moviments.size() - 1)[0];
+			cadena = moviments.get(i)[0] + ";" + moviments.get(i)[1] + "-";
+		cadena += moviments.get(moviments.size() - 1)[0] + ";" + moviments.get(moviments.size() - 1)[0];
 		json.put("res", cadena);
 		return json.toString();
 	}

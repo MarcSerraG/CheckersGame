@@ -48,9 +48,9 @@ public class Peo extends Fitxa {
 			break;
 		}
 		// Select only positions inside the game
-		if (!(mov1[0] < 0 || mov1[0] > 7 || mov1[1] < 0 || mov1[1] > 7))
+		if (!(mov1[0] < 0 || mov1[0] > 9 || mov1[1] < 0 || mov1[1] > 9))
 			llista.add(mov1);
-		if (!(mov2[0] < 0 || mov2[0] > 7 || mov2[1] < 0 || mov2[1] > 7))
+		if (!(mov2[0] < 0 || mov2[0] > 9 || mov2[1] < 0 || mov2[1] > 9))
 			llista.add(mov2);
 		return llista;
 	}

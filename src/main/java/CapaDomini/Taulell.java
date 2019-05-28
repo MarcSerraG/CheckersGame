@@ -21,8 +21,8 @@ public class Taulell {
 		intNumBlanques = 0;
 		intNumNegres = 0;
 		this.mida = mida;
-		casMatCaselles = new Casella[mida][mida];
-		this.omplirTaulell(mida, mida);
+		casMatCaselles = new Casella[10][10];
+		this.omplirTaulell(10, 10);
 	}
 	public Casella[][] getMatriu(){return casMatCaselles;}
 	public int getMida() {return mida;}
@@ -61,8 +61,13 @@ public class Taulell {
 		casOrigen.eliminarFitxa();
 		this.canviDama(casDesti.getFitxa().iColor, casDesti);
 		// Look if in the next position there is any movement available
-		if (this.veurePossiblesMoviments(casDesti).size() != 0)
+		if (this.veurePossiblesMoviments(casDesti).size() != 0) {
 			potMoure = true;
+			List<int[]> movs = this.veurePossiblesMoviments(casDesti);
+			for (int i = 0; i< movs.size(); i++) {
+				System.out.println(movs.get(i)[0]+" "+ movs.get(i)[1]);
+			}
+		}
 		return haMatat && potMoure;
 	}
 
@@ -135,7 +140,7 @@ public class Taulell {
 					break;
 				}
 				// If the new movement is inside the game and it is empty
-				if (!(newMov[0] < 0 || newMov[0] > casMatCaselles.length - 1 || newMov[1] < 0 || newMov[1] > casMatCaselles.length - 1)
+				if (!(newMov[0] < 0 || newMov[0] > 9|| newMov[1] < 0 || newMov[1] > 9)
 						&& !(casMatCaselles[newMov[0]][newMov[1]].getTeFitxa())) {
 					return newMov;
 				}
@@ -181,7 +186,7 @@ public class Taulell {
 					}
 				}
 				// If the new movement is inside the game and it is empty
-				if (!(newMov[0] < 0 || newMov[0] > casMatCaselles.length -1 || newMov[1] < 0 || newMov[1] > casMatCaselles.length - 1)
+				if (!(newMov[0] < 0 || newMov[0] > 9 || newMov[1] < 0 || newMov[1] > 9)
 						&& !(casMatCaselles[newMov[0]][newMov[1]].getTeFitxa())) {
 					return newMov;
 				}
@@ -262,7 +267,7 @@ public class Taulell {
 			return true;
 		} else
 		// Black
-		if (color == 1 && casella.getX() == casMatCaselles.length - 1) {
+		if (color == 1 && casella.getX() == 9) {
 			casMatCaselles[casella.getX()][casella.getY()].setFitxa(new Dama(1));
 			return true;
 		}
@@ -355,8 +360,8 @@ public class Taulell {
 
 		String text = "";
 
-		for (int i = 0; i < this.mida; i++) {
-			for (int j = 0; j < this.mida; j++) {
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
 				if (j != mida - 1)
 					text += casMatCaselles[i][j] + ",";
 				else
