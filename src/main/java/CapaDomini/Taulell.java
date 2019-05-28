@@ -53,20 +53,17 @@ public class Taulell {
 		casMatar = this.potMatar(casOrigen, casDesti);
 		// Remove killed token if there is any
 		if (!(casMatar == null)) {
+			if(casMatar.getFitxa().iColor == 0) intNumBlanques --;
+			else intNumNegres --;
 			casMatar.eliminarFitxa();
 			haMatat = true;
 		}
 		// Move selected token
 		casDesti.setFitxa(casOrigen.getFitxa());
 		casOrigen.eliminarFitxa();
-		this.canviDama(casDesti.getFitxa().iColor, casDesti);
 		// Look if in the next position there is any movement available
-		if (this.veurePossiblesMoviments(casDesti).size() != 0) {
+		if (this.veurePossiblesMoviments(casDesti).size() != 0 && haMatat) {
 			potMoure = true;
-			List<int[]> movs = this.veurePossiblesMoviments(casDesti);
-			for (int i = 0; i< movs.size(); i++) {
-				System.out.println(movs.get(i)[0]+" "+ movs.get(i)[1]);
-			}
 		}
 		return haMatat && potMoure;
 	}
@@ -87,8 +84,11 @@ public class Taulell {
 					movMatada = this.casellaMatadaPeo(casOrigen, mov);
 					if (movMatada != null)
 						moviment.set(i, movMatada);
-					else
+					else {
 						moviment.remove(i);
+						i--;
+					}
+						
 				} else {
 					movMatada = this.casellaMatadaDama(casOrigen, mov);
 					if (movMatada != null)
@@ -141,7 +141,7 @@ public class Taulell {
 				}
 				// If the new movement is inside the game and it is empty
 				if (!(newMov[0] < 0 || newMov[0] > 9|| newMov[1] < 0 || newMov[1] > 9)
-						&& !(casMatCaselles[newMov[0]][newMov[1]].getTeFitxa())) {
+					&& !(casMatCaselles[newMov[0]][newMov[1]].getTeFitxa())) {
 					return newMov;
 				}
 			}
