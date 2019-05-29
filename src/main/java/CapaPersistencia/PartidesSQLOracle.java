@@ -301,7 +301,7 @@ public class PartidesSQLOracle {
 		try {
 			rs = conn.ferSelect(sqlcompro);
 			while (rs.next()) {
-				nomguanyador = rs.getString(1);
+				nomguanyador = rs.getString("nom_guanyador");
 				if (nomguanyador.equals(usuari))
 					res.add(nomguanyador + ",guanya");
 				else
