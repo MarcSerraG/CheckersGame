@@ -95,7 +95,7 @@ public class ConnectionSQLOracle {
 			//System.out.println(usu.getConnectat("Marc"));
 			//System.out.println(tb.toString());
 			PartidesSQLOracle pat = new PartidesSQLOracle(cn);
-			String id = pat.getPartida("Ricard", "Narcis");
+			String id = usu.getCandidats("Ricard");
 			System.out.println(id);
 			//System.out.println(pat.getTaullelnou().toString());
 			
