@@ -24,6 +24,12 @@ public class Taulell {
 		casMatCaselles = new Casella[10][10];
 		this.omplirTaulell(10, 10);
 	}
+	public Taulell(String text) {
+		
+		intNumBlanques = 0;
+		intNumNegres = 0;
+		this.reconstruirTaulell(text);
+	}
 	public Casella[][] getMatriu(){return casMatCaselles;}
 	public int getMida() {return mida;}
 	//Retorna si algun jugador no te fitxes per moure
@@ -314,16 +320,24 @@ public class Taulell {
 			for (String posicio : casella) {
 				System.out.println(posicio + " " + fil + " " + col);
 				new Casella(fil, col, true, 0, 0);
-				if (posicio.equals("0"))
+				if (posicio.equals("0")) {
 					casMatCaselles[fil][col] = new Casella(fil, col, true, 0, 0);
-				if (posicio.equals("1"))
+					intNumBlanques ++;
+				}
+				if (posicio.equals("1")) {
 					casMatCaselles[fil][col] = new Casella(fil, col, true, 0, 1);
+					intNumNegres ++;
+				}
 				if (posicio.equals("x"))
 					casMatCaselles[fil][col] = new Casella(fil, col, false, 0, 0);
-				if (posicio.equals("D"))
+				if (posicio.equals("D")) {
 					casMatCaselles[fil][col] = new Casella(fil, col, true, 1, 0);
-				if (posicio.equals("d"))
+					intNumBlanques ++;
+				}
+				if (posicio.equals("d")) {
 					casMatCaselles[fil][col] = new Casella(fil, col, true, 1, 1);
+					intNumNegres ++;
+				}
 				col++;
 			}
 			col = 0;
