@@ -333,12 +333,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bLogOut.setForeground(Color.WHITE);
 		this.bStatistics.setForeground(Color.WHITE);
 
-		Partida partida = new Partida(this);
-		centerPanel = partida.partidaCreate("26");
-		partida.setVisible(true);
-		getContentPane().add(centerPanel, BorderLayout.CENTER);
-		getContentPane().repaint();
-		validate();
+		// TODO: Cridar a la classe request
 	}
 
 	private void actionStatics() {
