@@ -32,10 +32,10 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 	static BaseInterficie interficieBase;
 	JPanel panelContinueGame, panelCentral, panelNord, panelSud, panelEst, panelOest;
-	JLabel labelMessage, labelErrorMessage;
+	JLabel labelErrorMessage;
 	JocAPI api;
 	JButton bPlayGame, bRefresh, bYourTurn, bRivalTurn, bFinishedMatches;
-
+	String contrincant;
 	JList<String> listPartides;
 	JScrollPane scrollPanel;
 	JLabel icon;
@@ -54,7 +54,6 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 		bFinishedMatches = createButton("Finished Matches", size);
 		listPartides = new JList<String>();
 		panelCentral = new JPanel();
-		labelMessage = new JLabel();
 		labelErrorMessage = new JLabel();
 		scrollPanel = new JScrollPane(listPartides);
 	}
@@ -64,8 +63,9 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 		panelContinueGame.setLayout(new BorderLayout());
 
-		labelErrorMessage.setFont(new Font("SansSerif", Font.BOLD, 20));
+		labelErrorMessage.setFont(new Font("SansSerif", Font.BOLD, 12));
 		labelErrorMessage.setForeground(new Color(237, 215, 178));
+		labelErrorMessage.setText("Hii");
 
 		AjustaPantalla(panelNord, panelSud, panelEst, panelOest);
 		listPartides.setBackground(Color.GRAY);
@@ -147,6 +147,8 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 		panelSud.add(bRefresh);
 		panelSud.add(Box.createRigidArea(new Dimension(180, 0)));
 		panelSud.add(bPlayGame);
+		panelSud.add(Box.createRigidArea(new Dimension(0, 180)));
+		panelSud.add(labelErrorMessage);
 
 	}
 
@@ -277,7 +279,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 						FineshedMaches();
 						presButton = 2;
 					} else {
-
+						ComenssarJoc();
 					}
 				}
 			}
@@ -287,9 +289,46 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 	public void valueChanged(ListSelectionEvent e) {
 		String str = (String) listPartides.getSelectedValue();
 		bPlayGame.setEnabled(true);
-
+		contrincant = str;
 		bPlayGame.setText("Continue playing with " + str);
 
+	}
+
+	public void ComenssarJoc() {
+
+		String triaPartida = api.triaPartida(interficieBase.getPlayerID(), contrincant);
+
+		JSONObject json = new JSONObject(triaPartida);
+
+		String err = json.getString("err");
+		String Mss = json.getString("res");
+
+		if (!err.equals("")) {
+			labelErrorMessage.setText(err);
+		} else {
+			Partida partida = new Partida(interficieBase);
+			interficieBase.centerPanel = partida.partidaCreate(Mss);
+			partida.setVisible(true);
+			interficieBase.getContentPane().add(interficieBase.centerPanel, BorderLayout.CENTER);
+			interficieBase.getContentPane().repaint();
+			validate();
+		}
+
+		AdaptarBaseInterfaceNewJoc();
+	}
+
+	private void AdaptarBaseInterfaceNewJoc() {
+		interficieBase.bLogOut.setBackground(Color.GRAY);
+		interficieBase.bNewGame.setBackground(Color.GRAY);
+		interficieBase.bContinue_Game.setBackground(Color.GRAY);
+		interficieBase.bStatistics.setBackground(Color.GRAY);
+		interficieBase.bRequests.setBackground(Color.GRAY);
+
+		interficieBase.bLogOut.setForeground(Color.WHITE);
+		interficieBase.bNewGame.setForeground(Color.WHITE);
+		interficieBase.bContinue_Game.setForeground(Color.WHITE);
+		interficieBase.bStatistics.setForeground(Color.WHITE);
+		interficieBase.bRequests.setForeground(Color.WHITE);
 	}
 
 	public void YourTurn() {
