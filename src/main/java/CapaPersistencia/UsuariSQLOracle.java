@@ -35,8 +35,31 @@ public class UsuariSQLOracle {
 			return psw;
 		}
 	}
-
-	// Insert usuari
+	
+	
+	public String getCandidats(String nomUsu) {
+		ResultSet rs = null;
+		String sortida = "";
+		String sql = ConnectionSQLOracle.SQLSELECT;
+		
+		sql = "SELECT nom FROM USUARIS WHERE nom NOT IN "
+				+ "("
+				+ "SELECT jugador FROM partides WHERE ((contrincant = '"+nomUsu+"') and estat between 0 and 2) " + 
+				"UNION " + 
+				"SELECT contrincant FROM partides WHERE ((jugador = '"+nomUsu+"') and estat between 0 and 2)" + 
+				") AND nom != '"+nomUsu+"'";
+		
+		try {
+			rs = conn.ferSelect(sql);
+			while (rs.next())
+				sortida += rs.getString("nom")+";";
+		} catch (SQLException e) {
+			System.out.println("Error sql usuarisCandidats: "+e);
+		} catch (Exception e) {
+			System.out.println("Error usuarisCandidats: "+e);
+		}
+		return sortida;
+	}
 	/**
 	 * Torna un resultset de nom usuaris conectats
 	 * 
