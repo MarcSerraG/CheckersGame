@@ -30,7 +30,7 @@ public class Partida extends JPanel implements ActionListener {
 	JButton bTaules, bSeleccioInicial;
 	JLabel lMessage, lPlayerBlancas, lPlayerNegras; // (Blancas=0, Negras = 1)
 	Map<String, JButton> taulell;
-	String posInicial = "", posFinal = "", idPartida = "26";
+	String posInicial = "", posFinal = "", idPartida;
 
 	public Partida(BaseInterficie base) {
 		interficieBase = base;
@@ -51,7 +51,7 @@ public class Partida extends JPanel implements ActionListener {
 
 		panelTaulell.setLayout(new BorderLayout());
 
-		setNouTaulell(panelCentral);
+		// setNouTaulell(panelCentral);
 		AjustaPantalla(panelNord, panelSud, panelEst, panelOest);
 
 		panelTaulell.add(panelCentral, BorderLayout.CENTER);
@@ -61,6 +61,7 @@ public class Partida extends JPanel implements ActionListener {
 
 	public JPanel partidaCreate(String idPartida) {
 		panelTaulell = new JPanel();
+		this.idPartida = idPartida;
 
 		String nouTaulell = interficieBase.getAPI().obtenirTaulerAct(interficieBase.getPlayerID(), idPartida);
 		JSONObject json = new JSONObject(nouTaulell);
@@ -70,9 +71,8 @@ public class Partida extends JPanel implements ActionListener {
 
 		if (!err.equals("")) {
 			lMessage.setText(err);
-			setNouTaulell(panelCentral);
+
 		} else {
-			;
 			setAnticTaulell(mss);
 		}
 
@@ -83,59 +83,6 @@ public class Partida extends JPanel implements ActionListener {
 		panelTaulell.add(panelCentral, BorderLayout.CENTER);
 
 		return panelTaulell;
-	}
-
-	private void setNouTaulell(JPanel panelCentral) {
-		GridLayout layoutTaulell = new GridLayout(10, 10);
-		panelCentral.setLayout(layoutTaulell);
-		int color = -1;
-
-		taulell = new LinkedHashMap<String, JButton>();
-		Dimension size = new Dimension(50, 50);
-
-		try {
-
-			Image myImage = ImageIO.read(getClass().getResource("/PeoNegre.png"));
-			myImage = myImage.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
-			ImageIcon peoNegre = new ImageIcon(myImage);
-
-			Image myImage2 = ImageIO.read(getClass().getResource("/PeoBlanca.png"));
-			myImage2 = myImage2.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
-			ImageIcon peoBlanca = new ImageIcon(myImage2);
-
-			for (int x = 0; x < 10; x++) {
-				if (color == 0 || color == -1)
-					color++;
-				else
-					color--;
-				for (int y = 0; y < 10; y++) {
-					if ((x == 0 && y % 2 != 0) || (x == 1 && y % 2 == 0) || (x == 2 && y % 2 != 0)
-							|| (x == 3 && y % 2 == 0))
-						taulell.put(x + ";" + y, createButton("", size, color, peoNegre));
-					else {
-
-						if ((x == 7 && y % 2 == 0) || (x == 8 && y % 2 != 0) || (x == 9 && y % 2 == 0)
-								|| (x == 6 && y % 2 != 0))
-							taulell.put(x + ";" + y, createButton("", size, color, peoBlanca));
-						else
-							taulell.put(x + ";" + y, createButton("", size, color, null));
-					}
-
-					if (color == 0)
-						color++;
-					else
-						color--;
-				}
-			}
-
-			for (Map.Entry<String, JButton> entry : taulell.entrySet()) {
-				panelCentral.add(entry.getValue());
-			}
-
-		} catch (IOException e) {
-			System.out.println("setNouTaulell Error: " + e);
-		}
-
 	}
 
 	private void setAnticTaulell(String taulellSQL) {
@@ -267,7 +214,7 @@ public class Partida extends JPanel implements ActionListener {
 		panelSud.add(Box.createRigidArea(new Dimension(0, 100)), BorderLayout.CENTER);
 		panelSud.add(lMessage, BorderLayout.WEST);
 
-		lMessage.setText("Tu ets el: " + interficieBase.getAPI().obtenirColor(interficieBase.getPlayerID(), "26"));
+		lMessage.setText("Tu ets el: " + interficieBase.getAPI().obtenirColor(interficieBase.getPlayerID(), idPartida));
 		lMessage.setForeground(Color.white);
 	}
 
@@ -276,6 +223,7 @@ public class Partida extends JPanel implements ActionListener {
 		for (Map.Entry<String, JButton> entry : taulell.entrySet()) {
 			if (entry.getValue() == e.getSource()) {
 				MourePessa(entry);
+				break;
 			}
 		}
 
@@ -292,8 +240,8 @@ public class Partida extends JPanel implements ActionListener {
 			if (posFinal.equals("")) {
 				posFinal = pessa.getKey();
 				System.out.println(posInicial + " " + posFinal);
-				String moviment = interficieBase.getAPI().ferMoviment(interficieBase.getPlayerID(), "26", posInicial,
-						posFinal);
+				String moviment = interficieBase.getAPI().ferMoviment(interficieBase.getPlayerID(), idPartida,
+						posInicial, posFinal);
 
 				JSONObject json = new JSONObject(moviment);
 
@@ -312,7 +260,7 @@ public class Partida extends JPanel implements ActionListener {
 						}
 
 						String nouTaulell = interficieBase.getAPI().obtenirTaulerAct(interficieBase.getPlayerID(),
-								"26");
+								idPartida);
 						json = new JSONObject(nouTaulell);
 
 						err = json.getString("err");
