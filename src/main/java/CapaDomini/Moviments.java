@@ -21,7 +21,7 @@ public class Moviments {
 	private List<String> listMovsAnt; // Moviments torn anterior
 	private Taulell taulActual; // Taulell torn actual
 	private Taulell taulAnt; // Taulell torn anterior
-	private boolean bufaPossible;
+	private boolean tornAcabat;
 	
 	public Moviments(String movsAnt, String taulActual, String taulAnterior) {
 		this.listMovsAnt = new ArrayList<String>();
@@ -32,6 +32,7 @@ public class Moviments {
 		this.listMovs = new ArrayList<String>();
 		this.taulActual = new Taulell(taulActual);
 		this.taulAnt = new Taulell(taulAnterior);
+		this.tornAcabat = false;
 	}
 	
 	public Taulell getTaulellActual() {return this.taulActual;}
@@ -75,6 +76,24 @@ public class Moviments {
 			}
 		}
 		
+		return false;
+	}
+	
+	public boolean ferMoure(int xIni, int yIni, int xFi, int yFi) {
+		if (this.tornAcabat)
+			return false;
+		
+		Casella casOrigen = this.taulActual.seleccionarCasella(xIni, yIni);
+		Casella casDesti = this.taulActual.seleccionarCasella(xFi, yFi);
+		boolean potMatar = this.taulActual.potMatar(casOrigen, casDesti) != null;
+		if (this.taulActual.moviment(casOrigen, casDesti)) {
+			if (potMatar) 
+				this.listMovs.add("matar;" + xIni + ";" + yIni + ";" + xFi + ";" + yFi);
+			else
+				this.listMovs.add("moure;" + xIni + ";" + yIni + ";" + xFi + ";" + yFi);
+			
+			return true;
+		}
 		return false;
 	}
 }
