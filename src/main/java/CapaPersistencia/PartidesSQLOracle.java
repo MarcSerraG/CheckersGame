@@ -330,7 +330,7 @@ public class PartidesSQLOracle {
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
 		sqlcompro += "id from partides where ";
-		sqlcompro += " jugador = '" + jugador + " and contrincant = '" + contrincant + "' and "
+		sqlcompro += " jugador = '" + jugador + "' and contrincant = '" + contrincant + "' and "
 				+ " estat between 0 AND 2";
 
 		try {
