@@ -336,7 +336,7 @@ public class PartidesSQLOracle {
 		try {
 			rs = conn.ferSelect(sqlcompro);
 			if (rs.next())
-				res = rs.getString(0);
+				res = rs.getString("id");
 		} catch (SQLException e) {
 			System.out.println("Error sql getPartida: " + e);
 			return null;
