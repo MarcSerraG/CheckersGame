@@ -23,11 +23,11 @@ public class Dama extends Fitxa{
 			for (int i = -9; i <= 9; i++) {
 				for (int j = -9; j <= 9; j++) {
 					//Select only diagonal movements
-					if(i+j%2 == 0) {
+					if((Math.abs(i)+Math.abs(j))%2 == 0) {
 						int fila = x+i;
 						int columna = y+j;
 						//Select only positions inside the game
-						if (!(fila < 0 || fila > 9 || columna < 0 || columna > 9)) {
+						if (!(fila < 0 || fila > 9 || columna < 0 || columna > 9) && (!(fila==x && columna == y))) {
 							//Add position to list
 							int[] mov = {fila, columna};
 							llista.add(mov);
