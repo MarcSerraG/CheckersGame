@@ -20,10 +20,10 @@ public class Dama extends Fitxa{
 		
 			Vector <int[]> llista = new Vector<int[]>();
 			//Go through the matrix to get all positions
-			for (int i = 0; i <= 9; i++) {
-				for (int j = 0; j <= 9; j++) {
+			for (int i = -9; i <= 9; i++) {
+				for (int j = -9; j <= 9; j++) {
 					//Select only diagonal movements
-					if(Math.abs(i) == Math.abs(j)) {
+					if(i+j%2 == 0) {
 						int fila = x+i;
 						int columna = y+j;
 						//Select only positions inside the game
