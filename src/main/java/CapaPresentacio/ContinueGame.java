@@ -308,7 +308,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 			labelErrorMessage.setText(err);
 		} else {
 			AdaptarBaseInterfaceNewJoc();
-			interficieBase.setVisible(false);
+			interficieBase.centerPanel.setVisible(false);
 			Partida partida = new Partida(interficieBase);
 			interficieBase.centerPanel = partida.partidaCreate(Mss);
 			partida.setVisible(true);
