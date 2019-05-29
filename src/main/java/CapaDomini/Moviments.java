@@ -37,7 +37,38 @@ public class Moviments {
 	public Taulell getTaulellActual() {return this.taulActual;}
 	public List<String> getMovimentsAct() {return this.listMovs;}
 	
-	public boolean ferBufa() {
+	public boolean ferBufa(int x, int y) {
+		// Comprovem si s'ha matat en el torn anterior, si es aixi no es pot bufar
+		// Altrament guardem posicio anterior de la peça, si es que s'ha mogut
+		for (String mov : this.listMovsAnt) {
+			if (mov.contains("matar"))
+				return false;
+			else if (mov.contains("moure")) {
+				int xAct, yAct;
+				xAct = Integer.parseInt(mov.split(";")[3]);
+				yAct = Integer.parseInt(mov.split(";")[4]);
+				if (x == xAct && y == yAct) {
+					x = Integer.parseInt(mov.split(";")[1]);
+					y = Integer.parseInt(mov.split(";")[2]);
+				}
+			}
+		}
+		
+		// Comprovem si la peça seleccionada podria haver matat en el torn anterior
+		Casella casSelec = this.taulAnt.seleccionarCasella(x, y);
+		if (!casSelec.getTeFitxa())
+			return false;
+		
+		List<int[]> movimentsFitxa = this.taulAnt.veurePossiblesMoviments(casSelec);
+		
+		for (int[] pos : movimentsFitxa) {
+			Casella casDesti = this.taulAnt.seleccionarCasella(pos[0], pos[1]);
+			boolean potMatar = this.taulAnt.potMatar(casSelec, casDesti) != null;
+			
+			if (potMatar)
+				return true;
+		}
+		
 		return false;
 	}
 }
