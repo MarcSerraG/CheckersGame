@@ -141,7 +141,7 @@ public class JocAPI {
 		json.put("res", "");
 		json.put("err", "");
 		json.put("sErr", "");
-		System.out.println("idSessio"+idSessio);
+		System.out.println("idSessio" + idSessio);
 		res = this.statSQL.getEstadistiquesUsuari(idSessio);
 		if (res == null)
 			json.put("err", "Sql error no hi han dades suficients.");
@@ -149,7 +149,7 @@ public class JocAPI {
 			json.put("err", "La base de dades ha retornat sense dades.");
 		else
 			json.put("res", res);
-		
+
 		return json.toString();
 	}
 
@@ -263,7 +263,7 @@ public class JocAPI {
 			nomsUsuaris += nom + ";";
 		}
 
-		nomsUsuaris = nomsUsuaris.substring(0, nomsUsuaris.length()); // Borrar ultim ;
+		nomsUsuaris = nomsUsuaris.substring(0, nomsUsuaris.length());
 		json.put("res", nomsUsuaris);
 
 		return json.toString();
@@ -304,6 +304,8 @@ public class JocAPI {
 		json.put("err", "");
 		json.put("sErr", "");
 
+		String llistaAcabades = "";
+
 		List<String> res = this.partSQL.getPartidesAcabada(idSessio);
 
 		if (res == null) {
@@ -314,8 +316,11 @@ public class JocAPI {
 		if (res.isEmpty()) {
 			json.put("err", "No hi ha cap partida");
 			return json.toString();
-		} else
-			json.put("res", res);
+		} else {
+			for (String r : res)
+				llistaAcabades += r + ";";
+			json.put("res", llistaAcabades);
+		}
 
 		return json.toString();
 	}
