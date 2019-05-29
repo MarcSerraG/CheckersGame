@@ -10,8 +10,9 @@ import java.util.List;
  * tal que:
  * moure;xInicial;yInicial;xFinal;yFinal
  * 
- * Bufar nomes té una posició:
+ * Bufar i fer dama nomes té una posició:
  * bufa;x;y
+ * dama;x;y
  * 
  */
 public class Moviments {
@@ -20,6 +21,7 @@ public class Moviments {
 	private List<String> listMovsAnt; // Moviments torn anterior
 	private Taulell taulActual; // Taulell torn actual
 	private Taulell taulAnt; // Taulell torn anterior
+	private boolean bufaPossible;
 	
 	public Moviments(String movsAnt, String taulActual, String taulAnterior) {
 		this.listMovsAnt = new ArrayList<String>();
@@ -28,6 +30,14 @@ public class Moviments {
 		}
 		
 		this.listMovs = new ArrayList<String>();
-		
+		this.taulActual = new Taulell(taulActual);
+		this.taulAnt = new Taulell(taulAnterior);
+	}
+	
+	public Taulell getTaulellActual() {return this.taulActual;}
+	public List<String> getMovimentsAct() {return this.listMovs;}
+	
+	public boolean ferBufa() {
+		return false;
 	}
 }
