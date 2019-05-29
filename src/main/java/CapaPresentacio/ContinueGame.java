@@ -277,6 +277,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 				} else {
 					if (e.getSource() == bFinishedMatches) {
 						FineshedMaches();
+						bPlayGame.setEnabled(false);
 						presButton = 2;
 					} else {
 						ComenssarJoc();
@@ -306,6 +307,8 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 		if (!err.equals("")) {
 			labelErrorMessage.setText(err);
 		} else {
+			AdaptarBaseInterfaceNewJoc();
+			interficieBase.centerPanel.setVisible(false);
 			Partida partida = new Partida(interficieBase);
 			interficieBase.centerPanel = partida.partidaCreate(Mss);
 			partida.setVisible(true);
@@ -314,7 +317,6 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 			validate();
 		}
 
-		AdaptarBaseInterfaceNewJoc();
 	}
 
 	private void AdaptarBaseInterfaceNewJoc() {

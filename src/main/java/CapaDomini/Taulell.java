@@ -203,7 +203,7 @@ public class Taulell {
 	}
 
 	// Retorna la casella que s'ha de matar si es pot
-	private Casella potMatar(Casella casOrigen, Casella casDesti) {
+	public Casella potMatar(Casella casOrigen, Casella casDesti) {
 
 		int[] posOrigen = casOrigen.getCoordenades();
 		int[] posDesti = casDesti.getCoordenades();

@@ -38,6 +38,7 @@ public class NewGame extends JPanel implements ActionListener, ListSelectionList
 	JList<String> listUsuaris;
 	JScrollPane scrollPanel;
 	JLabel icon;
+	String Contrincant;
 
 	public NewGame(BaseInterficie base, JocAPI API) {
 		interficieBase = base;
@@ -203,13 +204,19 @@ public class NewGame extends JPanel implements ActionListener, ListSelectionList
 
 		if (e.getSource() == bRefresh) {
 			addPlayers();
+		} else {
+			SendRequest();
 		}
+	}
+
+	private void SendRequest() {
+		api.enviaSol(interficieBase.getPlayerID(), Contrincant);
 	}
 
 	public void valueChanged(ListSelectionEvent e) {
 		String str = (String) listUsuaris.getSelectedValue();
 		bPlayGame.setEnabled(true);
-
+		Contrincant = str;
 		bPlayGame.setText("Play with " + str);
 
 	}
