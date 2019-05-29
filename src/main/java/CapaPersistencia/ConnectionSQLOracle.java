@@ -95,8 +95,8 @@ public class ConnectionSQLOracle {
 			//System.out.println(usu.getConnectat("Marc"));
 			//System.out.println(tb.toString());
 			PartidesSQLOracle pat = new PartidesSQLOracle(cn);
-			pat.canviarTorn("41", "Prova1");
-			//System.out.println(pat.getPartidesTorn("Marc").toString());
+			String id = pat.getPartida("Ricard", "Narcis");
+			System.out.println(id);
 			//System.out.println(pat.getTaullelnou().toString());
 			
 			} catch (Exception e) {
