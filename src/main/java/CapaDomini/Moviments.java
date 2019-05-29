@@ -38,6 +38,9 @@ public class Moviments {
 	public List<String> getMovimentsAct() {return this.listMovs;}
 	
 	public boolean ferBufa(int x, int y) {
+		int copyX = x; // Safety copy
+		int copyY = y; // Safety copy
+		
 		// Comprovem si s'ha matat en el torn anterior, si es aixi no es pot bufar
 		// Altrament guardem posicio anterior de la peça, si es que s'ha mogut
 		for (String mov : this.listMovsAnt) {
@@ -65,8 +68,11 @@ public class Moviments {
 			Casella casDesti = this.taulAnt.seleccionarCasella(pos[0], pos[1]);
 			boolean potMatar = this.taulAnt.potMatar(casSelec, casDesti) != null;
 			
-			if (potMatar)
+			if (potMatar) {
+				this.listMovs.add("bufar;" + copyX + ";" + copyY);
+				this.taulActual.seleccionarCasella(copyX, copyY).eliminarFitxa();
 				return true;
+			}
 		}
 		
 		return false;
