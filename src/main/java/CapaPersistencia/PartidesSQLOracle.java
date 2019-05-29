@@ -235,8 +235,7 @@ public class PartidesSQLOracle {
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro += "contrincant from partides where ";
-		sqlcompro += "jugador = '" + jugador + "' and torn = '" + jugador + "'";
+		sqlcompro = "SELECT jugador, contrincant FROM partides WHERE torn = '"+jugador+"' and estat between 1 AND 2";
 
 		try {
 			rs = conn.ferSelect(sqlcompro);

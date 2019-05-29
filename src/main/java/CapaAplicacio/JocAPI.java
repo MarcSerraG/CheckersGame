@@ -165,7 +165,7 @@ public class JocAPI {
 		json.put("res", "");
 		json.put("err", "");
 		json.put("sErr", "");
-		res = this.userSQL.retornaUsuaris(idSessio);
+		res = this.userSQL.getCandidats(idSessio);
 		if (res == null)
 			json.put("sErr", "Hi ha hagut un problema de connexió.");
 		else {
