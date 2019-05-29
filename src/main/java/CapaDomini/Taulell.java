@@ -61,6 +61,7 @@ public class Taulell {
 		// Move selected token
 		casDesti.setFitxa(casOrigen.getFitxa());
 		casOrigen.eliminarFitxa();
+		this.canviDama(casDesti.getFitxa().iColor, casDesti);
 		// Look if in the next position there is any movement available
 		if (this.veurePossiblesMoviments(casDesti).size() != 0 && haMatat) {
 			potMoure = true;
