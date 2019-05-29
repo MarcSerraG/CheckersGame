@@ -47,7 +47,7 @@ public class UsuariSQLOracle {
 				+ "SELECT jugador FROM partides WHERE ((contrincant = '"+nomUsu+"') and estat between 0 and 2) " + 
 				"UNION " + 
 				"SELECT contrincant FROM partides WHERE ((jugador = '"+nomUsu+"') and estat between 0 and 2)" + 
-				") AND nom != '"+nomUsu+"'";
+				") AND nom != '"+nomUsu+"' AND connectat = 1";
 		
 		try {
 			rs = conn.ferSelect(sql);
