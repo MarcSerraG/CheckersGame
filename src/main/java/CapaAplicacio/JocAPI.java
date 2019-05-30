@@ -24,12 +24,14 @@ public class JocAPI {
 	private PartidesSQLOracle partSQL;
 	private EstadistiquesSQLOracle statSQL;
 	private Sessio sessio;
+	private Moviments movTornAct;
 
 	public JocAPI(String user, String password) throws Exception {
 		connSQL = new ConnectionSQLOracle(user, password);
 		userSQL = new UsuariSQLOracle(connSQL);
 		partSQL = new PartidesSQLOracle(connSQL);
 		statSQL = new EstadistiquesSQLOracle(connSQL);
+		movTornAct = null;
 	}
 
 	/**
@@ -331,6 +333,8 @@ public class JocAPI {
 		json.put("res", "");
 		json.put("err", "");
 		json.put("sErr", "");
+		
+		this.movTornAct = null;
 
 		String id = this.partSQL.getPartida(idSessio, usuari);
 

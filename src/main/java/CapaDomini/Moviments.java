@@ -37,6 +37,7 @@ public class Moviments {
 	
 	public Taulell getTaulellActual() {return this.taulActual;}
 	public List<String> getMovimentsAct() {return this.listMovs;}
+	public List<String> getMovimentsAnt() {return this.listMovsAnt;}
 	
 	public boolean ferBufa(int x, int y) {
 		int copyX = x; // Safety copy
