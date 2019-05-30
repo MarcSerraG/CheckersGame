@@ -302,7 +302,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 		String err = json.getString("err");
 		String Mss = json.getString("res");
-
+		
 		if (!err.equals("")) {
 			labelErrorMessage.setText(err);
 		} else {
