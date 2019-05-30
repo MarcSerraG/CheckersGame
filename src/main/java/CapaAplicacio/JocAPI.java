@@ -12,6 +12,7 @@ import CapaDomini.Partida;
 import CapaDomini.Peo;
 import CapaDomini.Sessio;
 import CapaDomini.Taulell;
+import CapaDomini.Moviments;
 import CapaPersistencia.ConnectionSQLOracle;
 import CapaPersistencia.EstadistiquesSQLOracle;
 import CapaPersistencia.PartidesSQLOracle;
@@ -24,12 +25,16 @@ public class JocAPI {
 	private PartidesSQLOracle partSQL;
 	private EstadistiquesSQLOracle statSQL;
 	private Sessio sessio;
+	private Moviments movTornAct;
+	private JSONObject json;
 
 	public JocAPI(String user, String password) throws Exception {
 		connSQL = new ConnectionSQLOracle(user, password);
 		userSQL = new UsuariSQLOracle(connSQL);
 		partSQL = new PartidesSQLOracle(connSQL);
 		statSQL = new EstadistiquesSQLOracle(connSQL);
+		json = new JSONObject();
+		movTornAct = null;
 	}
 
 	/**
@@ -207,7 +212,7 @@ public class JocAPI {
 
 		List<String> solicituds = this.partSQL.getSolicitudsPendents(idSessio);
 		if (solicituds == null) {
-			json.put("err", "No s'han pogut carregar les solicituds");
+			json.put("sErr", "No s'han pogut carregar les solicituds");
 			return json.toString();
 		}
 
@@ -238,182 +243,142 @@ public class JocAPI {
 	}
 
 	public void rebutjaSol(String idSessio, String usuari) {
-
+		this.partSQL.rebutjaSolicitud(idSessio, usuari);
 	}
 
 	public String getPartidesTorn(String idSessio) {
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
-
+		
 		String nomsUsuaris = "";
 		List<String> partides = this.partSQL.getPartidesTorn(idSessio);
-		if (partides == null) {
-			json.put("sErr", "Error amb el servidor");
-			return json.toString();
-		}
+		if (partides == null)
+			return crearJSON("", "", "Error amb el servidor");
 
-		if (partides.isEmpty()) {
-			json.put("err", "No hi ha cap partida");
-			return json.toString();
-		}
+		if (partides.isEmpty()) 
+			return crearJSON("", "No hi ha cap partida", "");
 
 		for (String nom : partides) {
 			nomsUsuaris += nom + ";";
 		}
 
 		nomsUsuaris = nomsUsuaris.substring(0, nomsUsuaris.length());
-		json.put("res", nomsUsuaris);
-
-		return json.toString();
+		
+		return crearJSON(nomsUsuaris, "", "");
 	}
 
 	public String getPartidesNoTorn(String idSessio) {
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
 
 		String nomsUsuaris = "";
 		List<String> partides = this.partSQL.getPartidesNoTorn(idSessio);
-		if (partides == null) {
-			json.put("sErr", "Error amb el servidor");
-			return json.toString();
-		}
+		if (partides == null) 
+			return crearJSON("", "", "Error amb el servidor");
 
-		if (partides.isEmpty()) {
-			json.put("err", "No hi ha cap partida");
-			return json.toString();
-		}
+		if (partides.isEmpty()) 
+			return crearJSON("", "No hi ha cap partida", "");
 
 		for (String nom : partides) {
 			nomsUsuaris += nom + ";";
 		}
 
 		nomsUsuaris = nomsUsuaris.substring(0, nomsUsuaris.length()); // Borrar ultim ;
-		json.put("res", nomsUsuaris);
-
-		return json.toString();
+		return crearJSON(nomsUsuaris, "", "");
 	}
 
 	public String getPartidesAcabades(String idSessio) {
-
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
 
 		String llistaAcabades = "";
 
 		List<String> res = this.partSQL.getPartidesAcabada(idSessio);
 
-		if (res == null) {
-			json.put("sErr", "Error amb el servidor");
-			return json.toString();
-		}
+		if (res == null) 
+			return crearJSON("", "", "Error amb el servidor");
 
-		if (res.isEmpty()) {
-			json.put("err", "No hi ha cap partida");
-			return json.toString();
-		} else {
-			for (String r : res)
-				llistaAcabades += r + ";";
-			json.put("res", llistaAcabades);
-		}
+		if (res.isEmpty()) 
+			return crearJSON("", "No hi ha cap partida", "");
+		
+		for (String r : res)
+			llistaAcabades += r + ";";
 
-		return json.toString();
+		return crearJSON(llistaAcabades, "", "");
 	}
 
 	public String triaPartida(String idSessio, String usuari) {
-		JSONObject json = new JSONObject();
-
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
 
 		String id = this.partSQL.getPartida(idSessio, usuari);
 
-		if (id == null)
-			json.put("err", "No hi ha partida disponible.");
-		else
-			json.put("res", id);
+		if (id == null) 
+			return crearJSON("", "No hi ha partida disponible.", "");
+		
+		// return crearJSON(id, "", ""); // Remove comment only if the method fails
+		
+		String movsAnt = this.partSQL.getMovimentsAnt(id);
+		if (movsAnt == null)
+			return crearJSON("", "No hi ha moviments anteriors (null)", "");
+		
+		String taulerAnt = this.partSQL.getTaulerAnt(idSessio, id);
+		if (taulerAnt == null)
+			return crearJSON("", "No s'ha trobat tauler anterior", "");
+		
+		String taulerAct = this.partSQL.continuarPartida(id);
+		if (taulerAct == null)
+			return crearJSON("", "No s'ha trobat tauler actual", "");
+		
+		this.movTornAct = new Moviments(movsAnt, taulerAct, taulerAnt);
 
-		return json.toString();
-
+		return crearJSON(id, "", "");
 	}
 
 	public String obtenirColor(String idSessio, String idPartida) {
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
 
 		String color = this.partSQL.getColor(idSessio, idPartida);
 
 		if (color == null)
-			json.put("err", "No s'ha trobat partida o sessio");
-		else
-			json.put("res", color);
+			return crearJSON("", "No s'ha trobat partida o sessio", "");
 
-		return json.toString();
+		return crearJSON(color, "", "");
 	}
 
 	public String obtenirTaulerAnt(String idSessio, String idPartida) {
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
-
+		
 		String tauler = this.partSQL.getTaulerAnt(idSessio, idPartida);
 
 		if (tauler == null)
-			json.put("err", "No s'ha trobat partida o sessio, o no hi ha tauler anterior");
-		else
-			json.put("res", tauler);
+			return crearJSON("", "No s'ha trobat partida o sessio, o no hi ha tauler anterior", "");
 
-		return json.toString();
+		return crearJSON(tauler, "", "");
 	}
 
 	public String obtenirTaulerAct(String idSessio, String idPartida) {
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
-
+		
 		String tauler = this.partSQL.continuarPartida(idPartida);
 
 		if (tauler == null)
-			json.put("err", "No s'ha trobat partida o sessio");
-		else
-			json.put("res", tauler);
+			return crearJSON("", "No s'ha trobat partida o sessio", "");
 
-		return json.toString();
+		return crearJSON(tauler, "", "");
 	}
 
-	// Posiblement no sigui necessari o no el podem implementar?
 	public String obtenirTaulerRes(String idSessio, String idPartida) {
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
+		
+		if (this.movTornAct == null)
+			return crearJSON("", "ERROR no hi ha taulerRes", "");
 
-		String tauler = this.partSQL.getTaulerRes(idSessio, idPartida);
+		String tauler = this.movTornAct.getTaulellActual().toString();
 
 		if (tauler == null)
-			json.put("err", "No s'ha trobat partida o sessio");
-		else
-			json.put("res", tauler);
-
-		return json.toString();
+			return crearJSON("", "No s'ha trobat partida o sessio", "");
+		
+		return crearJSON(tauler, "", "");
 	}
 
-	// NO ES POT IMPLEMENTAR PER ARA...
 	public String obtenirMovsAnt(String idSessio, String idPartida) {
-		return null;
+		
+		String movsAnt = this.partSQL.getMovimentsAnt(idPartida);
+		if (movsAnt == null)
+			return crearJSON("", "No s'han trobat moviments anteriors", "");
+		
+		return crearJSON(movsAnt, "", "");
 	}
 
-	// NO ES POT IMPLEMENTAR PER ARA...
 	public String grabarTirada(String idSessio, String idPartida) {
 		return null;
 	}
@@ -566,6 +531,15 @@ public class JocAPI {
 			cadena = moviments.get(i)[0] + ";" + moviments.get(i)[1] + "-";
 		cadena += moviments.get(moviments.size() - 1)[0] + ";" + moviments.get(moviments.size() - 1)[0];
 		json.put("res", cadena);
+		return json.toString();
+	}
+	
+	private String crearJSON(String res, String err, String sErr) {
+		if (this.json == null)
+			this.json = new JSONObject();
+		json.put("res", res);
+		json.put("err", err);
+		json.put("sErr", sErr);
 		return json.toString();
 	}
 }
