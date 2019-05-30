@@ -236,11 +236,18 @@ public class PartidesSQLOracle {
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
 		sqlcompro = "SELECT jugador, contrincant FROM partides WHERE torn = '"+jugador+"' and estat between 1 AND 2";
-
+		String contrincant = "";
+		String usuari = "";
 		try {
 			rs = conn.ferSelect(sqlcompro);
 			while (rs.next()) {
-				res.add(rs.getString("CONTRINCANT"));
+				usuari =  rs.getString("JUGADOR");
+				contrincant = rs.getString("CONTRINCANT");
+				if (contrincant.equals(jugador)) {
+					res.add(usuari);
+				}
+				else
+					res.add(contrincant);
 			}
 		} catch (SQLException e) {
 			System.out.println("Error SQL getPartidesTorn: " + e);
@@ -328,19 +335,29 @@ public class PartidesSQLOracle {
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro += "id from partides where ";
-		sqlcompro += " jugador = '" + jugador + "' and contrincant = '" + contrincant + "' and "
-				+ " estat between 0 AND 2";
+		sqlcompro = "SELECT id FROM PARTIDES WHERE"
+				+ " jugador = '"+jugador+"' and contrincant ='"+contrincant+"' or "
+				+ "jugador = '"+contrincant+"' and contrincant ='"+jugador+"' and estat between 1 and 2";
 
 		try {
 			rs = conn.ferSelect(sqlcompro);
 			if (rs.next())
-				res = rs.getString("id");
+				return rs.getString("id");
 		} catch (SQLException e) {
 			System.out.println("Error sql getPartida: " + e);
 			return null;
 		}
-		return res;
+		
+		try {
+			rs = conn.ferSelect(sqlcompro);
+			if (rs.next())
+				return rs.getString("id");
+		} catch (SQLException e) {
+			System.out.println("Error sql getPartida: " + e);
+			return null;
+		}
+		
+		return "";
 	}
 
 	/**
