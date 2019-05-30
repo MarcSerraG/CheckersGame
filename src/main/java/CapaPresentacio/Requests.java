@@ -147,6 +147,7 @@ public class Requests extends JPanel implements ActionListener, ListSelectionLis
 
 		String err = json.getString("err");
 		String Mss = json.getString("res");
+		System.out.println(Mss);
 
 		if (!Mss.equals("")) {
 			String player[] = Mss.split(";");
