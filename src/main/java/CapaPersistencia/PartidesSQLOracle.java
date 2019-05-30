@@ -224,6 +224,44 @@ public class PartidesSQLOracle {
 	
 	public boolean rebutjaSolicitud(String jugador, String contrincant) {
 		
+		String sql;
+		ResultSet rs;
+		String id = "";
+		sql = "SELECT id FROM partides WHERE estat = 0 and jugador = '"+contrincant+"'"
+				+ " and contrincant = '"+jugador+"'";		
+		try {
+			rs = conn.ferSelect(sql);
+			if (rs.next())
+				id = rs.getString("id");
+			
+			if (id.isEmpty())
+			{
+				System.out.println("Error no hay partidas con ese id.");
+				return false;
+			}
+				
+		} catch (SQLException e) {
+			System.out.println("Error SQL rebutja: "+e);
+			return false;
+		}
+		
+		String sql2 = "DELETE * FROM partides WHERE id = '"+id+"'";
+		
+		try {
+			rs = conn.ferSelect(sql);
+			if (rs.next())
+				id = rs.getString("id");
+			
+			if (id.isEmpty())
+			{
+				System.out.println("Error no hay partidas con ese id.");
+				return false;
+			}
+				
+		} catch (SQLException e) {
+			System.out.println("Error SQL rebutja: "+e);
+			return false;
+		}
 		
 		return false;
 	}
@@ -277,19 +315,25 @@ public class PartidesSQLOracle {
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro += "contrincant from partides where ";
-		sqlcompro += "jugador = '" + jugador + "' and torn != '" + jugador + "'";
-
+		sqlcompro = "SELECT jugador, contrincant FROM partides WHERE torn != '"+jugador+"' and estat between 1 AND 2";
+		String contrincant = "";
+		String usuari = "";
 		try {
 			rs = conn.ferSelect(sqlcompro);
 			while (rs.next()) {
-				res.add(rs.getString("CONTRINCANT"));
+				usuari =  rs.getString("JUGADOR");
+				contrincant = rs.getString("CONTRINCANT");
+				if (contrincant.equals(jugador)) {
+					res.add(usuari);
+				}
+				else
+					res.add(contrincant);
 			}
 		} catch (SQLException e) {
-			System.out.println("Error SQL getPartidesNoTorn: " + e);
-			return null;
+			System.out.println("Error SQL getPartidesTorn: " + e);
+			return res;
 		} catch (Exception e) {
-			System.out.println("Error getPartidesNoTorn: " + e);
+			System.out.println("Error getPartidesTorn: " + e);
 		}
 		return res;
 	}
