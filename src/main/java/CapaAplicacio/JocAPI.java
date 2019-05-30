@@ -243,7 +243,7 @@ public class JocAPI {
 	}
 
 	public void rebutjaSol(String idSessio, String usuari) {
-
+		this.partSQL.rebutjaSolicitud(idSessio, usuari);
 	}
 
 	public String getPartidesTorn(String idSessio) {
