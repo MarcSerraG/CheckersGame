@@ -227,19 +227,18 @@ public class Requests extends JPanel implements ActionListener, ListSelectionLis
 	}
 
 	private void Rebutjar() {
-		api.rebutjaSol(interficieBase.getName(), contrincant);
+		api.rebutjaSol(interficieBase.getPlayerID(), contrincant);
 		addPlayers();
 	}
 
 	private void Acceptar() {
-		api.acceptaSol(interficieBase.getName(), contrincant);
+		api.acceptaSol(interficieBase.getPlayerID(), contrincant);
 		addPlayers();
 	}
 
 	public void valueChanged(ListSelectionEvent e) {
 		String str = (String) listPartides.getSelectedValue();
 		contrincant = str;
-		System.out.println(str);
 		bAcceptGame.setText("Accept " + str);
 		bRefuseGame.setText("Refuse " + str);
 
