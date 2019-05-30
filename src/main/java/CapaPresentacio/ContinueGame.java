@@ -65,7 +65,6 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 		labelErrorMessage.setFont(new Font("SansSerif", Font.BOLD, 12));
 		labelErrorMessage.setForeground(new Color(237, 215, 178));
-		labelErrorMessage.setText("Hii");
 
 		AjustaPantalla(panelNord, panelSud, panelEst, panelOest);
 		listPartides.setBackground(Color.GRAY);
