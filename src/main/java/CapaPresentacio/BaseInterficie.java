@@ -333,12 +333,19 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bLogOut.setForeground(Color.WHITE);
 		this.bStatistics.setForeground(Color.WHITE);
 
-		// TODO: Cridar a la classe request
+		Requests req = new Requests(this, api);
+		centerPanel = req.RequestsGameCreate();
+
+		centerPanel.setVisible(true);
+		getContentPane().add(centerPanel, BorderLayout.CENTER);
+		getContentPane().repaint();
+		validate();
 	}
 
 	private void actionStatics() {
-		System.out.println("Hola");
+
 		centerPanel.setVisible(false);
+
 		this.bStatistics.setBackground(new Color(237, 215, 178));
 		this.bStatistics.setForeground(Color.BLACK);
 
@@ -404,9 +411,5 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		System.exit(0);
 
 	}
-
-	/*
-	 * public void CanviPantalla() { this.centerPanel.setVisible(false); }
-	 */
 
 }

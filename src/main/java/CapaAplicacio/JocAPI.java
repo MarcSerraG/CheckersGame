@@ -207,7 +207,7 @@ public class JocAPI {
 
 		List<String> solicituds = this.partSQL.getSolicitudsPendents(idSessio);
 		if (solicituds == null) {
-			json.put("err", "No s'han pogut carregar les solicituds");
+			json.put("sErr", "No s'han pogut carregar les solicituds");
 			return json.toString();
 		}
 
