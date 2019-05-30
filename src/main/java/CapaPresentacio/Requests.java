@@ -214,23 +214,25 @@ public class Requests extends JPanel implements ActionListener, ListSelectionLis
 
 		if (e.getSource() == bRefresh) {
 			addPlayers();
+			bAcceptGame.setText("Accept");
+			bRefuseGame.setText("Refuse");
 		} else {
 			if (e.getSource() == bAcceptGame) {
-				Rebutjar();
-			} else {
 				Acceptar();
+			} else {
+				Rebutjar();
 			}
 		}
 
 	}
 
 	private void Rebutjar() {
-		api.rebutjaSol(interficieBase.getName(), contrincant);
+		api.rebutjaSol(interficieBase.getPlayerID(), contrincant);
 		addPlayers();
 	}
 
 	private void Acceptar() {
-		api.acceptaSol(interficieBase.getName(), contrincant);
+		api.acceptaSol(interficieBase.getPlayerID(), contrincant);
 		addPlayers();
 	}
 

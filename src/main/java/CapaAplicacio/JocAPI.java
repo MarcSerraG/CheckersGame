@@ -307,21 +307,24 @@ public class JocAPI {
 
 		if (id == null) 
 			return crearJSON("", "No hi ha partida disponible.", "");
-		return crearJSON(id, "", "");
 		
-		/*String movsAnt = this.partSQL.getMovimentsAnt(id);
-		if (movsAnt == null) {
-			json.put("err", "No hi ha moviments anteriors (null)");
-		}
+		// return crearJSON(id, "", ""); // Remove comment only if the method fails
+		
+		String movsAnt = this.partSQL.getMovimentsAnt(id);
+		if (movsAnt == null)
+			return crearJSON("", "No hi ha moviments anteriors (null)", "");
 		
 		String taulerAnt = this.partSQL.getTaulerAnt(idSessio, id);
-		if (tauler == null)
-			json.put("err", "No s'ha trobat partida o sessio, o no hi ha tauler anterior");
-		else
-			json.put("res", tauler);
-		this.movTornAct = new Moviments();
+		if (taulerAnt == null)
+			return crearJSON("", "No s'ha trobat tauler anterior", "");
+		
+		String taulerAct = this.partSQL.continuarPartida(id);
+		if (taulerAct == null)
+			return crearJSON("", "No s'ha trobat tauler actual", "");
+		
+		this.movTornAct = new Moviments(movsAnt, taulerAct, taulerAnt);
 
-		return json.toString();*/
+		return crearJSON(id, "", "");
 	}
 
 	public String obtenirColor(String idSessio, String idPartida) {
@@ -335,55 +338,47 @@ public class JocAPI {
 	}
 
 	public String obtenirTaulerAnt(String idSessio, String idPartida) {
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
-
+		
 		String tauler = this.partSQL.getTaulerAnt(idSessio, idPartida);
 
 		if (tauler == null)
-			json.put("err", "No s'ha trobat partida o sessio, o no hi ha tauler anterior");
-		else
-			json.put("res", tauler);
+			return crearJSON("", "No s'ha trobat partida o sessio, o no hi ha tauler anterior", "");
 
-		return json.toString();
+		return crearJSON(tauler, "", "");
 	}
 
 	public String obtenirTaulerAct(String idSessio, String idPartida) {
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
-
+		
 		String tauler = this.partSQL.continuarPartida(idPartida);
 
 		if (tauler == null)
-			json.put("err", "No s'ha trobat partida o sessio");
-		else
-			json.put("res", tauler);
+			return crearJSON("", "No s'ha trobat partida o sessio", "");
 
-		return json.toString();
+		return crearJSON(tauler, "", "");
 	}
 
-	// Posiblement no sigui necessari o no el podem implementar?
 	public String obtenirTaulerRes(String idSessio, String idPartida) {
+		
+		if (this.movTornAct == null)
+			return crearJSON("", "ERROR no hi ha taulerRes", "");
 
-		String tauler = this.partSQL.getTaulerRes(idSessio, idPartida);
+		String tauler = this.movTornAct.getTaulellActual().toString();
 
-		if (tauler == null) {
+		if (tauler == null)
 			return crearJSON("", "No s'ha trobat partida o sessio", "");
-		}
 		
 		return crearJSON(tauler, "", "");
 	}
 
-	// NO ES POT IMPLEMENTAR PER ARA...
 	public String obtenirMovsAnt(String idSessio, String idPartida) {
-		return null;
+		
+		String movsAnt = this.partSQL.getMovimentsAnt(idPartida);
+		if (movsAnt == null)
+			return crearJSON("", "No s'han trobat moviments anteriors", "");
+		
+		return crearJSON(movsAnt, "", "");
 	}
 
-	// NO ES POT IMPLEMENTAR PER ARA...
 	public String grabarTirada(String idSessio, String idPartida) {
 		return null;
 	}

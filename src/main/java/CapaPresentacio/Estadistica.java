@@ -3,10 +3,11 @@ package CapaPresentacio;
 import java.awt.Color;
 import java.awt.Font;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 
 import org.json.JSONObject;
 
@@ -18,7 +19,7 @@ public class Estadistica extends JPanel {
 	JLabel labelRank;
 
 	JList<String> listRank;
-	JScrollPane scrollPanel;
+
 	String[] rank;
 
 	static BaseInterficie interficieBase;
@@ -29,6 +30,8 @@ public class Estadistica extends JPanel {
 	public Estadistica(BaseInterficie base, JocAPI API) {
 		interficieBase = base;
 		listRank = new JList<String>();
+		DefaultListCellRenderer renderer = (DefaultListCellRenderer) listRank.getCellRenderer();
+		renderer.setHorizontalAlignment(SwingConstants.CENTER);
 		api = API;
 		ApiGetStats();
 	}
