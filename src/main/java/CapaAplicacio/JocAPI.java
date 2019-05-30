@@ -8,11 +8,11 @@ import org.json.JSONObject;
 import com.lambdaworks.crypto.SCryptUtil;
 
 import CapaDomini.Casella;
+import CapaDomini.Moviments;
 import CapaDomini.Partida;
 import CapaDomini.Peo;
 import CapaDomini.Sessio;
 import CapaDomini.Taulell;
-import CapaDomini.Moviments;
 import CapaPersistencia.ConnectionSQLOracle;
 import CapaPersistencia.EstadistiquesSQLOracle;
 import CapaPersistencia.PartidesSQLOracle;
@@ -247,13 +247,13 @@ public class JocAPI {
 	}
 
 	public String getPartidesTorn(String idSessio) {
-		
+
 		String nomsUsuaris = "";
 		List<String> partides = this.partSQL.getPartidesTorn(idSessio);
 		if (partides == null)
 			return crearJSON("", "", "Error amb el servidor");
 
-		if (partides.isEmpty()) 
+		if (partides.isEmpty())
 			return crearJSON("", "No hi ha cap partida", "");
 
 		for (String nom : partides) {
@@ -261,7 +261,7 @@ public class JocAPI {
 		}
 
 		nomsUsuaris = nomsUsuaris.substring(0, nomsUsuaris.length());
-		
+
 		return crearJSON(nomsUsuaris, "", "");
 	}
 
@@ -269,10 +269,10 @@ public class JocAPI {
 
 		String nomsUsuaris = "";
 		List<String> partides = this.partSQL.getPartidesNoTorn(idSessio);
-		if (partides == null) 
+		if (partides == null)
 			return crearJSON("", "", "Error amb el servidor");
 
-		if (partides.isEmpty()) 
+		if (partides.isEmpty())
 			return crearJSON("", "No hi ha cap partida", "");
 
 		for (String nom : partides) {
@@ -289,12 +289,12 @@ public class JocAPI {
 
 		List<String> res = this.partSQL.getPartidesAcabada(idSessio);
 
-		if (res == null) 
+		if (res == null)
 			return crearJSON("", "", "Error amb el servidor");
 
-		if (res.isEmpty()) 
+		if (res.isEmpty())
 			return crearJSON("", "No hi ha cap partida", "");
-		
+
 		for (String r : res)
 			llistaAcabades += r + ";";
 
@@ -305,26 +305,25 @@ public class JocAPI {
 
 		String id = this.partSQL.getPartida(idSessio, usuari);
 
-		if (id == null) 
+		if (id == null)
 			return crearJSON("", "No hi ha partida disponible.", "");
-		
-		// return crearJSON(id, "", ""); // Remove comment only if the method fails
-		
-		String movsAnt = this.partSQL.getMovimentsAnt(id);
-		if (movsAnt == null)
-			return crearJSON("", "No hi ha moviments anteriors (null)", "");
-		
-		String taulerAnt = this.partSQL.getTaulerAnt(idSessio, id);
-		if (taulerAnt == null)
-			return crearJSON("", "No s'ha trobat tauler anterior", "");
-		
-		String taulerAct = this.partSQL.continuarPartida(id);
-		if (taulerAct == null)
-			return crearJSON("", "No s'ha trobat tauler actual", "");
-		
-		this.movTornAct = new Moviments(movsAnt, taulerAct, taulerAnt);
 
-		return crearJSON(id, "", "");
+		return crearJSON(id, "", ""); // Remove comment only if the method fails
+
+		/*
+		 * String movsAnt = this.partSQL.getMovimentsAnt(id); if (movsAnt == null)
+		 * return crearJSON("", "No hi ha moviments anteriors (null)", "");
+		 * 
+		 * String taulerAnt = this.partSQL.getTaulerAnt(idSessio, id); if (taulerAnt ==
+		 * null) return crearJSON("", "No s'ha trobat tauler anterior", "");
+		 * 
+		 * String taulerAct = this.partSQL.continuarPartida(id); if (taulerAct == null)
+		 * return crearJSON("", "No s'ha trobat tauler actual", "");
+		 * 
+		 * this.movTornAct = new Moviments(movsAnt, taulerAct, taulerAnt);
+		 * 
+		 * return crearJSON(id, "", "");
+		 */
 	}
 
 	public String obtenirColor(String idSessio, String idPartida) {
@@ -338,7 +337,7 @@ public class JocAPI {
 	}
 
 	public String obtenirTaulerAnt(String idSessio, String idPartida) {
-		
+
 		String tauler = this.partSQL.getTaulerAnt(idSessio, idPartida);
 
 		if (tauler == null)
@@ -348,7 +347,7 @@ public class JocAPI {
 	}
 
 	public String obtenirTaulerAct(String idSessio, String idPartida) {
-		
+
 		String tauler = this.partSQL.continuarPartida(idPartida);
 
 		if (tauler == null)
@@ -358,7 +357,7 @@ public class JocAPI {
 	}
 
 	public String obtenirTaulerRes(String idSessio, String idPartida) {
-		
+
 		if (this.movTornAct == null)
 			return crearJSON("", "ERROR no hi ha taulerRes", "");
 
@@ -366,16 +365,16 @@ public class JocAPI {
 
 		if (tauler == null)
 			return crearJSON("", "No s'ha trobat partida o sessio", "");
-		
+
 		return crearJSON(tauler, "", "");
 	}
 
 	public String obtenirMovsAnt(String idSessio, String idPartida) {
-		
+
 		String movsAnt = this.partSQL.getMovimentsAnt(idPartida);
 		if (movsAnt == null)
 			return crearJSON("", "No s'han trobat moviments anteriors", "");
-		
+
 		return crearJSON(movsAnt, "", "");
 	}
 
@@ -533,7 +532,7 @@ public class JocAPI {
 		json.put("res", cadena);
 		return json.toString();
 	}
-	
+
 	private String crearJSON(String res, String err, String sErr) {
 		if (this.json == null)
 			this.json = new JSONObject();
