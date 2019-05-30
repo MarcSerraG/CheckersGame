@@ -210,16 +210,22 @@ public class PartidesSQLOracle {
 	public boolean acceptarSolicitud(String jugador, String contrincant) {
 
 		String sql;
-		sql = ConnectionSQLOracle.SQLUPDATE + " partides SET connectat = 1" + " WHERE jugador = '" + contrincant
+		sql = ConnectionSQLOracle.SQLUPDATE + " partides SET estat = 1" + " WHERE jugador = '" + contrincant
 				+ "' and contrincant = '" + jugador + "'";
 		try {
 			if (conn == null)
 				return false;
 			return conn.crearInsert(sql);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("Error sql acceptarSolicitud: "+e);
 			return false;
 		}
+	}
+	
+	public boolean rebutjaSolicitud(String jugador, String contrincant) {
+		
+		
+		return false;
 	}
 
 	/**
