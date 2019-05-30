@@ -247,106 +247,69 @@ public class JocAPI {
 	}
 
 	public String getPartidesTorn(String idSessio) {
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
-
+		
 		String nomsUsuaris = "";
 		List<String> partides = this.partSQL.getPartidesTorn(idSessio);
-		if (partides == null) {
-			json.put("sErr", "Error amb el servidor");
-			return json.toString();
-		}
+		if (partides == null)
+			return crearJSON("", "", "Error amb el servidor");
 
-		if (partides.isEmpty()) {
-			json.put("err", "No hi ha cap partida");
-			return json.toString();
-		}
+		if (partides.isEmpty()) 
+			return crearJSON("", "No hi ha cap partida", "");
 
 		for (String nom : partides) {
 			nomsUsuaris += nom + ";";
 		}
 
 		nomsUsuaris = nomsUsuaris.substring(0, nomsUsuaris.length());
-		json.put("res", nomsUsuaris);
-
-		return json.toString();
+		
+		return crearJSON(nomsUsuaris, "", "");
 	}
 
 	public String getPartidesNoTorn(String idSessio) {
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
 
 		String nomsUsuaris = "";
 		List<String> partides = this.partSQL.getPartidesNoTorn(idSessio);
-		if (partides == null) {
-			json.put("sErr", "Error amb el servidor");
-			return json.toString();
-		}
+		if (partides == null) 
+			return crearJSON("", "", "Error amb el servidor");
 
-		if (partides.isEmpty()) {
-			json.put("err", "No hi ha cap partida");
-			return json.toString();
-		}
+		if (partides.isEmpty()) 
+			return crearJSON("", "No hi ha cap partida", "");
 
 		for (String nom : partides) {
 			nomsUsuaris += nom + ";";
 		}
 
 		nomsUsuaris = nomsUsuaris.substring(0, nomsUsuaris.length()); // Borrar ultim ;
-		json.put("res", nomsUsuaris);
-
-		return json.toString();
+		return crearJSON(nomsUsuaris, "", "");
 	}
 
 	public String getPartidesAcabades(String idSessio) {
-
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
 
 		String llistaAcabades = "";
 
 		List<String> res = this.partSQL.getPartidesAcabada(idSessio);
 
-		if (res == null) {
-			json.put("sErr", "Error amb el servidor");
-			return json.toString();
-		}
+		if (res == null) 
+			return crearJSON("", "", "Error amb el servidor");
 
-		if (res.isEmpty()) {
-			json.put("err", "No hi ha cap partida");
-			return json.toString();
-		} else {
-			for (String r : res)
-				llistaAcabades += r + ";";
-			json.put("res", llistaAcabades);
-		}
+		if (res.isEmpty()) 
+			return crearJSON("", "No hi ha cap partida", "");
+		
+		for (String r : res)
+			llistaAcabades += r + ";";
 
-		return json.toString();
+		return crearJSON(llistaAcabades, "", "");
 	}
 
 	public String triaPartida(String idSessio, String usuari) {
-		JSONObject json = new JSONObject();
-
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
 
 		String id = this.partSQL.getPartida(idSessio, usuari);
 
-		if (id == null) {
-			json.put("err", "No hi ha partida disponible.");
-			return json.toString();
-		}
-		else
-			json.put("res", id);
+		if (id == null) 
+			return crearJSON("", "No hi ha partida disponible.", "");
+		return crearJSON(id, "", "");
 		
-		String movsAnt = this.partSQL.getMovimentsAnt(id);
+		/*String movsAnt = this.partSQL.getMovimentsAnt(id);
 		if (movsAnt == null) {
 			json.put("err", "No hi ha moviments anteriors (null)");
 		}
@@ -358,24 +321,17 @@ public class JocAPI {
 			json.put("res", tauler);
 		this.movTornAct = new Moviments();
 
-		return json.toString();
-
+		return json.toString();*/
 	}
 
 	public String obtenirColor(String idSessio, String idPartida) {
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
 
 		String color = this.partSQL.getColor(idSessio, idPartida);
 
 		if (color == null)
-			json.put("err", "No s'ha trobat partida o sessio");
-		else
-			json.put("res", color);
+			return crearJSON("", "No s'ha trobat partida o sessio", "");
 
-		return json.toString();
+		return crearJSON(color, "", "");
 	}
 
 	public String obtenirTaulerAnt(String idSessio, String idPartida) {
@@ -412,19 +368,14 @@ public class JocAPI {
 
 	// Posiblement no sigui necessari o no el podem implementar?
 	public String obtenirTaulerRes(String idSessio, String idPartida) {
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
 
 		String tauler = this.partSQL.getTaulerRes(idSessio, idPartida);
 
 		if (tauler == null) {
-			json.put("err", "No s'ha trobat partida o sessio");
+			return crearJSON("", "No s'ha trobat partida o sessio", "");
 		}
 		
-
-		return json.toString();
+		return crearJSON(tauler, "", "");
 	}
 
 	// NO ES POT IMPLEMENTAR PER ARA...
