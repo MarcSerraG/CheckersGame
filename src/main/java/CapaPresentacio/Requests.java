@@ -31,13 +31,13 @@ public class Requests extends JPanel implements ActionListener, ListSelectionLis
 
 	static BaseInterficie interficieBase;
 	JPanel panelRequests, panelCentral, panelNord, panelSud, panelEst, panelOest;
-	JLabel labelMessage, labelErrorMessage;
+	JLabel labelErrorMessage;
 	JocAPI api;
-	JButton bPlayGame;
-	JButton bRefresh;
+	JButton bAcceptGame, bRefresh, bRefuseGame;
 	JList<String> listPartides;
 	JScrollPane scrollPanel;
 	JLabel icon;
+	String contrincant;
 
 	public Requests(BaseInterficie base, JocAPI API) {
 		interficieBase = base;
@@ -49,12 +49,11 @@ public class Requests extends JPanel implements ActionListener, ListSelectionLis
 		panelOest = new JPanel();
 		listPartides = new JList<String>();
 		panelCentral = new JPanel();
-		labelMessage = new JLabel();
 		labelErrorMessage = new JLabel();
 		scrollPanel = new JScrollPane(listPartides);
 	}
 
-	public JPanel ContinueGameCreate() {
+	public JPanel RequestsGameCreate() {
 		panelRequests = new JPanel();
 
 		panelRequests.setLayout(new BorderLayout());
@@ -98,7 +97,7 @@ public class Requests extends JPanel implements ActionListener, ListSelectionLis
 	}
 
 	private void TitolNord(JPanel panelNord) {
-		JLabel TitolUsuaris = new JLabel("Continue Game");
+		JLabel TitolUsuaris = new JLabel("Request");
 		TitolUsuaris.setForeground(new Color(237, 215, 178));
 		TitolUsuaris.setFont(new Font("Monospaced", Font.BOLD, 60));
 
@@ -107,37 +106,46 @@ public class Requests extends JPanel implements ActionListener, ListSelectionLis
 
 	private void BotonsSud(JPanel panelSud) {
 		bRefresh = new JButton("Refresh");
-		bPlayGame = new JButton("Continue gaming");
-		bPlayGame.setEnabled(false);
+		bAcceptGame = new JButton("Accept");
+		bRefuseGame = new JButton("Refuse");
 
 		bRefresh.setBackground(Color.GRAY);
 		bRefresh.setForeground(Color.WHITE);
-		bPlayGame.setBackground(Color.GRAY);
-		bPlayGame.setForeground(Color.WHITE);
+		bAcceptGame.setBackground(Color.GRAY);
+		bAcceptGame.setForeground(Color.WHITE);
+		bRefuseGame.setBackground(Color.GRAY);
+		bRefuseGame.setForeground(Color.WHITE);
+
 		bRefresh.setOpaque(true);
-		bPlayGame.setOpaque(true);
+		bAcceptGame.setOpaque(true);
+		bRefuseGame.setOpaque(true);
 
 		bRefresh.setPreferredSize(new Dimension(100, 40));
-		bPlayGame.setPreferredSize(new Dimension(300, 40));
+		bAcceptGame.setPreferredSize(new Dimension(300, 40));
+		bRefuseGame.setPreferredSize(new Dimension(300, 40));
 
 		bRefresh.setFont(new Font("SansSerif", Font.BOLD, 14));
-		bPlayGame.setFont(new Font("SansSerif", Font.BOLD, 14));
+		bAcceptGame.setFont(new Font("SansSerif", Font.BOLD, 14));
+		bRefuseGame.setFont(new Font("SansSerif", Font.BOLD, 14));
 
 		bRefresh.addActionListener(this);
-		bPlayGame.addActionListener(this);
+		bAcceptGame.addActionListener(this);
+		bRefuseGame.addActionListener(this);
 
 		panelSud.add(bRefresh);
-		panelSud.add(Box.createRigidArea(new Dimension(180, 0)));
-		panelSud.add(bPlayGame);
+		panelSud.add(Box.createRigidArea(new Dimension(20, 0)));
+		panelSud.add(bAcceptGame);
+		panelSud.add(Box.createRigidArea(new Dimension(20, 0)));
+		panelSud.add(bRefuseGame);
 
 	}
 
 	private void addPlayers() {
-		String APIplayers = api.getCandidatsSol(interficieBase.getPlayerID());
+		String APIplayers = api.solicituds(interficieBase.getPlayerID());
 
 		JSONObject json = new JSONObject(APIplayers);
 
-		String sErr = json.getString("sErr");
+		String err = json.getString("err");
 		String Mss = json.getString("res");
 
 		if (!Mss.equals("")) {
@@ -159,7 +167,7 @@ public class Requests extends JPanel implements ActionListener, ListSelectionLis
 
 			listPartides.setListData(player);
 		} else {
-			if (sErr.equals("No hi han usuaris connectats.")) {
+			if (err.equals("No hi ha cap partida")) {
 
 				Error("You don't have friends? Start a New Game Now!", "/NoPlayers.png", 70, 200, 500, 30);
 
@@ -190,7 +198,8 @@ public class Requests extends JPanel implements ActionListener, ListSelectionLis
 			labelErrorMessage.setText(mess);
 			icon.setBounds(250, 50, 100, 100);
 			labelErrorMessage.setBounds(x, y, w, h);
-			bPlayGame.setText("Play");
+			bAcceptGame.setText("Accept");
+			bRefuseGame.setText("Refuse");
 
 			panelCentral.add(icon);
 			panelCentral.add(labelErrorMessage);
@@ -204,14 +213,31 @@ public class Requests extends JPanel implements ActionListener, ListSelectionLis
 
 		if (e.getSource() == bRefresh) {
 			addPlayers();
+		} else {
+			if (e.getSource() == bAcceptGame) {
+				Rebutjar();
+			} else {
+				Acceptar();
+			}
 		}
+
+	}
+
+	private void Rebutjar() {
+		api.rebutjaSol(interficieBase.getName(), contrincant);
+		addPlayers();
+	}
+
+	private void Acceptar() {
+		api.acceptaSol(interficieBase.getName(), contrincant);
+		addPlayers();
 	}
 
 	public void valueChanged(ListSelectionEvent e) {
 		String str = (String) listPartides.getSelectedValue();
-		bPlayGame.setEnabled(true);
-
-		bPlayGame.setText("Accept game with " + str);
+		contrincant = str;
+		bAcceptGame.setText("Accept " + str);
+		bRefuseGame.setText("Refuse " + str);
 
 	}
 

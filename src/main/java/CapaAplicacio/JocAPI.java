@@ -12,6 +12,7 @@ import CapaDomini.Partida;
 import CapaDomini.Peo;
 import CapaDomini.Sessio;
 import CapaDomini.Taulell;
+import CapaDomini.Moviments;
 import CapaPersistencia.ConnectionSQLOracle;
 import CapaPersistencia.EstadistiquesSQLOracle;
 import CapaPersistencia.PartidesSQLOracle;
@@ -24,12 +25,16 @@ public class JocAPI {
 	private PartidesSQLOracle partSQL;
 	private EstadistiquesSQLOracle statSQL;
 	private Sessio sessio;
+	private Moviments movTornAct;
+	private JSONObject json;
 
 	public JocAPI(String user, String password) throws Exception {
 		connSQL = new ConnectionSQLOracle(user, password);
 		userSQL = new UsuariSQLOracle(connSQL);
 		partSQL = new PartidesSQLOracle(connSQL);
 		statSQL = new EstadistiquesSQLOracle(connSQL);
+		json = new JSONObject();
+		movTornAct = null;
 	}
 
 	/**
@@ -207,7 +212,7 @@ public class JocAPI {
 
 		List<String> solicituds = this.partSQL.getSolicitudsPendents(idSessio);
 		if (solicituds == null) {
-			json.put("err", "No s'han pogut carregar les solicituds");
+			json.put("sErr", "No s'han pogut carregar les solicituds");
 			return json.toString();
 		}
 
@@ -334,10 +339,24 @@ public class JocAPI {
 
 		String id = this.partSQL.getPartida(idSessio, usuari);
 
-		if (id == null)
+		if (id == null) {
 			json.put("err", "No hi ha partida disponible.");
+			return json.toString();
+		}
 		else
 			json.put("res", id);
+		
+		String movsAnt = this.partSQL.getMovimentsAnt(id);
+		if (movsAnt == null) {
+			json.put("err", "No hi ha moviments anteriors (null)");
+		}
+		
+		String taulerAnt = this.partSQL.getTaulerAnt(idSessio, id);
+		if (tauler == null)
+			json.put("err", "No s'ha trobat partida o sessio, o no hi ha tauler anterior");
+		else
+			json.put("res", tauler);
+		this.movTornAct = new Moviments();
 
 		return json.toString();
 
@@ -400,10 +419,10 @@ public class JocAPI {
 
 		String tauler = this.partSQL.getTaulerRes(idSessio, idPartida);
 
-		if (tauler == null)
+		if (tauler == null) {
 			json.put("err", "No s'ha trobat partida o sessio");
-		else
-			json.put("res", tauler);
+		}
+		
 
 		return json.toString();
 	}
@@ -566,6 +585,15 @@ public class JocAPI {
 			cadena = moviments.get(i)[0] + ";" + moviments.get(i)[1] + "-";
 		cadena += moviments.get(moviments.size() - 1)[0] + ";" + moviments.get(moviments.size() - 1)[0];
 		json.put("res", cadena);
+		return json.toString();
+	}
+	
+	private String crearJSON(String res, String err, String sErr) {
+		if (this.json == null)
+			this.json = new JSONObject();
+		json.put("res", res);
+		json.put("err", err);
+		json.put("sErr", sErr);
 		return json.toString();
 	}
 }

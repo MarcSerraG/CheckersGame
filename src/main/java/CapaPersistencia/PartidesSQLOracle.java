@@ -457,6 +457,23 @@ public class PartidesSQLOracle {
 		if (!this.actualitzarTaulell(idPartida, estatNou))
 			System.out.println("No s'ha pogut guardar el nou estat.");
 	}
+	
+	/**
+	 * Guarda els moviments anteriors a la BD
+	 * @param idPartida
+	 * @return true si s'ha guardat correctament
+	 */
+	public boolean guardarMovimentsAnt(String idPartida, String movsAnt) {
+		return false;
+	}
+	
+	/**
+	 * Retorna els moviments anteriors
+	 * @param idPartida
+	 */
+	public String getMovimentsAnt(String idPartida) {
+		return null;
+	}
 
 	/**
 	 * PRIVATES
