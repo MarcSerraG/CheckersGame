@@ -279,7 +279,8 @@ public class PartidesSQLOracle {
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro = "SELECT jugador, contrincant FROM partides WHERE torn = '"+jugador+"' and estat between 1 AND 2";
+		sqlcompro = "SELECT jugador, contrincant FROM partides WHERE (jugador = '"+jugador+"' "
+				+ "or contrincant = '"+jugador+"') and torn = '"+jugador+"' and estat between 1 AND 2";
 		String contrincant = "";
 		String usuari = "";
 		try {
@@ -315,7 +316,8 @@ public class PartidesSQLOracle {
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro = "SELECT jugador, contrincant FROM partides WHERE torn != '"+jugador+"' and estat between 1 AND 2";
+		sqlcompro = "SELECT jugador, contrincant FROM partides WHERE (jugador = '"+jugador+"' "
+		+ "or contrincant = '"+jugador+"') and torn != '"+jugador+"' and estat between 1 AND 2";
 		String contrincant = "";
 		String usuari = "";
 		try {
