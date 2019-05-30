@@ -214,11 +214,13 @@ public class Requests extends JPanel implements ActionListener, ListSelectionLis
 
 		if (e.getSource() == bRefresh) {
 			addPlayers();
+			bAcceptGame.setText("Accept");
+			bRefuseGame.setText("Refuse");
 		} else {
 			if (e.getSource() == bAcceptGame) {
-				Rebutjar();
-			} else {
 				Acceptar();
+			} else {
+				Rebutjar();
 			}
 		}
 
@@ -237,6 +239,7 @@ public class Requests extends JPanel implements ActionListener, ListSelectionLis
 	public void valueChanged(ListSelectionEvent e) {
 		String str = (String) listPartides.getSelectedValue();
 		contrincant = str;
+		System.out.println(str);
 		bAcceptGame.setText("Accept " + str);
 		bRefuseGame.setText("Refuse " + str);
 
