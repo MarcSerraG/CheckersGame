@@ -14,32 +14,141 @@ public class Dama extends Fitxa{
 		this.iColor = iColor;
 	}
 	//Torna una llista de moviments possibles de dama
-	public List<int[]> possiblesMoviments(int x, int y) throws IllegalArgumentException{
+	public List<int[]> possiblesMoviments(int x, int y, Casella[][] matCas) throws IllegalArgumentException{
 		
 		if (x < 0 || x > 9 || y < 0 || y > 9) throw new IllegalArgumentException("Position out of bounds");
 		
 			Vector <int[]> llista = new Vector<int[]>();
 			//Go through the matrix to get all positions
-			for (int i = -9; i <= 9; i++) {
-				for (int j = -9; j <= 9; j++) {
-					//Select only diagonal movements
-					if((Math.abs(i)+Math.abs(j))%2 == 0) {
-						int fila = x+i;
-						int columna = y+j;
-						//Select only positions inside the game
-						if (!(fila < 0 || fila > 9 || columna < 0 || columna > 9) && (!(fila==x && columna == y))) {
-							//Add position to list
-							int[] mov = {fila, columna};
-							llista.add(mov);
+			List<int[]> dig1 = this.calcularDiagonal(x, y, matCas, 0);
+			List<int[]> dig2 = this.calcularDiagonal(x, y, matCas, 1);
+			List<int[]> dig3 = this.calcularDiagonal(x, y, matCas, 2);
+			List<int[]> dig4 = this.calcularDiagonal(x, y, matCas, 3);
+		
+		if(dig1 != null) for(int[] mov : dig1) llista.add(mov);
+		if(dig2 != null) for(int[] mov : dig2) llista.add(mov);
+		if(dig3 != null) for(int[] mov : dig3) llista.add(mov);
+		if(dig4 != null) for(int[] mov : dig4) llista.add(mov);
+		
+		return llista;
+	}
+	//Retorna una llista que va omplint en diagonal fins que troba una fitxa
+	public List<int[]> calcularDiagonal(int x, int y, Casella[][]matCas, int dir){
+		//dir 0 = UPRIGHT
+		//dir 1 = DOWNRIGHT
+		//dir 2 = DOWNLEFT
+		//dir 3 = UPLEFT
+		Vector<int[]> llista = new Vector<int[]>();
+		int[] pos = null;
+		switch (dir) {
+		
+		case 0:
+			//initial position
+			pos[0]= x-1; pos[1] = y+1;
+			//if position is not out of bounds
+			while(!(pos[0] < 0 || pos[0] > 9 || pos[1] < 0 || pos[1] > 9)) {
+				//if position is full
+				if(matCas[pos[0]][pos[1]].getTeFitxa()) {
+					//if it has different color
+					if(matCas[pos[0]][pos[1]].getFitxa().iColor != matCas[x][y].getFitxa().iColor) {
+						pos[0]--;
+						pos[1]++;
+						if(!matCas[pos[0]][pos[1]].getTeFitxa()) {
+							llista.add(pos);
+							return llista;
 						}
+						else return llista;	
 					}
+					
 				}
+				llista.add(pos);
+				pos[0]--;
+				pos[1]++;
 			}
+			return llista;
+		case 1:
+			//initial position
+			pos[0]= x+1; pos[1] = y+1;
+			//if position is not out of bounds
+			while(!(pos[0] < 0 || pos[0] > 9 || pos[1] < 0 || pos[1] > 9)) {
+				//if position is full
+				if(matCas[pos[0]][pos[1]].getTeFitxa()) {
+					//if it has different color
+					if(matCas[pos[0]][pos[1]].getFitxa().iColor != matCas[x][y].getFitxa().iColor) {
+						pos[0]++;
+						pos[1]++;
+						if(!matCas[pos[0]][pos[1]].getTeFitxa()) {
+							llista.add(pos);
+							return llista;
+						}
+						else return llista;	
+					}
+					
+				}
+				llista.add(pos);
+				pos[0]++;
+				pos[1]++;
+			}
+			return llista;
+		case 2:
+			//initial position
+			pos[0]= x+1; pos[1] = y-1;
+			//if position is not out of bounds
+			while(!(pos[0] < 0 || pos[0] > 9 || pos[1] < 0 || pos[1] > 9)) {
+				//if position is full
+				if(matCas[pos[0]][pos[1]].getTeFitxa()) {
+					//if it has different color
+					if(matCas[pos[0]][pos[1]].getFitxa().iColor != matCas[x][y].getFitxa().iColor) {
+						pos[0]++;
+						pos[1]--;
+						if(!matCas[pos[0]][pos[1]].getTeFitxa()) {
+							llista.add(pos);
+							return llista;
+						}
+						else return llista;	
+					}
+					
+				}
+				llista.add(pos);
+				pos[0]++;
+				pos[1]--;
+			}
+			return llista;
+		case 3:
+			//initial position
+			pos[0]= x-1; pos[1] = y-1;
+			//if position is not out of bounds
+			while(!(pos[0] < 0 || pos[0] > 9 || pos[1] < 0 || pos[1] > 9)) {
+				//if position is full
+				if(matCas[pos[0]][pos[1]].getTeFitxa()) {
+					//if it has different color
+					if(matCas[pos[0]][pos[1]].getFitxa().iColor != matCas[x][y].getFitxa().iColor) {
+						pos[0]--;
+						pos[1]--;
+						if(!matCas[pos[0]][pos[1]].getTeFitxa()) {
+							llista.add(pos);
+							return llista;
+						}
+						else return llista;	
+					}
+					
+				}
+				llista.add(pos);
+				pos[0]--;
+				pos[1]--;
+			}
+			return llista;
+		}
 		return llista;
 	}
 	//Retorna D per dama blanca i d per dama negra
 	public String toString() {
 		if(iColor == 0) return "D";
 		else return "d";
+	}
+	@Override
+	public List<int[]> possiblesMoviments(int x, int y) throws IllegalArgumentException {
+		
+		return null;
 	}
 }
