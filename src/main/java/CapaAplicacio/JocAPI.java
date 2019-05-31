@@ -11,7 +11,6 @@ import CapaDomini.Casella;
 import CapaDomini.Moviments;
 import CapaDomini.Partida;
 import CapaDomini.Peo;
-import CapaDomini.Sessio;
 import CapaDomini.Taulell;
 import CapaPersistencia.ConnectionSQLOracle;
 import CapaPersistencia.EstadistiquesSQLOracle;
@@ -24,7 +23,6 @@ public class JocAPI {
 	private UsuariSQLOracle userSQL;
 	private PartidesSQLOracle partSQL;
 	private EstadistiquesSQLOracle statSQL;
-	private Sessio sessio;
 	private Moviments movTornAct;
 	private JSONObject json;
 
@@ -47,97 +45,61 @@ public class JocAPI {
 	 *         "";
 	 */
 	public String login(String user, String password) {
-		JSONObject json = new JSONObject();
-		json.put("res", user);
-		json.put("err", "");
-		json.put("sErr", "");
 
 		boolean jaConnectat = this.userSQL.getConnectat(user);
 		if (jaConnectat)
-			json.put("err", "Usuari amb sessió oberta");
-		else {
-			/* Password checking */
-			String BDPassword = this.userSQL.getPasword(user);
-			if (BDPassword == null)
-				json.put("err", "No User");
-			else {
-				boolean passwordMatch = SCryptUtil.check(password, BDPassword);
-				if (!passwordMatch)
-					json.put("err", "User-password incorrecte");
-				else {
-
-					boolean connexioCorrecte = this.userSQL.canviarSessio(user, true);
-					if (!connexioCorrecte)
-						json.put("sErr", "No s'ha pogut crear la sessio");
-
-					try {
-						this.sessio = new Sessio(user, new HashSet<Partida>(), 0, "g3geilab1", "g3geilab1");
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} // TEMPORAL
-				}
-			}
-		}
-
-		return json.toString();
+			return crearJSON("", "Usuari amb sessió oberta", "");
+		
+		/* Password checking */
+		String BDPassword = this.userSQL.getPasword(user);
+		if (BDPassword == null)
+			return crearJSON("", "No User", "");
+		
+		boolean passwordMatch = SCryptUtil.check(password, BDPassword);
+		if (!passwordMatch)
+			return crearJSON("", "User-password incorrecte", "");
+		
+		boolean connexioCorrecte = this.userSQL.canviarSessio(user, true);
+		if (!connexioCorrecte)
+			return crearJSON("", "", "No s'ha pogut crear la sessio");
+		
+		return crearJSON(user, "", "");
 	}
 
 	public String registra(String user, String password) {
 
-		JSONObject json = new JSONObject();
-		json.put("res", user);
-		json.put("err", "");
-		json.put("sErr", "");
-
-		if (user.contains(";") || user.contains("\"")) {
-			json.put("err", "El nom no pot contenir \" ni ;");
-			return json.toString();
-		}
+		if (user.contains(";") || user.contains("\""))
+			return crearJSON("", "El nom no pot contenir \" ni ;", "");
 
 		boolean userExists = this.userSQL.getPasword(user) != null;
 		if (userExists)
-			json.put("err", "Usuari existent");
-		else {
-			String BDPassword = SCryptUtil.scrypt(password, 2, 2, 2);
+			return crearJSON("", "Usuari existent", "");
+		
+		String BDPassword = SCryptUtil.scrypt(password, 2, 2, 2);
 
-			boolean creacioCorrecte = this.userSQL.insertUsuari(user, BDPassword, "-", "1");
-			if (!creacioCorrecte)
-				json.put("err", "Error al crear usuari");
-		}
+		boolean creacioCorrecte = this.userSQL.insertUsuari(user, BDPassword, "-", "1");
+		if (!creacioCorrecte)
+			return crearJSON("", "Error al crear usuari", "");
 
-		return json.toString();
+		return crearJSON(user, "", "");
 	}
 
 	public String logout(String idSessio) {
 
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
-
 		boolean errorSessio = !userSQL.canviarSessio(idSessio, false);
-		if (errorSessio) {
-			json.put("err", "Error ID Sessió");
-		} else
-			this.sessio = null;
-		return json.toString();
+		if (errorSessio)
+			return crearJSON("", "Error ID Sessió", "");
+
+		return crearJSON("", "", "");
 	}
 
 	public String reconnecta(String idSessio, String password) {
 
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
-
-		boolean sessioCaducada = !this.sessio.getConnectat();
+		boolean sessioCaducada = !this.userSQL.getConnectat(idSessio); // Canviar pel necessari?
 		if (sessioCaducada)
 			return this.login(idSessio, password);
-		else {
-			json.put("err", "La sessió encara està connectada");
-		}
-		return json.toString();
+		else
+			return crearJSON("", "La sessió encara està connectada", "");
 	}
 
 	public String getEstadistics(String idSessio) {
