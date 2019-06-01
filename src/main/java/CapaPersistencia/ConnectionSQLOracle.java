@@ -77,6 +77,22 @@ public class ConnectionSQLOracle {
 		}
 	}
 	
+	/**
+	 * Crear delete a la bbdd
+	 * @param sql
+	 * @throws SQLException
+	 */
+	public void crearDelete(String sql) throws SQLException {
+		Statement st = null;
+		try {
+			System.out.println(sql);
+			st = conn.createStatement();
+			st.execute(sql);
+		} catch (SQLException e) {
+			System.out.println("Error en Select de "+sql+" tipus de error "+e);
+		}
+	}
+	
 	public void ferCommit() throws SQLException {
 		conn.commit();
 	}
