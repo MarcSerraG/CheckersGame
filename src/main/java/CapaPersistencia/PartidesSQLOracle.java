@@ -255,7 +255,9 @@ public class PartidesSQLOracle {
 				System.out.println("Error no hay partidas con ese id.");
 				return false;
 			}
-
+			
+			this.conn.crearDelete(sql2);
+				
 		} catch (SQLException e) {
 			System.out.println("Error SQL rebutja: " + e);
 			return false;
