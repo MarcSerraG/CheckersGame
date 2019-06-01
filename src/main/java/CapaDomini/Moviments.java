@@ -111,4 +111,14 @@ public class Moviments {
 		}
 		return false;
 	}
+	
+	public String movsToString() {
+		String movs = "";
+		
+		for (String mov : this.listMovs) {
+			movs += mov + "/";
+		}
+		movs = movs.substring(0, movs.length());
+		return movs;
+	}
 }
