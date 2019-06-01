@@ -320,7 +320,21 @@ public class JocAPI {
 	}
 
 	public String grabarTirada(String idSessio, String idPartida) {
-		return null;
+		// TODO: Comprovar quan s'ha guanyat la partida, perdut, o continua...
+		// Per ara SEMPRE continua
+		
+		String movs = this.movTornAct.movsToString();
+		if (movs.isEmpty())
+			return crearJSON("", "No hi han moviments en aquest torn", "");
+		
+		boolean guardat = this.partSQL.guardarMovimentsAnt(idPartida, movs);
+		if (!guardat)
+			return crearJSON("", "No s'han pogut guardar els moviments a la BD", "");
+	
+		String taulellRes = this.movTornAct.getTaulellActual().toString();
+		this.partSQL.guardarEstatTauler(idPartida, taulellRes);
+		
+		return crearJSON("continua", "", "");
 	}
 
 	// NO ES POT IMPLEMENTAR PER ARA...
@@ -350,16 +364,7 @@ public class JocAPI {
 		try {
 
 			moviment = tauler.moviment(casIni, casFi);
-
-			// tindria que ser contrincant, no idSessio!!
-			// boolean canviTorn = this.partSQL.canviarTorn(idPartida, idSessio);
-			// if (!canviTorn) {
-			// json.put("err", "Error al fer canvi de torn, no s'ha guardat el nou estat del
-			// taulell");
-			// return json.toString();
-			// } else {
 			this.partSQL.guardarEstatTauler(idPartida, tauler.toString());
-			// }
 
 		} catch (Exception e) {
 			return crearJSON("", e.toString(), "");
@@ -455,5 +460,17 @@ public class JocAPI {
 		json.put("err", err);
 		json.put("sErr", sErr);
 		return json.toString();
+	}
+	
+	// Converteix un string d'un taulell de la capa domini o aplicacio,
+	// Retornant un string de taulell com especifica l'API
+	private String taulellConversor(String taulell) {
+		taulell = taulell.replace('x', ' ');
+		taulell = taulell.replaceAll(",", "");
+		taulell = taulell.replace('0', '♗');
+		taulell = taulell.replace('1', '♝');
+		taulell = taulell.replace('D', '♕');
+		taulell = taulell.replace('d', '♛');
+		return taulell;
 	}
 }

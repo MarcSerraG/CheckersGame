@@ -45,6 +45,9 @@ public class Moviments {
 	public List<String> getMovimentsAnt() {return this.listMovsAnt;}
 	
 	public boolean ferBufa(int x, int y) {
+		if (this.tornAcabat)
+			return false;
+		
 		if (!this.potBufar)
 			return false;
 		
@@ -99,11 +102,23 @@ public class Moviments {
 		if (this.taulActual.moviment(casOrigen, casDesti)) {
 			if (potMatar) 
 				this.listMovs.add("matar;" + xIni + ";" + yIni + ";" + xFi + ";" + yFi);
-			else
+			else {
 				this.listMovs.add("moure;" + xIni + ";" + yIni + ";" + xFi + ";" + yFi);
-			
+				this.tornAcabat = true; // Si no ha matat, s'acaba el torn
+			}
+			this.potBufar = false;
 			return true;
 		}
 		return false;
+	}
+	
+	public String movsToString() {
+		String movs = "";
+		
+		for (String mov : this.listMovs) {
+			movs += mov + "/";
+		}
+		movs = movs.substring(0, movs.length());
+		return movs;
 	}
 }
