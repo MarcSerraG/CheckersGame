@@ -77,6 +77,22 @@ public class ConnectionSQLOracle {
 		}
 	}
 	
+	/**
+	 * Crear delete a la bbdd
+	 * @param sql
+	 * @throws SQLException
+	 */
+	public void crearDelete(String sql) throws SQLException {
+		Statement st = null;
+		try {
+			System.out.println(sql);
+			st = conn.createStatement();
+			st.execute(sql);
+		} catch (SQLException e) {
+			System.out.println("Error en Select de "+sql+" tipus de error "+e);
+		}
+	}
+	
 	public void ferCommit() throws SQLException {
 		conn.commit();
 	}
@@ -95,7 +111,7 @@ public class ConnectionSQLOracle {
 			//System.out.println(usu.getConnectat("Marc"));
 			//System.out.println(tb.toString());
 			PartidesSQLOracle pat = new PartidesSQLOracle(cn);
-			String id = usu.getCandidats("Ricard");
+			String id = pat.getColor("Prova3", "66");
 			System.out.println(id);
 			//System.out.println(pat.getTaullelnou().toString());
 			
