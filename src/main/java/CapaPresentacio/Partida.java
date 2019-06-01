@@ -245,7 +245,7 @@ public class Partida extends JPanel implements ActionListener {
 
 		if (err.equals("")) {
 			JugadorColor = ClJugador;
-			if (ClJugador == "Red") {
+			if (ClJugador.equals("Red")) {
 				ContrincantColor = "Black";
 				LabelNegres.setText(NomContrincant + " Black");
 				LabelVermelles.setText(interficieBase.getPlayerID() + " Red");
