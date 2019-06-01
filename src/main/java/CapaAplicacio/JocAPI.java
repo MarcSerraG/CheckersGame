@@ -456,4 +456,16 @@ public class JocAPI {
 		json.put("sErr", sErr);
 		return json.toString();
 	}
+	
+	// Converteix un string d'un taulell de la capa domini o aplicacio,
+	// Retornant un string de taulell com especifica l'API
+	private String taulellConversor(String taulell) {
+		taulell = taulell.replace('x', ' ');
+		taulell = taulell.replaceAll(",", "");
+		taulell = taulell.replace('0', '♗');
+		taulell = taulell.replace('1', '♝');
+		taulell = taulell.replace('D', '♕');
+		taulell = taulell.replace('d', '♛');
+		return taulell;
+	}
 }
