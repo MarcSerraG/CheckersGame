@@ -189,9 +189,9 @@ public class Partida extends JPanel implements ActionListener {
 		if (peo != null)
 			button.setIcon(peo);
 		button.setPreferredSize(size);
-		button.addActionListener(this);
+		if (ContrincantPesses && torn)
+			button.addActionListener(this);
 		button.setMinimumSize(size);
-		button.setEnabled(ContrincantPesses);
 		button.setMaximumSize(size);
 		button.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		switch (color) {
@@ -266,7 +266,7 @@ public class Partida extends JPanel implements ActionListener {
 		ColorJugadorsPanel.add(LabelNegres);
 		ColorJugadorsPanel.add(Box.createRigidArea(new Dimension(0, 400)));
 		ColorJugadorsPanel.add(LabelVermelles);
-		panelEst.add(Box.createRigidArea(new Dimension(250, 0)));
+		panelEst.add(Box.createRigidArea(new Dimension(150, 0)));
 
 		panelEst.add(ColorJugadorsPanel);
 
@@ -275,7 +275,7 @@ public class Partida extends JPanel implements ActionListener {
 	private void PanellSud() {
 		panelSud.setLayout(new BorderLayout());
 		panelSud.add(Box.createRigidArea(new Dimension(0, 100)), BorderLayout.CENTER);
-		panelSud.add(lMessage, BorderLayout.WEST);
+		panelSud.add(lMessage, BorderLayout.EAST);
 
 		if (torn)
 			lMessage.setText("It's your turn!");
@@ -320,9 +320,11 @@ public class Partida extends JPanel implements ActionListener {
 
 						if (Boolean.parseBoolean(mss)) {
 							lMessage.setText("It's your turn again");
+							torn = true;
 
 						} else {
 							lMessage.setText("It's rival turn");
+							torn = false;
 						}
 
 						String nouTaulell = interficieBase.getAPI().obtenirTaulerAct(interficieBase.getPlayerID(),
