@@ -245,8 +245,24 @@ public class JocAPI {
 		if (id == null)
 			return crearJSON("", "No hi ha partida disponible.", "");
 
-		return crearJSON(id, "", "");
-	}
+		// return crearJSON(id, "", ""); // Remove comment only if the method fails
+		
+		String movsAnt = this.partSQL.getMovimentsAnt(id);  
+		if (movsAnt == null) 
+			movsAnt = ""; 
+		// return crearJSON("", "No hi ha moviments anteriors (null)", ""); 
+		String taulerAnt = this.partSQL.getTaulerAnt(idSessio, id);  
+		if (taulerAnt == null)  
+			taulerAnt = ""; 
+		// return crearJSON("", "No s'ha trobat tauler anterior", ""); 
+ 
+		String taulerAct = this.partSQL.continuarPartida(id);  
+		if (taulerAct == null) 
+			return crearJSON("", "No s'ha trobat tauler actual", ""); 
+ 
+		this.movTornAct = new Moviments(movsAnt, taulerAct, taulerAnt); 
+		return crearJSON(id, "", ""); 
+	} 
 
 	public String obtenirColor(String idSessio, String idPartida) {
 
@@ -349,24 +365,10 @@ public class JocAPI {
 		int xFi = Integer.parseInt(posFi.split(";")[0]);
 		int yFi = Integer.parseInt(posFi.split(";")[1]);
 
-		Casella casIni = tauler.seleccionarCasella(xIni, yIni);
-		Casella casFi = tauler.seleccionarCasella(xFi, yFi);
-
-		boolean moviment;
-
-		try {
-
-			moviment = tauler.moviment(casIni, casFi);
-			this.partSQL.guardarEstatTauler(idPartida, tauler.toString());
-
-		} catch (Exception e) {
-			return crearJSON("", e.toString(), "");
-		}
-
+		boolean moviment = this.movTornAct.ferMoure(xIni, yIni, xFi, yFi);
 		if (moviment)
 			return crearJSON("true", "", "");
 		else {
-			partSQL.canviarTorn(idPartida, contrincant);
 			return crearJSON("false", "", "");
 		}
 

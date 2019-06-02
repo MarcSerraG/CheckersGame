@@ -35,11 +35,19 @@ public class Moviments {
 		}
 		
 		this.listMovs = new ArrayList<String>();
-		this.taulActual = new Taulell(taulActual);
-		if (taulAnterior.isEmpty())
-			this.taulAnt = new Taulell(taulActual);
-		else
-			this.taulAnt = new Taulell(taulAnterior);
+		System.out.println(taulActual);
+		System.out.println();
+		System.out.println(taulAnterior);
+		this.taulActual = new Taulell(10);
+		this.taulActual.reconstruirTaulell(taulActual);
+		if (taulAnterior.isEmpty()) {
+			this.taulAnt = new Taulell(10);
+			this.taulAnt.reconstruirTaulell(taulActual);
+		}
+		else {
+			this.taulAnt = new Taulell(10);
+			this.taulAnt.reconstruirTaulell(taulAnterior);
+		}
 		this.tornAcabat = false;
 		if (taulAnterior.isEmpty())
 			this.potBufar = false;
