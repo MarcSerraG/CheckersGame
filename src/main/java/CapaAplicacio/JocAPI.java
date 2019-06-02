@@ -1,6 +1,5 @@
 package CapaAplicacio;
 
-import java.util.HashSet;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -9,7 +8,6 @@ import com.lambdaworks.crypto.SCryptUtil;
 
 import CapaDomini.Casella;
 import CapaDomini.Moviments;
-import CapaDomini.Partida;
 import CapaDomini.Peo;
 import CapaDomini.Taulell;
 import CapaPersistencia.ConnectionSQLOracle;
@@ -49,20 +47,20 @@ public class JocAPI {
 		boolean jaConnectat = this.userSQL.getConnectat(user);
 		if (jaConnectat)
 			return crearJSON("", "Usuari amb sessió oberta", "");
-		
+
 		/* Password checking */
 		String BDPassword = this.userSQL.getPasword(user);
 		if (BDPassword == null)
 			return crearJSON("", "No User", "");
-		
+
 		boolean passwordMatch = SCryptUtil.check(password, BDPassword);
 		if (!passwordMatch)
 			return crearJSON("", "User-password incorrecte", "");
-		
+
 		boolean connexioCorrecte = this.userSQL.canviarSessio(user, true);
 		if (!connexioCorrecte)
 			return crearJSON("", "", "No s'ha pogut crear la sessio");
-		
+
 		return crearJSON(user, "", "");
 	}
 
@@ -74,7 +72,7 @@ public class JocAPI {
 		boolean userExists = this.userSQL.getPasword(user) != null;
 		if (userExists)
 			return crearJSON("", "Usuari existent", "");
-		
+
 		String BDPassword = SCryptUtil.scrypt(password, 2, 2, 2);
 
 		boolean creacioCorrecte = this.userSQL.insertUsuari(user, BDPassword, "-", "1");
@@ -120,14 +118,14 @@ public class JocAPI {
 	 * @return
 	 */
 	public String getCandidatsSol(String idSessio) {
-		
+
 		String res = this.userSQL.getCandidats(idSessio);
 		if (res == null)
 			return crearJSON("", "", "Hi ha hagut un problema de connexió.");
-		
+
 		if (res.isEmpty())
-				return crearJSON("", "", "No hi han usuaris connectats.");
-		
+			return crearJSON("", "", "No hi han usuaris connectats.");
+
 		return crearJSON(res, "", "");
 	}
 
@@ -294,6 +292,8 @@ public class JocAPI {
 		if (tauler == null)
 			return crearJSON("", "No s'ha trobat partida o sessio", "");
 
+		// tauler = taulellConversor(tauler);
+
 		return crearJSON(tauler, "", "");
 	}
 
@@ -322,18 +322,18 @@ public class JocAPI {
 	public String grabarTirada(String idSessio, String idPartida) {
 		// TODO: Comprovar quan s'ha guanyat la partida, perdut, o continua...
 		// Per ara SEMPRE continua
-		
+
 		String movs = this.movTornAct.movsToString();
 		if (movs.isEmpty())
 			return crearJSON("", "No hi han moviments en aquest torn", "");
-		
+
 		boolean guardat = this.partSQL.guardarMovimentsAnt(idPartida, movs);
 		if (!guardat)
 			return crearJSON("", "No s'han pogut guardar els moviments a la BD", "");
-	
+
 		String taulellRes = this.movTornAct.getTaulellActual().toString();
 		this.partSQL.guardarEstatTauler(idPartida, taulellRes);
-		
+
 		return crearJSON("continua", "", "");
 	}
 
@@ -358,9 +358,9 @@ public class JocAPI {
 
 		Casella casIni = tauler.seleccionarCasella(xIni, yIni);
 		Casella casFi = tauler.seleccionarCasella(xFi, yFi);
-		
+
 		boolean moviment;
-		
+
 		try {
 
 			moviment = tauler.moviment(casIni, casFi);
@@ -369,7 +369,7 @@ public class JocAPI {
 		} catch (Exception e) {
 			return crearJSON("", e.toString(), "");
 		}
-		
+
 		if (moviment)
 			return crearJSON("true", "", "");
 		else
@@ -390,7 +390,7 @@ public class JocAPI {
 
 		Casella cas = tauler.seleccionarCasella(xIni, yIni);
 		Peo p = (Peo) cas.getFitxa();
-		
+
 		boolean damaFeta = tauler.canviDama(p.getColor(), cas);
 
 		this.partSQL.guardarEstatTauler(idPartida, tauler.toString());
@@ -406,7 +406,7 @@ public class JocAPI {
 		String estatTauler = this.partSQL.continuarPartida(idPartida);
 		if (estatTauler == null)
 			return crearJSON("", "No s'ha pogut carregar la partida", "");
-			
+
 		Taulell tauler = new Taulell(10);
 		tauler.reconstruirTaulell(estatTauler);
 
@@ -446,7 +446,7 @@ public class JocAPI {
 
 		List<int[]> moviments = tauler.veurePossiblesMoviments(cas);
 		String cadena = "";
-		for (int i = 0; i < moviments.size() - 1; i++)
+		for (int i = 0; i < moviments.size(); i++)
 			cadena = moviments.get(i)[0] + ";" + moviments.get(i)[1] + "-";
 		cadena += moviments.get(moviments.size() - 1)[0] + ";" + moviments.get(moviments.size() - 1)[0];
 
@@ -461,12 +461,13 @@ public class JocAPI {
 		json.put("sErr", sErr);
 		return json.toString();
 	}
-	
+
 	// Converteix un string d'un taulell de la capa domini o aplicacio,
 	// Retornant un string de taulell com especifica l'API
 	private String taulellConversor(String taulell) {
 		taulell = taulell.replace('x', ' ');
 		taulell = taulell.replaceAll(",", "");
+		taulell = taulell.replace("\n", ";");
 		taulell = taulell.replace('0', '♗');
 		taulell = taulell.replace('1', '♝');
 		taulell = taulell.replace('D', '♕');

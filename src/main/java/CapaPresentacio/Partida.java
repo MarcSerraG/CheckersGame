@@ -106,9 +106,8 @@ public class Partida extends JPanel implements ActionListener {
 		Dimension size = new Dimension(50, 50);
 
 		String[] divisioTaulell = taulellSQL.split("[,\n]");
-		for (String i : divisioTaulell)
-			System.out.print(i);
-		System.out.println();
+		for (String a : divisioTaulell)
+			System.out.print(a);
 
 		try {
 
@@ -301,7 +300,7 @@ public class Partida extends JPanel implements ActionListener {
 			posInicial = pessa.getValue();
 			bSeleccioInicial = pessa.getKey();
 			bSeleccioInicial.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-			// VeurePossiblesMoviments(pessa.getValue());
+			VeurePossiblesMoviments(pessa.getValue());
 		} else {
 			if (posFinal.equals("")) {
 				posFinal = pessa.getValue();
@@ -320,6 +319,7 @@ public class Partida extends JPanel implements ActionListener {
 
 						if (Boolean.parseBoolean(mss)) {
 							lMessage.setText("It's your turn again");
+
 							torn = true;
 
 						} else {
@@ -348,22 +348,33 @@ public class Partida extends JPanel implements ActionListener {
 				} else
 					lMessage.setText(sErr);
 
-				bSeleccioInicial.setBorder(BorderFactory.createEmptyBorder());
+				for (JButton b : taulell2.keySet())
+					b.setBorder(BorderFactory.createEmptyBorder());
 
 			}
 		}
 	}
 
-	/*
-	 * private void VeurePossiblesMoviments(String pos) { // movsPessa(String
-	 * idSessio, String idPartida, String Pos) String moviments =
-	 * interficieBase.getAPI().movsPessa(interficieBase.getName(), idPartida, pos);
-	 * JSONObject json = new JSONObject(moviments);
-	 * 
-	 * String err = json.getString("err"); String mss = json.getString("res");
-	 * String sErr = json.getString("sErr");
-	 * 
-	 * System.out.println(mss); }
-	 */
+	private void VeurePossiblesMoviments(String pos) { // movsPessa(String
+
+		String moviments = interficieBase.getAPI().movsPessa(interficieBase.getName(), idPartida, pos);
+		JSONObject json = new JSONObject(moviments);
+
+		String err = json.getString("err");
+		String mss = json.getString("res");
+		String sErr = json.getString("sErr");
+
+		System.out.println(mss);
+
+		String[] posicions = mss.split("-");
+
+		for (String posicio : posicions) {
+			for (Map.Entry<JButton, String> entry : taulell2.entrySet()) {
+				if (entry.getValue().equals(posicio)) {
+					entry.getKey().setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+				}
+			}
+		}
+	}
 
 }
