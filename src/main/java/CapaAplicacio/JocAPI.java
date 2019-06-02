@@ -1,6 +1,5 @@
 package CapaAplicacio;
 
-import java.util.HashSet;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -9,9 +8,7 @@ import com.lambdaworks.crypto.SCryptUtil;
 
 import CapaDomini.Casella;
 import CapaDomini.Moviments;
-import CapaDomini.Partida;
 import CapaDomini.Peo;
-import CapaDomini.Sessio;
 import CapaDomini.Taulell;
 import CapaPersistencia.ConnectionSQLOracle;
 import CapaPersistencia.EstadistiquesSQLOracle;
@@ -24,9 +21,9 @@ public class JocAPI {
 	private UsuariSQLOracle userSQL;
 	private PartidesSQLOracle partSQL;
 	private EstadistiquesSQLOracle statSQL;
-	private Sessio sessio;
 	private Moviments movTornAct;
 	private JSONObject json;
+	private String contrincant;
 
 	public JocAPI(String user, String password) throws Exception {
 		connSQL = new ConnectionSQLOracle(user, password);
@@ -35,6 +32,7 @@ public class JocAPI {
 		statSQL = new EstadistiquesSQLOracle(connSQL);
 		json = new JSONObject();
 		movTornAct = null;
+		contrincant = "";
 	}
 
 	/**
@@ -47,115 +45,72 @@ public class JocAPI {
 	 *         "";
 	 */
 	public String login(String user, String password) {
-		JSONObject json = new JSONObject();
-		json.put("res", user);
-		json.put("err", "");
-		json.put("sErr", "");
 
 		boolean jaConnectat = this.userSQL.getConnectat(user);
 		if (jaConnectat)
-			json.put("err", "Usuari amb sessió oberta");
-		else {
-			/* Password checking */
-			String BDPassword = this.userSQL.getPasword(user);
-			if (BDPassword == null)
-				json.put("err", "No User");
-			else {
-				boolean passwordMatch = SCryptUtil.check(password, BDPassword);
-				if (!passwordMatch)
-					json.put("err", "User-password incorrecte");
-				else {
+			return crearJSON("", "Usuari amb sessió oberta", "");
 
-					boolean connexioCorrecte = this.userSQL.canviarSessio(user, true);
-					if (!connexioCorrecte)
-						json.put("sErr", "No s'ha pogut crear la sessio");
+		/* Password checking */
+		String BDPassword = this.userSQL.getPasword(user);
+		if (BDPassword == null)
+			return crearJSON("", "No User", "");
 
-					try {
-						this.sessio = new Sessio(user, new HashSet<Partida>(), 0, "g3geilab1", "g3geilab1");
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} // TEMPORAL
-				}
-			}
-		}
+		boolean passwordMatch = SCryptUtil.check(password, BDPassword);
+		if (!passwordMatch)
+			return crearJSON("", "User-password incorrecte", "");
 
-		return json.toString();
+		boolean connexioCorrecte = this.userSQL.canviarSessio(user, true);
+		if (!connexioCorrecte)
+			return crearJSON("", "", "No s'ha pogut crear la sessio");
+
+		return crearJSON(user, "", "");
 	}
 
 	public String registra(String user, String password) {
 
-		JSONObject json = new JSONObject();
-		json.put("res", user);
-		json.put("err", "");
-		json.put("sErr", "");
-
-		if (user.contains(";") || user.contains("\"")) {
-			json.put("err", "El nom no pot contenir \" ni ;");
-			return json.toString();
-		}
+		if (user.contains(";") || user.contains("\""))
+			return crearJSON("", "El nom no pot contenir \" ni ;", "");
 
 		boolean userExists = this.userSQL.getPasword(user) != null;
 		if (userExists)
-			json.put("err", "Usuari existent");
-		else {
-			String BDPassword = SCryptUtil.scrypt(password, 2, 2, 2);
+			return crearJSON("", "Usuari existent", "");
 
-			boolean creacioCorrecte = this.userSQL.insertUsuari(user, BDPassword, "-", "1");
-			if (!creacioCorrecte)
-				json.put("err", "Error al crear usuari");
-		}
+		String BDPassword = SCryptUtil.scrypt(password, 2, 2, 2);
 
-		return json.toString();
+		boolean creacioCorrecte = this.userSQL.insertUsuari(user, BDPassword, "-", "1");
+		if (!creacioCorrecte)
+			return crearJSON("", "Error al crear usuari", "");
+
+		return crearJSON(user, "", "");
 	}
 
 	public String logout(String idSessio) {
 
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
-
 		boolean errorSessio = !userSQL.canviarSessio(idSessio, false);
-		if (errorSessio) {
-			json.put("err", "Error ID Sessió");
-		} else
-			this.sessio = null;
-		return json.toString();
+		if (errorSessio)
+			return crearJSON("", "Error ID Sessió", "");
+
+		return crearJSON("", "", "");
 	}
 
 	public String reconnecta(String idSessio, String password) {
 
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
-
-		boolean sessioCaducada = !this.sessio.getConnectat();
+		boolean sessioCaducada = !this.userSQL.getConnectat(idSessio); // Canviar pel necessari?
 		if (sessioCaducada)
 			return this.login(idSessio, password);
-		else {
-			json.put("err", "La sessió encara està connectada");
-		}
-		return json.toString();
+		else
+			return crearJSON("", "La sessió encara està connectada", "");
 	}
 
 	public String getEstadistics(String idSessio) {
-		JSONObject json = new JSONObject();
-		String res = "";
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
 		System.out.println("idSessio" + idSessio);
-		res = this.statSQL.getEstadistiquesUsuari(idSessio);
+		String res = this.statSQL.getEstadistiquesUsuari(idSessio);
 		if (res == null)
-			json.put("err", "Sql error no hi han dades suficients.");
+			return crearJSON("", "SQL error no hi han dades suficients", "");
 		else if (res.equals(""))
-			json.put("err", "La base de dades ha retornat sense dades.");
+			return crearJSON("", "La base de dades ha retornat sense dades", "");
 		else
-			json.put("res", res);
-
-		return json.toString();
+			return crearJSON(res, "", "");
 	}
 
 	/**
@@ -165,22 +120,15 @@ public class JocAPI {
 	 * @return
 	 */
 	public String getCandidatsSol(String idSessio) {
-		JSONObject json = new JSONObject();
-		String res = "";
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
-		res = this.userSQL.getCandidats(idSessio);
-		if (res == null)
-			json.put("sErr", "Hi ha hagut un problema de connexió.");
-		else {
-			if (res == "")
-				json.put("sErr", "No hi han usuaris connectats.");
-			else
-				json.put("res", res).toString();
-		}
 
-		return json.toString();
+		String res = this.userSQL.getCandidats(idSessio);
+		if (res == null)
+			return crearJSON("", "", "Hi ha hagut un problema de connexió.");
+
+		if (res.isEmpty())
+			return crearJSON("", "", "No hi han usuaris connectats.");
+
+		return crearJSON(res, "", "");
 	}
 
 	// CreaPartida esta comprovat que funciona a la part de SQL
@@ -205,20 +153,14 @@ public class JocAPI {
 	 * @return
 	 */
 	public String solicituds(String idSessio) {
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
 
 		List<String> solicituds = this.partSQL.getSolicitudsPendents(idSessio);
 		if (solicituds == null) {
-			json.put("sErr", "No s'han pogut carregar les solicituds");
-			return json.toString();
+			return crearJSON("", "", "No s'han pogut carregar les solicituds");
 		}
 
 		if (solicituds.isEmpty()) {
-			json.put("err", "No hi ha cap partida");
-			return json.toString();
+			return crearJSON("", "No hi ha cap partida", "");
 		}
 		String nomsUsuaris = "";
 		for (String nom : solicituds) {
@@ -226,7 +168,7 @@ public class JocAPI {
 		}
 
 		nomsUsuaris = nomsUsuaris.substring(0, nomsUsuaris.length()); // Borrar ultim ;
-		json.put("res", nomsUsuaris);
+		return crearJSON(nomsUsuaris, "", "");
 
 		// res = this.partSQL.getSolicitudsPendents(idSessio);
 		/*
@@ -235,7 +177,6 @@ public class JocAPI {
 		 * System.out.println("No sa pogut afegir la partida a la BBDD."); else
 		 * System.out.println(res); }
 		 */
-		return json.toString();
 	}
 
 	public void acceptaSol(String idSessio, String usuari) {
@@ -304,6 +245,7 @@ public class JocAPI {
 	public String triaPartida(String idSessio, String usuari) {
 
 		String id = this.partSQL.getPartida(idSessio, usuari);
+		contrincant = usuari;
 
 		if (id == null)
 			return crearJSON("", "No hi ha partida disponible.", "");
@@ -353,6 +295,8 @@ public class JocAPI {
 		if (tauler == null)
 			return crearJSON("", "No s'ha trobat partida o sessio", "");
 
+		// tauler = taulellConversor(tauler);
+
 		return crearJSON(tauler, "", "");
 	}
 
@@ -379,7 +323,21 @@ public class JocAPI {
 	}
 
 	public String grabarTirada(String idSessio, String idPartida) {
-		return null;
+		// TODO: Comprovar quan s'ha guanyat la partida, perdut, o continua...
+		// Per ara SEMPRE continua
+
+		String movs = this.movTornAct.movsToString();
+		if (movs.isEmpty())
+			return crearJSON("", "No hi han moviments en aquest torn", "");
+
+		boolean guardat = this.partSQL.guardarMovimentsAnt(idPartida, movs);
+		if (!guardat)
+			return crearJSON("", "No s'han pogut guardar els moviments a la BD", "");
+
+		String taulellRes = this.movTornAct.getTaulellActual().toString();
+		this.partSQL.guardarEstatTauler(idPartida, taulellRes);
+
+		return crearJSON("continua", "", "");
 	}
 
 	// NO ES POT IMPLEMENTAR PER ARA...
@@ -388,16 +346,10 @@ public class JocAPI {
 	}
 
 	public String ferMoviment(String idSessio, String idPartida, String posIni, String posFi) {
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
 
 		String estatTauler = this.partSQL.continuarPartida(idPartida);
-		if (estatTauler == null) {
-			json.put("sErr", "No s'ha pogut carregar la partida");
-			return json.toString();
-		}
+		if (estatTauler == null)
+			return crearJSON("", "", "No s'ha pogut carregar la partida");
 
 		Taulell tauler = new Taulell(10);
 		tauler.reconstruirTaulell(estatTauler);
@@ -409,42 +361,32 @@ public class JocAPI {
 
 		Casella casIni = tauler.seleccionarCasella(xIni, yIni);
 		Casella casFi = tauler.seleccionarCasella(xFi, yFi);
+
+		boolean moviment;
+
 		try {
 
-			boolean moviment = tauler.moviment(casIni, casFi);
-			if (moviment)
-				json.put("res", "true");
-			else
-				json.put("res", "false");
-
-			// tindria que ser contrincant, no idSessio!!
-			// boolean canviTorn = this.partSQL.canviarTorn(idPartida, idSessio);
-			// if (!canviTorn) {
-			// json.put("err", "Error al fer canvi de torn, no s'ha guardat el nou estat del
-			// taulell");
-			// return json.toString();
-			// } else {
+			moviment = tauler.moviment(casIni, casFi);
 			this.partSQL.guardarEstatTauler(idPartida, tauler.toString());
-			// }
 
 		} catch (Exception e) {
-			json.put("err", e);
+			return crearJSON("", e.toString(), "");
 		}
 
-		return json.toString();
+		if (moviment)
+			return crearJSON("true", "", "");
+		else {
+			partSQL.canviarTorn(idPartida, contrincant);
+			return crearJSON("false", "", "");
+		}
+
 	}
 
 	public String ferDama(String idSessio, String idPartida, String pos) {
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
 
 		String estatTauler = this.partSQL.continuarPartida(idPartida);
-		if (estatTauler == null) {
-			json.put("err", "No s'ha pogut carregar la partida");
-			return json.toString();
-		}
+		if (estatTauler == null)
+			return crearJSON("", "No s'ha pogut carregar la partida", "");
 
 		Taulell tauler = new Taulell(10);
 		tauler.reconstruirTaulell(estatTauler);
@@ -454,28 +396,22 @@ public class JocAPI {
 
 		Casella cas = tauler.seleccionarCasella(xIni, yIni);
 		Peo p = (Peo) cas.getFitxa();
+
 		boolean damaFeta = tauler.canviDama(p.getColor(), cas);
-		if (damaFeta)
-			json.put("res", "true");
-		else
-			json.put("res", "false");
 
 		this.partSQL.guardarEstatTauler(idPartida, tauler.toString());
 
-		return json.toString();
+		if (damaFeta)
+			return crearJSON("true", "", "");
+		else
+			return crearJSON("false", "", "");
 	}
 
 	public String ferBufa(String idSessio, String idPartida, String pos) {
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
 
 		String estatTauler = this.partSQL.continuarPartida(idPartida);
-		if (estatTauler == null) {
-			json.put("err", "No s'ha pogut carregar la partida");
-			return json.toString();
-		}
+		if (estatTauler == null)
+			return crearJSON("", "No s'ha pogut carregar la partida", "");
 
 		Taulell tauler = new Taulell(10);
 		tauler.reconstruirTaulell(estatTauler);
@@ -484,12 +420,10 @@ public class JocAPI {
 		int yIni = Integer.parseInt(pos.split(";")[1]);
 
 		Casella cas = tauler.seleccionarCasella(xIni, yIni);
-		if (tauler.bufar(cas)) {
-			json.put("res", "true");
-			return json.toString();
-		}
-		json.put("res", "false");
-		return json.toString();
+		if (tauler.bufar(cas))
+			return crearJSON("true", "", "");
+		else
+			return crearJSON("false", "", "");
 	}
 
 	public String acceptaTaules(String idSessio, String idPartida) {
@@ -502,16 +436,9 @@ public class JocAPI {
 
 	public String movsPessa(String idSessio, String idPartida, String Pos) {
 
-		JSONObject json = new JSONObject();
-		json.put("res", "");
-		json.put("err", "");
-		json.put("sErr", "");
-
 		String estatTauler = this.partSQL.continuarPartida(idPartida);
-		if (estatTauler == null) {
-			json.put("err", "No s'ha pogut carregar la partida");
-			return json.toString();
-		}
+		if (estatTauler == null)
+			return crearJSON("", "No s'ha pogut carregar la partida", "");
 
 		Taulell tauler = new Taulell(10);
 		tauler.reconstruirTaulell(estatTauler);
@@ -520,17 +447,20 @@ public class JocAPI {
 		int yIni = Integer.parseInt(Pos.split(";")[1]);
 
 		Casella cas = tauler.seleccionarCasella(xIni, yIni);
-		if (!cas.getTeFitxa()) {
-			json.put("err", "No hi ha fitxa a la posicio donada");
-			return json.toString();
-		}
+		if (!cas.getTeFitxa())
+			return crearJSON("", "No hi ha fitxa a la posicio donada", "");
+
 		List<int[]> moviments = tauler.veurePossiblesMoviments(cas);
+
+		if (moviments.isEmpty())
+			return crearJSON("", "You can't move", "");
+
 		String cadena = "";
-		for (int i = 0; i < moviments.size() - 1; i++)
-			cadena = moviments.get(i)[0] + ";" + moviments.get(i)[1] + "-";
-		cadena += moviments.get(moviments.size() - 1)[0] + ";" + moviments.get(moviments.size() - 1)[0];
-		json.put("res", cadena);
-		return json.toString();
+		for (int i[] : moviments) {
+			cadena += i[0] + ";" + i[1] + "-";
+		}
+
+		return crearJSON(cadena, "", "");
 	}
 
 	private String crearJSON(String res, String err, String sErr) {
@@ -540,5 +470,18 @@ public class JocAPI {
 		json.put("err", err);
 		json.put("sErr", sErr);
 		return json.toString();
+	}
+
+	// Converteix un string d'un taulell de la capa domini o aplicacio,
+	// Retornant un string de taulell com especifica l'API
+	private String taulellConversor(String taulell) {
+		taulell = taulell.replace('x', ' ');
+		taulell = taulell.replaceAll(",", "");
+		taulell = taulell.replace("\n", ";");
+		taulell = taulell.replace('0', '♗');
+		taulell = taulell.replace('1', '♝');
+		taulell = taulell.replace('D', '♕');
+		taulell = taulell.replace('d', '♛');
+		return taulell;
 	}
 }

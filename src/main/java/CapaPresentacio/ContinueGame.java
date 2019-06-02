@@ -39,6 +39,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 	JList<String> listPartides;
 	JScrollPane scrollPanel;
 	JLabel icon;
+	Boolean torn;
 
 	public ContinueGame(BaseInterficie base, JocAPI API) {
 		interficieBase = base;
@@ -308,7 +309,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 		} else {
 			AdaptarBaseInterfaceNewJoc();
 			interficieBase.centerPanel.setVisible(false);
-			Partida partida = new Partida(interficieBase);
+			Partida partida = new Partida(interficieBase, contrincant, torn);
 			interficieBase.centerPanel = partida.partidaCreate(Mss);
 			partida.setVisible(true);
 			interficieBase.getContentPane().add(interficieBase.centerPanel, BorderLayout.CENTER);
@@ -335,6 +336,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 	public void YourTurn() {
 		String APIplayers = api.getPartidesTorn(interficieBase.getPlayerID());
 		addPlayers(APIplayers);
+		torn = true;
 
 		this.bYourTurn.setBackground(new Color(237, 215, 178));
 		this.bYourTurn.setForeground(Color.BLACK);
@@ -352,6 +354,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 	public void RivalTurn() {
 		String APIplayers = api.getPartidesNoTorn(interficieBase.getPlayerID());
 		addPlayers(APIplayers);
+		torn = false;
 
 		this.bRivalTurn.setBackground(new Color(237, 215, 178));
 		this.bRivalTurn.setForeground(Color.BLACK);

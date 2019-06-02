@@ -217,52 +217,53 @@ public class PartidesSQLOracle {
 				return false;
 			return conn.crearInsert(sql);
 		} catch (SQLException e) {
-			System.out.println("Error sql acceptarSolicitud: "+e);
+			System.out.println("Error sql acceptarSolicitud: " + e);
 			return false;
 		}
 	}
-	
+
 	public boolean rebutjaSolicitud(String jugador, String contrincant) {
-		
+
 		String sql;
 		ResultSet rs;
 		String id = "";
-		sql = "SELECT id FROM partides WHERE estat = 0 and jugador = '"+contrincant+"'"
-				+ " and contrincant = '"+jugador+"'";		
+		sql = "SELECT id FROM partides WHERE estat = 0 and (jugador = '" + contrincant + "'" + " and contrincant = '"
+				+ jugador + "' or jugador = '"+jugador+"' and contrincant = '"+contrincant+"')";
 		try {
 			rs = conn.ferSelect(sql);
 			if (rs.next())
 				id = rs.getString("id");
-			
-			if (id.isEmpty())
-			{
+
+			if (id.isEmpty()) {
 				System.out.println("Error no hay partidas con ese id.");
 				return false;
 			}
-				
+
 		} catch (SQLException e) {
-			System.out.println("Error SQL rebutja: "+e);
+			System.out.println("Error SQL rebutja: " + e);
 			return false;
 		}
 		
-		String sql2 = "DELETE * FROM partides WHERE id = '"+id+"'";
-		
+		System.out.println(id);
+		String sql2 = "DELETE FROM partides WHERE id = " + id + "";
+
 		try {
 			rs = conn.ferSelect(sql);
 			if (rs.next())
 				id = rs.getString("id");
-			
-			if (id.isEmpty())
-			{
+
+			if (id.isEmpty()) {
 				System.out.println("Error no hay partidas con ese id.");
 				return false;
 			}
-				
+			
+			conn.ferDelete(sql2);
+
 		} catch (SQLException e) {
-			System.out.println("Error SQL rebutja: "+e);
+			System.out.println("Error SQL rebutja: " + e);
 			return false;
 		}
-		
+
 		return false;
 	}
 
@@ -279,19 +280,18 @@ public class PartidesSQLOracle {
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro = "SELECT jugador, contrincant FROM partides WHERE (jugador = '"+jugador+"' "
-				+ "or contrincant = '"+jugador+"') and torn = '"+jugador+"' and estat between 1 AND 2";
+		sqlcompro = "SELECT jugador, contrincant FROM partides WHERE (jugador = '" + jugador + "' "
+				+ "or contrincant = '" + jugador + "') and torn = '" + jugador + "' and estat between 1 AND 2";
 		String contrincant = "";
 		String usuari = "";
 		try {
 			rs = conn.ferSelect(sqlcompro);
 			while (rs.next()) {
-				usuari =  rs.getString("JUGADOR");
+				usuari = rs.getString("JUGADOR");
 				contrincant = rs.getString("CONTRINCANT");
 				if (contrincant.equals(jugador)) {
 					res.add(usuari);
-				}
-				else
+				} else
 					res.add(contrincant);
 			}
 		} catch (SQLException e) {
@@ -316,19 +316,18 @@ public class PartidesSQLOracle {
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro = "SELECT jugador, contrincant FROM partides WHERE (jugador = '"+jugador+"' "
-		+ "or contrincant = '"+jugador+"') and torn != '"+jugador+"' and estat between 1 AND 2";
+		sqlcompro = "SELECT jugador, contrincant FROM partides WHERE (jugador = '" + jugador + "' "
+				+ "or contrincant = '" + jugador + "') and torn != '" + jugador + "' and estat between 1 AND 2";
 		String contrincant = "";
 		String usuari = "";
 		try {
 			rs = conn.ferSelect(sqlcompro);
 			while (rs.next()) {
-				usuari =  rs.getString("JUGADOR");
+				usuari = rs.getString("JUGADOR");
 				contrincant = rs.getString("CONTRINCANT");
 				if (contrincant.equals(jugador)) {
 					res.add(usuari);
-				}
-				else
+				} else
 					res.add(contrincant);
 			}
 		} catch (SQLException e) {
@@ -387,9 +386,9 @@ public class PartidesSQLOracle {
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro = "SELECT id FROM PARTIDES WHERE"
-				+ " jugador = '"+jugador+"' and contrincant ='"+contrincant+"' or "
-				+ "jugador = '"+contrincant+"' and contrincant ='"+jugador+"' and estat between 1 and 2";
+		sqlcompro = "SELECT id FROM PARTIDES WHERE" + " jugador = '" + jugador + "' and contrincant ='" + contrincant
+				+ "' or " + "jugador = '" + contrincant + "' and contrincant ='" + jugador
+				+ "' and estat between 1 and 2";
 
 		try {
 			rs = conn.ferSelect(sqlcompro);
@@ -399,7 +398,7 @@ public class PartidesSQLOracle {
 			System.out.println("Error sql getPartida: " + e);
 			return null;
 		}
-		
+
 		try {
 			rs = conn.ferSelect(sqlcompro);
 			if (rs.next())
@@ -408,7 +407,7 @@ public class PartidesSQLOracle {
 			System.out.println("Error sql getPartida: " + e);
 			return null;
 		}
-		
+
 		return "";
 	}
 
@@ -429,9 +428,9 @@ public class PartidesSQLOracle {
 
 			if (rs.next())
 				if (rs.getString("jugador").equals(idSessio))
-					return "blanc";
+					return "Red";
 				else if (rs.getString("contrincant").equals(idSessio))
-					return "negre";
+					return "Black";
 
 		} catch (SQLException e) {
 			System.out.println("Error SQL getColor: " + e);
@@ -509,22 +508,92 @@ public class PartidesSQLOracle {
 		if (!this.actualitzarTaulell(idPartida, estatNou))
 			System.out.println("No s'ha pogut guardar el nou estat.");
 	}
-	
+
 	/**
 	 * Guarda els moviments anteriors a la BD
+	 * 
 	 * @param idPartida
 	 * @return true si s'ha guardat correctament
 	 */
 	public boolean guardarMovimentsAnt(String idPartida, String movsAnt) {
+		
+		String sqldel =  "DELETE FROM MOVIMENTS WHERE partides_id = "+idPartida+"";
+		String sqlinsert;
+		try {
+			this.conn.ferDelete(sqldel);
+		} catch (SQLException e) {
+			System.out.println("0 dades borrades.");
+		}
+		
+		String[] mov = movsAnt.split("/");
+		String[] sep;
+		String tipus,inix,iniy,fix,fiy;
+		if (mov.length == 0) {
+			System.out.println("No hi han moviments per guardar. SPLIT "+mov.length);
+			return false;
+		}
+		
+		for (String m : mov) {
+			sep = m.split(";");
+			if (sep.length == 0 || sep.length < 5) {
+				System.out.println("No hi han moviments per guardar. SPLIT sep"+sep.length);
+				return false;
+			}
+			tipus = sep[0];
+			inix =  sep[1];
+			iniy = sep[2];
+			fix = sep[3];
+			fiy = sep[4];
+			sqlinsert =  "INSERT INTO MOVIMENTS (filaorigen,columnaorigen,filadesti,columnadesti,partides_id,tipus) "
+					+ "VALUES ("+inix+","+iniy+","+fix+","+fiy+","+idPartida+",'"+tipus+"'";
+			
+			try {
+				boolean rs = this.conn.crearInsert(sqlinsert);
+				return rs;
+			} catch (SQLException e) {
+				System.out.println("Error SQL al fer insert gaurdarMovimentsAnt: "+e);
+				return false;
+			}
+		}
+		
+		
 		return false;
 	}
-	
+
 	/**
 	 * Retorna els moviments anteriors
+	 * 
 	 * @param idPartida
 	 */
 	public String getMovimentsAnt(String idPartida) {
-		return null;
+		
+		String sql = "SELECT filaorigen,columnaorigen,filadesti,columnadesti,tipus "
+				+ "FROM MOVIMENTS WHERE partides_id = "+idPartida+"";
+		
+		ResultSet rs;
+		String res;
+		try {
+			rs = this.conn.ferSelect(sql);
+			res = "";
+			while (rs.next()) {
+				res += rs.getString("tipus")+";";
+				res += rs.getString("filaorigen")+";";
+				res += rs.getString("columnaorigen")+";";
+				res += rs.getString("filadesti")+";";
+				res += rs.getString("columnadesti")+";";
+				res += "/";
+			}
+			
+			return res;
+			
+		} catch (SQLException e) {
+			
+			System.out.println("Error SQL getMovimentsAnt: "+e);
+			return null;
+		} catch (Exception e) {
+			System.out.println("Error getMovimentsAnt: "+e);
+			return null;
+		}
 	}
 
 	/**
