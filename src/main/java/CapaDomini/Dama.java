@@ -1,7 +1,7 @@
 package CapaDomini;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 
 public class Dama extends Fitxa{
 	
@@ -18,7 +18,7 @@ public class Dama extends Fitxa{
 		
 		if (x < 0 || x > 9 || y < 0 || y > 9) throw new IllegalArgumentException("Position out of bounds");
 		
-			Vector <int[]> llista = new Vector<int[]>();
+			LinkedList <int[]> llista = new LinkedList<int[]>();
 			//Go through the matrix to get all positions
 			List<int[]> dig1 = this.calcularDiagonal(x, y, matCas, 0);
 			List<int[]> dig2 = this.calcularDiagonal(x, y, matCas, 1);
@@ -30,6 +30,7 @@ public class Dama extends Fitxa{
 		if(dig3 != null) for(int[] mov : dig3) llista.add(mov);
 		if(dig4 != null) for(int[] mov : dig4) llista.add(mov);
 		
+		for (int[] mov : llista) System.out.println(mov[0] + mov[1]);
 		return llista;
 	}
 	//Retorna una llista que va omplint en diagonal fins que troba una fitxa
@@ -38,7 +39,7 @@ public class Dama extends Fitxa{
 		//dir 1 = DOWNRIGHT
 		//dir 2 = DOWNLEFT
 		//dir 3 = UPLEFT
-		Vector<int[]> llista = new Vector<int[]>();
+		LinkedList<int[]> llista = new LinkedList<int[]>();
 		int[] pos = {x,y};
 		
 		if(dir == 0) {
@@ -59,14 +60,17 @@ public class Dama extends Fitxa{
 						System.out.println("adeu" +pos[0]+pos[1]);
 						if(!matCas[pos[0]][pos[1]].getTeFitxa()) {
 							System.out.println(pos[0]+" "+pos[1]);
-							llista.add(pos);
+							int[] j = {pos[0], pos[1]};
+							llista.add(j);
 							return llista;
-						}	
+						}
+						else return llista;
 					}
 					else return llista;
 				}
 				System.out.println("hola" +pos[0]+pos[1]);
-				llista.add(pos);
+				int[] i = {pos[0], pos[1]}; 
+				llista.add(i);
 				pos[0]--;
 				pos[1]++;
 			}
@@ -80,19 +84,25 @@ public class Dama extends Fitxa{
 			while(!(pos[0] < 0 || pos[0] > 9 || pos[1] < 0 || pos[1] > 9)) {
 				//if position is full
 				if(matCas[pos[0]][pos[1]].getTeFitxa()) {
+					System.out.println("passa te fitxa");
 					//if it has different color
 					if(matCas[pos[0]][pos[1]].getFitxa().iColor != matCas[x][y].getFitxa().iColor) {
+						System.out.println("passa color");
 						pos[0]++;
 						pos[1]++;
+						System.out.println("adeu" +pos[0]+pos[1]);
 						if(!matCas[pos[0]][pos[1]].getTeFitxa()) {
-							llista.add(pos);
-							break;
+							int[] j = {pos[0], pos[1]};
+							llista.add(j);
+							return llista;
 						}
-						else break;	
+						else return llista;	
 					}
-					
+					else return llista;
 				}
-				llista.add(pos);
+				int[] i = {pos[0], pos[1]}; 
+				llista.add(i);
+				System.out.println("hola" +pos[0]+pos[1]);
 				pos[0]++;
 				pos[1]++;
 			}
@@ -106,19 +116,25 @@ public class Dama extends Fitxa{
 			while(!(pos[0] < 0 || pos[0] > 9 || pos[1] < 0 || pos[1] > 9)) {
 				//if position is full
 				if(matCas[pos[0]][pos[1]].getTeFitxa()) {
+					System.out.println("passa te fitxa");
 					//if it has different color
 					if(matCas[pos[0]][pos[1]].getFitxa().iColor != matCas[x][y].getFitxa().iColor) {
+						System.out.println("passa color");
 						pos[0]++;
 						pos[1]--;
+						System.out.println("adeu" +pos[0]+pos[1]);
 						if(!matCas[pos[0]][pos[1]].getTeFitxa()) {
-							llista.add(pos);
-							break;
+							int[] j = {pos[0], pos[1]};
+							llista.add(j);
+							return llista;
 						}
-						else break;	
+						else return llista;	
 					}
-					
+					else return llista;
 				}
-				llista.add(pos);
+				int[] i = {pos[0], pos[1]}; 
+				llista.add(i);
+				System.out.println("hola" +pos[0]+pos[1]);
 				pos[0]++;
 				pos[1]--;
 			}
@@ -132,19 +148,24 @@ public class Dama extends Fitxa{
 			while(!(pos[0] < 0 || pos[0] > 9 || pos[1] < 0 || pos[1] > 9)) {
 				//if position is full
 				if(matCas[pos[0]][pos[1]].getTeFitxa()) {
+					System.out.println("passa te fitxa");
 					//if it has different color
 					if(matCas[pos[0]][pos[1]].getFitxa().iColor != matCas[x][y].getFitxa().iColor) {
+						System.out.println("passa color");
 						pos[0]--;
 						pos[1]--;
+						System.out.println("adeu" +pos[0]+pos[1]);
 						if(!matCas[pos[0]][pos[1]].getTeFitxa()) {
 							llista.add(pos);
-							break;
+							return llista;
 						}
-						else break;	
+						else return llista;	
 					}
-					
+					else return llista;
 				}
-				llista.add(pos);
+				int[] i = {pos[0], pos[1]}; 
+				llista.add(i);
+				System.out.println("hola" +pos[0]+pos[1]);
 				pos[0]--;
 				pos[1]--;
 			}

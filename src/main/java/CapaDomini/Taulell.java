@@ -68,7 +68,7 @@ public class Taulell {
 		List<int[]> moviments = this.veurePossiblesMoviments(casOrigen);
 		// Find out if the destination position is within possible movements
 		for (int i = 0; i < moviments.size(); i++) {
-			System.out.println(moviments.get(i));
+			System.out.println(moviments.get(i)[0] + moviments.get(i)[1]);
 			if (moviments.get(i)[0] == casDesti.getX() && moviments.get(i)[1] == casDesti.getY())
 				trobat = true;
 		}
