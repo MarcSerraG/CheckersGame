@@ -323,11 +323,10 @@ public class JocAPI {
 	}
 
 	public String grabarTirada(String idSessio, String idPartida) {
-		// TODO: Comprovar quan s'ha guanyat la partida, perdut, o continua...
-		// Per ara SEMPRE continua
+		// TODO: Comprovar / implementar taules...
 
 		String movs = this.movTornAct.movsToString();
-		if (movs.isEmpty())
+		if (movs == null || movs.isEmpty())
 			return crearJSON("", "No hi han moviments en aquest torn", "");
 
 		boolean guardat = this.partSQL.guardarMovimentsAnt(idPartida, movs);
@@ -336,8 +335,18 @@ public class JocAPI {
 
 		String taulellRes = this.movTornAct.getTaulellActual().toString();
 		this.partSQL.guardarEstatTauler(idPartida, taulellRes);
-
-		return crearJSON("continua", "", "");
+		
+		String resultat = this.movTornAct.partidaAcabada();
+		String idColor = this.partSQL.getColor(idSessio, idPartida);
+		
+		if (resultat.equalsIgnoreCase(idColor))
+			return crearJSON("guanya", "", "");
+		else if (resultat.equalsIgnoreCase("taules"))
+			return crearJSON("taules", "", "");
+		else if (resultat.equalsIgnoreCase("continua"))
+			return crearJSON("continua", "", "");
+		else
+			return crearJSON("perd", "", "");
 	}
 
 	// NO ES POT IMPLEMENTAR PER ARA...
