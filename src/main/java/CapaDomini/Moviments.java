@@ -25,14 +25,21 @@ public class Moviments {
 	private boolean potBufar;
 	
 	public Moviments(String movsAnt, String taulActual, String taulAnterior) {
+		
 		this.listMovsAnt = new ArrayList<String>();
-		for (String mov : movsAnt.split("/")) {
-			this.listMovsAnt.add(mov);
+		
+		if (!movsAnt.isEmpty()) {
+			for (String mov : movsAnt.split("/")) {
+				this.listMovsAnt.add(mov);
+			}
 		}
 		
 		this.listMovs = new ArrayList<String>();
 		this.taulActual = new Taulell(taulActual);
-		this.taulAnt = new Taulell(taulAnterior);
+		if (taulAnterior.isEmpty())
+			this.taulAnt = new Taulell(taulActual);
+		else
+			this.taulAnt = new Taulell(taulAnterior);
 		this.tornAcabat = false;
 		if (taulAnterior.isEmpty())
 			this.potBufar = false;

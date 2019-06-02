@@ -25,8 +25,8 @@ public class JocAPI {
 	private JSONObject json;
 	private String contrincant;
 
-	public JocAPI(String user, String password) throws Exception {
-		connSQL = new ConnectionSQLOracle(user, password);
+	public JocAPI() throws Exception {
+		connSQL = new ConnectionSQLOracle();
 		userSQL = new UsuariSQLOracle(connSQL);
 		partSQL = new PartidesSQLOracle(connSQL);
 		statSQL = new EstadistiquesSQLOracle(connSQL);

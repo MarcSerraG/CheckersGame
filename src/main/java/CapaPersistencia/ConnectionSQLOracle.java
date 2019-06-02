@@ -16,7 +16,7 @@ public class ConnectionSQLOracle {
 	public static String SQLSELECT = "SELECT ";
 	public static String SQLUPDATE = "UPDATE";
 
-	public ConnectionSQLOracle(String usuari, String contrasena) throws Exception {
+	public ConnectionSQLOracle() throws Exception {
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 		ConfigurationSQLOracle propietes = ConfigurationSQLOracle.getInstancia();
 		String server = propietes.getPropietat("Server.server");
