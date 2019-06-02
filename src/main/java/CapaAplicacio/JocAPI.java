@@ -326,7 +326,7 @@ public class JocAPI {
 		// TODO: Comprovar / implementar taules...
 
 		String movs = this.movTornAct.movsToString();
-		if (movs.isEmpty())
+		if (movs == null || movs.isEmpty())
 			return crearJSON("", "No hi han moviments en aquest torn", "");
 
 		boolean guardat = this.partSQL.guardarMovimentsAnt(idPartida, movs);
