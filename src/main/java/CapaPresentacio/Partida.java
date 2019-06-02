@@ -408,6 +408,6 @@ public class Partida extends JPanel implements ActionListener {
 	}
 
 	private void refresh() {
-
+		System.out.println("Refresh!");
 	}
 }
