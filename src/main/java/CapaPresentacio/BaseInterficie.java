@@ -305,13 +305,6 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		getContentPane().repaint();
 		validate();
 
-		/*
-		 * 
-		 * Partida partida = new Partida(this); centerPanel = partida.partidaCreate();
-		 * partida.setVisible(true); getContentPane().add(centerPanel,
-		 * BorderLayout.CENTER); getContentPane().repaint(); validate();
-		 */
-
 	}
 
 	private void actionRequest() {

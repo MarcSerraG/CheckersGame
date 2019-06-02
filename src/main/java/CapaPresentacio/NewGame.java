@@ -16,6 +16,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
@@ -211,6 +212,9 @@ public class NewGame extends JPanel implements ActionListener, ListSelectionList
 
 	private void SendRequest() {
 		api.enviaSol(interficieBase.getPlayerID(), Contrincant);
+		JOptionPane.showMessageDialog(null, "Request send to: " + Contrincant);
+		addPlayers();
+		bPlayGame.setText("Play");
 	}
 
 	public void valueChanged(ListSelectionEvent e) {
