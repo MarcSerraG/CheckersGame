@@ -389,12 +389,17 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 	public String TornPartidaEnCurs() {
 		String APIplayers = api.getPartidesTorn(interficieBase.getPlayerID());
+		JSONObject json = new JSONObject(APIplayers);
+
+		APIplayers = json.getString("res");
 
 		String usuaris[] = APIplayers.split(";");
 
-		for (String s : usuaris)
+		for (String s : usuaris) {
+			System.out.println(s);
 			if (s.equals(contrincant))
 				return interficieBase.getPlayerID();
+		}
 
 		return "";
 	}

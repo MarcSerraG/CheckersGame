@@ -377,7 +377,7 @@ public class Partida extends JPanel implements ActionListener {
 						mss = json.getString("res");
 						sErr = json.getString("sErr");
 
-						if (!err.equals(""))
+						if (err.equals(""))
 							lMessage.setText(mss);
 						else
 							lMessage.setText(err);
