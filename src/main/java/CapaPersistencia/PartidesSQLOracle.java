@@ -566,7 +566,34 @@ public class PartidesSQLOracle {
 	 * @param idPartida
 	 */
 	public String getMovimentsAnt(String idPartida) {
-		return null;
+		
+		String sql = "SELECT filaorigen,columnaorigen,filadesti,columnadesti,tipus "
+				+ "FROM MOVIMENTS WHERE partides_id = "+idPartida+"";
+		
+		ResultSet rs;
+		String res;
+		try {
+			rs = this.conn.ferSelect(sql);
+			res = "";
+			while (rs.next()) {
+				res += rs.getString("tipus")+";";
+				res += rs.getString("filaorigen")+";";
+				res += rs.getString("columnaorigen")+";";
+				res += rs.getString("filadesti")+";";
+				res += rs.getString("columnadesti")+";";
+				res += "/";
+			}
+			
+			return res;
+			
+		} catch (SQLException e) {
+			
+			System.out.println("Error SQL getMovimentsAnt: "+e);
+			return null;
+		} catch (Exception e) {
+			System.out.println("Error getMovimentsAnt: "+e);
+			return null;
+		}
 	}
 
 	/**
