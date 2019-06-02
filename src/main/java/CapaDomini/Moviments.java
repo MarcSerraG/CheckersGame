@@ -2,6 +2,7 @@ package CapaDomini;
 
 import java.util.ArrayList;
 import java.util.List;
+import commons.lang
 
 
 /*
@@ -120,5 +121,40 @@ public class Moviments {
 		}
 		movs = movs.substring(0, movs.length());
 		return movs;
+	}
+	
+	// Retorna "continua" si no s'ha acabat la partida
+	// Altrament retorna qui ha guanyat
+	public String partidaAcabada() {
+		String res = "";
+		String taulellAct = this.taulActual.toString();
+		
+		int peonsBlancs = countOccurrences(taulellAct, '0');
+		int peonsNegres = countOccurrences(taulellAct, '1');
+		int damesBlancs = countOccurrences(taulellAct, 'D');
+		int damesNegres = countOccurrences(taulellAct, 'd');
+		
+		if (peonsBlancs == 0 && damesBlancs == 0)
+			res = "Red";
+		else if (peonsNegres == 0 && damesNegres == 0)
+			res = "Black";
+		else
+			res = "Continua";
+		
+		return res;
+	}
+	
+	// Compta les ocurrencies d'un char en un string
+	public static int countOccurrences(String comptat, char comptar)
+	{
+	    int count = 0;
+	    for (int i=0; i < comptat.length(); i++)
+	    {
+	        if (comptat.charAt(i) == comptar)
+	        {
+	             count++;
+	        }
+	    }
+	    return count;
 	}
 }
