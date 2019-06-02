@@ -51,7 +51,7 @@ public class Sessio {
 		this.iNumPendents = iPendents;
 		this.boolConnectat = true;
 		this.setPartides = new HashSet<Partida>(setPartides);
-		this.connSQL = new ConnectionSQLOracle(sqlUser, sqlPassword);
+		this.connSQL = new ConnectionSQLOracle();
 		this.userSQL = new UsuariSQLOracle(connSQL);
 		this.partSQL = new PartidesSQLOracle(connSQL);
 

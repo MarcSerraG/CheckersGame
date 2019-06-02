@@ -27,7 +27,7 @@ public class Partida extends JPanel implements ActionListener {
 
 	BaseInterficie interficieBase;
 	JPanel panelTaulell, panelNord, panelSud, panelEst, panelOest, panelCentral;
-	JButton bTaules, bSeleccioInicial, bBufar, bRefresh;
+	JButton bTaules, bSeleccioInicial, bBufar;
 	JLabel lMessage, lPlayerBlancas, lPlayerNegras; // (Blancas=0, Negras = 1)
 	Map<JButton, String> taulell2;
 	String posInicial = "", posFinal = "", idPartida, NomContrincant, ContrincantColor, JugadorColor;
@@ -297,13 +297,10 @@ public class Partida extends JPanel implements ActionListener {
 
 		bTaules = createButton(size, Color.GRAY, "Fer Taules");
 		bBufar = createButton(size, Color.GRAY, "Bufar");
-		bRefresh = createButton(size, Color.GRAY, "Refresh");
 
 		panelCSud.add(bTaules);
 		panelCSud.add(Box.createRigidArea(new Dimension(130, 0)), BorderLayout.WEST);
 		panelCSud.add(bBufar);
-		panelCSud.add(Box.createRigidArea(new Dimension(130, 0)), BorderLayout.WEST);
-		panelCSud.add(bRefresh);
 
 		panelSud.add(Box.createRigidArea(new Dimension(280, 100)), BorderLayout.WEST);
 		panelSud.add(panelCSud, BorderLayout.CENTER);
@@ -317,9 +314,8 @@ public class Partida extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == bRefresh)
-			refresh();
-		else if (e.getSource() != bTaules && e.getSource() != bBufar)
+
+		if (e.getSource() != bTaules && e.getSource() != bBufar)
 			MourePessa((JButton) e.getSource(), taulell2.get(e.getSource()));
 
 	}
@@ -424,7 +420,4 @@ public class Partida extends JPanel implements ActionListener {
 		}
 	}
 
-	private void refresh() {
-		System.out.println("Refresh!");
-	}
 }

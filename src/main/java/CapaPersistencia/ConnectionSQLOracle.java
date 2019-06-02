@@ -6,8 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import CapaDomini.Taulell;
-
 public class ConnectionSQLOracle {
 
 	private Connection conn;
@@ -29,7 +27,7 @@ public class ConnectionSQLOracle {
 	public void tancaConeccio() throws SQLException {
 		conn.close();
 	}
-	
+
 	/**
 	 * 
 	 * @param sql
@@ -42,7 +40,7 @@ public class ConnectionSQLOracle {
 			st = conn.createStatement();
 			st.execute(sql);
 		} catch (SQLException e) {
-			System.out.println("Error en Select de "+sql+" tipus de error "+e);
+			System.out.println("Error en Select de " + sql + " tipus de error " + e);
 		}
 	}
 
@@ -67,7 +65,7 @@ public class ConnectionSQLOracle {
 			rs = st.executeQuery(sql);
 			return rs;
 		} catch (SQLException e) {
-			System.out.println("Error en Select de "+sql+" tipus de error "+e);
+			System.out.println("Error en Select de " + sql + " tipus de error " + e);
 			return null;
 		}
 	}
@@ -88,34 +86,34 @@ public class ConnectionSQLOracle {
 			st.executeUpdate(sql);
 			return true;
 		} catch (SQLException e) {
-			System.out.println("Error en Select de "+sql+" tipus de error "+e);
+			System.out.println("Error en Select de " + sql + " tipus de error " + e);
 			return false;
 		}
 	}
-	
+
 	public void ferCommit() throws SQLException {
 		conn.commit();
 	}
-	
+
 	public void setAutocommit(boolean opt) throws SQLException {
 		conn.setAutoCommit(opt);
 	}
-	
+
 	public static void main(String[] args) {
 		// Sa dimportar odbc.jar
 		try {
-			
-			ConnectionSQLOracle cn =  new ConnectionSQLOracle("g3geilab1", "g3geilab1");
-			UsuariSQLOracle usu =  new UsuariSQLOracle(cn);
-			//usu.insertUsuari("Marc", "1234", "msg@gmail.com","0");
-			//System.out.println(usu.getConnectat("Marc"));
-			//System.out.println(tb.toString());
+
+			ConnectionSQLOracle cn = new ConnectionSQLOracle();
+			UsuariSQLOracle usu = new UsuariSQLOracle(cn);
+			// usu.insertUsuari("Marc", "1234", "msg@gmail.com","0");
+			// System.out.println(usu.getConnectat("Marc"));
+			// System.out.println(tb.toString());
 			PartidesSQLOracle pat = new PartidesSQLOracle(cn);
 			pat.rebutjaSolicitud("Marc", "Prova2");
-			//System.out.println(id);
-			//System.out.println(pat.getTaullelnou().toString());
-			
-			} catch (Exception e) {
+			// System.out.println(id);
+			// System.out.println(pat.getTaullelnou().toString());
+
+		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}

@@ -47,7 +47,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		MenuBar();
 
 		try {
-			api = new JocAPI("g3geilab1", "g3geilab1");// usuari i contrasenya del server
+			api = new JocAPI();// usuari i contrasenya del server
 			// carrega la pagina de login la qual es situa en el centre
 			log = CenterLogin();
 			log.labelMessage.setText("Server Connection: Correct");
@@ -183,7 +183,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 			menu.add(bStatistics);
 			menu.add(Box.createRigidArea(new Dimension(0, 15)));
 			menu.add(bRefresh);
-			menu.add(Box.createRigidArea(new Dimension(0, 160))); // 190 sense brefresh
+			menu.add(Box.createRigidArea(new Dimension(0, 150))); // 190 sense brefresh
 			menu.add(bLogOut);
 			menu.add(Box.createRigidArea(new Dimension(0, 50)));
 			menu.add(versio);
