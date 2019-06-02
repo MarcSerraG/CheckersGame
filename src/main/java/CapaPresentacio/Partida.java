@@ -341,7 +341,7 @@ public class Partida extends JPanel implements ActionListener {
 						}
 
 					} else {
-						lMessage.setText(err);
+						lMessage.setText(err.split(":")[1]);
 						posInicial = "";
 						posFinal = "";
 					}
@@ -364,14 +364,17 @@ public class Partida extends JPanel implements ActionListener {
 		String mss = json.getString("res");
 		String sErr = json.getString("sErr");
 
-		System.out.println(mss);
+		if (!err.equals(""))
+			lMessage.setText(err);
+		else {
 
-		String[] posicions = mss.split("-");
+			String[] posicions = mss.split("-");
 
-		for (String posicio : posicions) {
-			for (Map.Entry<JButton, String> entry : taulell2.entrySet()) {
-				if (entry.getValue().equals(posicio)) {
-					entry.getKey().setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+			for (String posicio : posicions) {
+				for (Map.Entry<JButton, String> entry : taulell2.entrySet()) {
+					if (entry.getValue().equals(posicio)) {
+						entry.getKey().setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+					}
 				}
 			}
 		}

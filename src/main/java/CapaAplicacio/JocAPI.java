@@ -446,6 +446,9 @@ public class JocAPI {
 
 		List<int[]> moviments = tauler.veurePossiblesMoviments(cas);
 
+		if (moviments.isEmpty())
+			return crearJSON("", "You can't move", "");
+
 		String cadena = "";
 		for (int i[] : moviments) {
 			cadena += i[0] + ";" + i[1] + "-";
