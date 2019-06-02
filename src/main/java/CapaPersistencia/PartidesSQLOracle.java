@@ -453,12 +453,11 @@ public class PartidesSQLOracle {
 	 */
 	public String getTaulerAnt(String idSessio, String idPartida) {
 		String res = null;
-		String sql = null;
+		String sql2;;
 		ResultSet rs = null;
-		sql = ConnectionSQLOracle.SQLSELECT + "santerio FROM partides where id = " + idPartida;
+		sql2 = "SELECT santerio FROM partides WHERE id ="+idPartida;
 		try {
-			rs = conn.ferSelect(sql);
-
+			rs = conn.ferSelect(sql2);
 			if (rs.next())
 				res = rs.getString("santerio");
 
