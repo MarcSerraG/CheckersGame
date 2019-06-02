@@ -23,6 +23,7 @@ public class JocAPI {
 	private EstadistiquesSQLOracle statSQL;
 	private Moviments movTornAct;
 	private JSONObject json;
+	private String contrincant;
 
 	public JocAPI(String user, String password) throws Exception {
 		connSQL = new ConnectionSQLOracle(user, password);
@@ -31,6 +32,7 @@ public class JocAPI {
 		statSQL = new EstadistiquesSQLOracle(connSQL);
 		json = new JSONObject();
 		movTornAct = null;
+		contrincant = "";
 	}
 
 	/**
@@ -243,6 +245,7 @@ public class JocAPI {
 	public String triaPartida(String idSessio, String usuari) {
 
 		String id = this.partSQL.getPartida(idSessio, usuari);
+		contrincant = usuari;
 
 		if (id == null)
 			return crearJSON("", "No hi ha partida disponible.", "");
@@ -372,8 +375,11 @@ public class JocAPI {
 
 		if (moviment)
 			return crearJSON("true", "", "");
-		else
+		else {
+			partSQL.canviarTorn(idPartida, contrincant);
 			return crearJSON("false", "", "");
+		}
+
 	}
 
 	public String ferDama(String idSessio, String idPartida, String pos) {
