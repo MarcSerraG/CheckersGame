@@ -39,36 +39,43 @@ public class Dama extends Fitxa{
 		//dir 2 = DOWNLEFT
 		//dir 3 = UPLEFT
 		Vector<int[]> llista = new Vector<int[]>();
-		int[] pos = null;
-		switch (dir) {
+		int[] pos = {x,y};
 		
-		case 0:
+		if(dir == 0) {
+			System.out.println("entra 0");
 			//initial position
-			pos[0]= x-1; pos[1] = y+1;
+			pos[0] -= 1; pos[1] += 1;
+			System.out.println("posicio inicial 0: "+pos[0]+ pos[1]);
 			//if position is not out of bounds
 			while(!(pos[0] < 0 || pos[0] > 9 || pos[1] < 0 || pos[1] > 9)) {
 				//if position is full
 				if(matCas[pos[0]][pos[1]].getTeFitxa()) {
+					System.out.println("passa te fitxa");
 					//if it has different color
 					if(matCas[pos[0]][pos[1]].getFitxa().iColor != matCas[x][y].getFitxa().iColor) {
+						System.out.println("passa color");
 						pos[0]--;
 						pos[1]++;
+						System.out.println("adeu" +pos[0]+pos[1]);
 						if(!matCas[pos[0]][pos[1]].getTeFitxa()) {
+							System.out.println(pos[0]+" "+pos[1]);
 							llista.add(pos);
 							return llista;
-						}
-						else return llista;	
+						}	
 					}
-					
+					else return llista;
 				}
+				System.out.println("hola" +pos[0]+pos[1]);
 				llista.add(pos);
 				pos[0]--;
 				pos[1]++;
 			}
-			return llista;
-		case 1:
+		}
+		if(dir == 1) {
+			System.out.println("entra 1");
 			//initial position
 			pos[0]= x+1; pos[1] = y+1;
+			System.out.println("posicio inicial 1: "+pos[0]+ pos[1]);
 			//if position is not out of bounds
 			while(!(pos[0] < 0 || pos[0] > 9 || pos[1] < 0 || pos[1] > 9)) {
 				//if position is full
@@ -79,9 +86,9 @@ public class Dama extends Fitxa{
 						pos[1]++;
 						if(!matCas[pos[0]][pos[1]].getTeFitxa()) {
 							llista.add(pos);
-							return llista;
+							break;
 						}
-						else return llista;	
+						else break;	
 					}
 					
 				}
@@ -89,10 +96,12 @@ public class Dama extends Fitxa{
 				pos[0]++;
 				pos[1]++;
 			}
-			return llista;
-		case 2:
+		}
+		if(dir == 2) {
+			System.out.println("entra 2");
 			//initial position
 			pos[0]= x+1; pos[1] = y-1;
+			System.out.println("posicio inicial 2: "+pos[0]+ pos[1]);
 			//if position is not out of bounds
 			while(!(pos[0] < 0 || pos[0] > 9 || pos[1] < 0 || pos[1] > 9)) {
 				//if position is full
@@ -103,9 +112,9 @@ public class Dama extends Fitxa{
 						pos[1]--;
 						if(!matCas[pos[0]][pos[1]].getTeFitxa()) {
 							llista.add(pos);
-							return llista;
+							break;
 						}
-						else return llista;	
+						else break;	
 					}
 					
 				}
@@ -113,10 +122,12 @@ public class Dama extends Fitxa{
 				pos[0]++;
 				pos[1]--;
 			}
-			return llista;
-		case 3:
+		}
+		if(dir == 3) {
+			System.out.println("entra 3");
 			//initial position
 			pos[0]= x-1; pos[1] = y-1;
+			System.out.println("posicio inicial 3: "+pos[0]+ pos[1]);
 			//if position is not out of bounds
 			while(!(pos[0] < 0 || pos[0] > 9 || pos[1] < 0 || pos[1] > 9)) {
 				//if position is full
@@ -127,9 +138,9 @@ public class Dama extends Fitxa{
 						pos[1]--;
 						if(!matCas[pos[0]][pos[1]].getTeFitxa()) {
 							llista.add(pos);
-							return llista;
+							break;
 						}
-						else return llista;	
+						else break;	
 					}
 					
 				}
@@ -137,7 +148,7 @@ public class Dama extends Fitxa{
 				pos[0]--;
 				pos[1]--;
 			}
-			return llista;
+			
 		}
 		return llista;
 	}
