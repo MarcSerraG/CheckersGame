@@ -445,10 +445,11 @@ public class JocAPI {
 			return crearJSON("", "No hi ha fitxa a la posicio donada", "");
 
 		List<int[]> moviments = tauler.veurePossiblesMoviments(cas);
+
 		String cadena = "";
-		for (int i = 0; i < moviments.size(); i++)
-			cadena = moviments.get(i)[0] + ";" + moviments.get(i)[1] + "-";
-		cadena += moviments.get(moviments.size() - 1)[0] + ";" + moviments.get(moviments.size() - 1)[0];
+		for (int i[] : moviments) {
+			cadena += i[0] + ";" + i[1] + "-";
+		}
 
 		return crearJSON(cadena, "", "");
 	}
