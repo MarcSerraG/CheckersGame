@@ -254,10 +254,12 @@ public class JocAPI {
 
 		 String movsAnt = this.partSQL.getMovimentsAnt(id); 
 		 if (movsAnt == null)
-			 return crearJSON("", "No hi ha moviments anteriors (null)", "");
+			 movsAnt = "";
+			 // return crearJSON("", "No hi ha moviments anteriors (null)", "");
 		 String taulerAnt = this.partSQL.getTaulerAnt(idSessio, id); 
 		 if (taulerAnt == null) 
-			 return crearJSON("", "No s'ha trobat tauler anterior", "");
+			 taulerAnt = "";
+			 // return crearJSON("", "No s'ha trobat tauler anterior", "");
 
 		 String taulerAct = this.partSQL.continuarPartida(id); 
 		 if (taulerAct == null)
