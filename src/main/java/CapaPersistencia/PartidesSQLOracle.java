@@ -455,7 +455,7 @@ public class PartidesSQLOracle {
 		String res = null;
 		String sql = null;
 		ResultSet rs = null;
-		sql = ConnectionSQLOracle.SQLSELECT + "santerio partides where id = " + idPartida;
+		sql = ConnectionSQLOracle.SQLSELECT + "santerio FROM partides where id = " + idPartida;
 		try {
 			rs = conn.ferSelect(sql);
 
