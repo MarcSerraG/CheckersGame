@@ -285,25 +285,25 @@ public class Partida extends JPanel implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 
-		for (Map.Entry<JButton, String> entry : taulell2.entrySet()) {
-			if (entry.getKey() == e.getSource()) {
-				MourePessa(entry);
-				break;
-			}
-		}
+		MourePessa((JButton) e.getSource(), taulell2.get(e.getSource()));
+
+		/*
+		 * for (Map.Entry<JButton, String> entry : taulell2.entrySet()) { if
+		 * (entry.getKey() == e.getSource()) { MourePessa(entry); break; } }
+		 */
 
 	}
 
-	private void MourePessa(Map.Entry<JButton, String> pessa) { // id26
+	private void MourePessa(JButton boto, String posicioBoto) { // id26
 
 		if (posInicial.equals("")) {
-			posInicial = pessa.getValue();
-			bSeleccioInicial = pessa.getKey();
+			posInicial = posicioBoto;
+			bSeleccioInicial = boto;
 			bSeleccioInicial.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-			VeurePossiblesMoviments(pessa.getValue());
+			VeurePossiblesMoviments(posicioBoto);
 		} else {
 			if (posFinal.equals("")) {
-				posFinal = pessa.getValue();
+				posFinal = posicioBoto;
 				System.out.println(posInicial + " " + posFinal);
 				String moviment = interficieBase.getAPI().ferMoviment(interficieBase.getPlayerID(), idPartida,
 						posInicial, posFinal);
