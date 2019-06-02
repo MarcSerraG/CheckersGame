@@ -227,8 +227,8 @@ public class PartidesSQLOracle {
 		String sql;
 		ResultSet rs;
 		String id = "";
-		sql = "SELECT id FROM partides WHERE estat = 0 and jugador = '" + contrincant + "'" + " and contrincant = '"
-				+ jugador + "'";
+		sql = "SELECT id FROM partides WHERE estat = 0 and (jugador = '" + contrincant + "'" + " and contrincant = '"
+				+ jugador + "' or jugador = '"+jugador+"' and contrincant = '"+contrincant+"')";
 		try {
 			rs = conn.ferSelect(sql);
 			if (rs.next())
@@ -243,8 +243,9 @@ public class PartidesSQLOracle {
 			System.out.println("Error SQL rebutja: " + e);
 			return false;
 		}
-
-		String sql2 = "DELETE * FROM partides WHERE id = '" + id + "'";
+		
+		System.out.println(id);
+		String sql2 = "DELETE FROM partides WHERE id = " + id + "";
 
 		try {
 			rs = conn.ferSelect(sql);
@@ -255,6 +256,8 @@ public class PartidesSQLOracle {
 				System.out.println("Error no hay partidas con ese id.");
 				return false;
 			}
+			
+			conn.ferDelete(sql2);
 
 		} catch (SQLException e) {
 			System.out.println("Error SQL rebutja: " + e);
