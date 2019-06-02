@@ -251,20 +251,20 @@ public class JocAPI {
 			return crearJSON("", "No hi ha partida disponible.", "");
 
 		// return crearJSON(id, "", ""); // Remove comment only if the method fails
-
-		 String movsAnt = this.partSQL.getMovimentsAnt(id); 
-		 if (movsAnt == null)
-			 return crearJSON("", "No hi ha moviments anteriors (null)", "");
-		 String taulerAnt = this.partSQL.getTaulerAnt(idSessio, id); 
-		 if (taulerAnt == null) 
-			 return crearJSON("", "No s'ha trobat tauler anterior", "");
-
-		 String taulerAct = this.partSQL.continuarPartida(id); 
-		 if (taulerAct == null)
-			 return crearJSON("", "No s'ha trobat tauler actual", "");
-		 
-		 this.movTornAct = new Moviments(movsAnt, taulerAct, taulerAnt);
-		 return crearJSON(id, "", "");
+		/*
+		 * String movsAnt = this.partSQL.getMovimentsAnt(id); if (movsAnt == null)
+		 * return crearJSON("", "No hi ha moviments anteriors (null)", ""); String
+		 * taulerAnt = this.partSQL.getTaulerAnt(idSessio, id); if (taulerAnt == null)
+		 * return crearJSON("", "No s'ha trobat tauler anterior", "");
+		 * 
+		 * String taulerAct = this.partSQL.continuarPartida(id); if (taulerAct == null)
+		 * return crearJSON("", "No s'ha trobat tauler actual", "");
+		 * 
+		 * 
+		 * this.movTornAct = new Moviments(movsAnt, taulerAct, taulerAnt);
+		 * 
+		 */
+		return crearJSON(id, "", "");
 	}
 
 	public String obtenirColor(String idSessio, String idPartida) {
@@ -334,10 +334,10 @@ public class JocAPI {
 
 		String taulellRes = this.movTornAct.getTaulellActual().toString();
 		this.partSQL.guardarEstatTauler(idPartida, taulellRes);
-		
+
 		String resultat = this.movTornAct.partidaAcabada();
 		String idColor = this.partSQL.getColor(idSessio, idPartida);
-		
+
 		if (resultat.equalsIgnoreCase(idColor))
 			return crearJSON("guanya", "", "");
 		else if (resultat.equalsIgnoreCase("taules"))

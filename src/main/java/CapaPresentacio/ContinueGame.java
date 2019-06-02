@@ -280,7 +280,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 						bPlayGame.setEnabled(false);
 						presButton = 2;
 					} else {
-						ComenssarJoc();
+						ComenssarJoc(torn);
 					}
 				}
 			}
@@ -295,7 +295,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 	}
 
-	public void ComenssarJoc() {
+	public void ComenssarJoc(boolean torn) {
 
 		String triaPartida = api.triaPartida(interficieBase.getPlayerID(), contrincant);
 
@@ -307,6 +307,9 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 		if (!err.equals("")) {
 			labelErrorMessage.setText(err);
 		} else {
+			interficieBase.bRefresh.setVisible(true);
+			interficieBase.bRefresh.setEnabled(true);
+
 			AdaptarBaseInterfaceNewJoc();
 			interficieBase.centerPanel.setVisible(false);
 			Partida partida = new Partida(interficieBase, contrincant, torn);
@@ -382,5 +385,17 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 		this.bRivalTurn.setForeground(Color.WHITE);
 		bPlayGame.setText("Play");
 
+	}
+
+	public String TornPartidaEnCurs() {
+		String APIplayers = api.getPartidesTorn(interficieBase.getPlayerID());
+
+		String usuaris[] = APIplayers.split(";");
+
+		for (String s : usuaris)
+			if (s.equals(contrincant))
+				return interficieBase.getPlayerID();
+
+		return "";
 	}
 }

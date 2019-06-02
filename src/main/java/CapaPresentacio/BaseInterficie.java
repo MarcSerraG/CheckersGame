@@ -22,13 +22,14 @@ import CapaAplicacio.JocAPI;
 
 public class BaseInterficie extends JFrame implements ActionListener {
 
-	public JButton bLogin, bNewGame, bContinue_Game, bStatistics, bLogOut, bRequests;
+	public JButton bLogin, bNewGame, bContinue_Game, bStatistics, bLogOut, bRequests, bRefresh;
 	public JPanel centerPanel;
 	private JLabel versio;
 	private JocAPI api;
 	private Login log;
 	private Partida par;
 	private static NewGame newGame;
+	private ContinueGame ContinueGame;
 
 	public BaseInterficie() {
 
@@ -99,9 +100,10 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bStatistics = createButton("Statistics", size);
 		this.bRequests = createButton("Requests", size);
 		this.bLogOut = createButton("Log Out", size);
+		this.bRefresh = createButton("Refresh", size);
 
 		// Versio
-		this.versio = new JLabel("Version: 0.0.2.1 (Alpha)");
+		this.versio = new JLabel("Version: 0.1 (Beta)");
 
 		// Definim el color de fons dels colors a gris menys el de login ja que sera el
 		// seleccionat sempre la primera vegada
@@ -111,6 +113,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bStatistics.setBackground(Color.GRAY);
 		this.bLogOut.setBackground(Color.GRAY);
 		this.bRequests.setBackground(Color.GRAY);
+		this.bRefresh.setBackground(Color.GRAY);
 
 		// Solucio error color Mac: (No funciona...)
 
@@ -120,6 +123,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bStatistics.setOpaque(true);
 		this.bRequests.setOpaque(true);
 		this.bLogOut.setOpaque(true);
+		this.bRefresh.setOpaque(true);
 
 		// Definim el color de les lletres dels botons a blanc menys la de login que
 		// sera negre
@@ -130,6 +134,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bLogOut.setForeground(Color.WHITE);
 		this.bRequests.setForeground(Color.WHITE);
 		this.versio.setForeground(Color.WHITE);
+		this.bRefresh.setForeground(Color.WHITE);
 
 		// Definim que els botons "llancin" una accio al ser premuts
 		this.bLogin.addActionListener(this);
@@ -138,6 +143,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bStatistics.addActionListener(this);
 		this.bRequests.addActionListener(this);
 		this.bLogOut.addActionListener(this);
+		this.bRefresh.addActionListener(this);
 
 		// Bloquejem tots els botons de tal manera que l'usuari tingui de entrar avans
 		// de poder cambiar de pantalla
@@ -146,6 +152,9 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bStatistics.setEnabled(false);
 		this.bRequests.setEnabled(false);
 		this.bLogOut.setEnabled(false);
+		this.bRefresh.setEnabled(false);
+
+		this.bRefresh.setVisible(false);
 
 		// carreguem el logo del joc que esta situat adalt a la dreta
 		Image myImage;
@@ -172,7 +181,9 @@ public class BaseInterficie extends JFrame implements ActionListener {
 			menu.add(bRequests);
 			menu.add(Box.createRigidArea(new Dimension(0, 15)));
 			menu.add(bStatistics);
-			menu.add(Box.createRigidArea(new Dimension(0, 190)));
+			menu.add(Box.createRigidArea(new Dimension(0, 15)));
+			menu.add(bRefresh);
+			menu.add(Box.createRigidArea(new Dimension(0, 160))); // 190 sense brefresh
 			menu.add(bLogOut);
 			menu.add(Box.createRigidArea(new Dimension(0, 50)));
 			menu.add(versio);
@@ -227,17 +238,32 @@ public class BaseInterficie extends JFrame implements ActionListener {
 					} else {
 						if (e.getSource() == this.bRequests)
 							actionRequest();
-						else
-							actionLogOut();
+						else {
+							if (e.getSource() == this.bLogOut)
+								actionLogOut();
+							else
+								refresh();
+						}
 					}
 				}
 			}
 		}
 	}
 
+	private void refresh() {
+
+		if (ContinueGame.TornPartidaEnCurs().equals(this.getPlayerID()))
+			ContinueGame.ComenssarJoc(true);
+		else
+			ContinueGame.ComenssarJoc(false);
+	}
+
 	private void actionLogin() {
 		this.bLogin.setBackground(new Color(237, 215, 178));
 		this.bLogin.setForeground(Color.BLACK);
+
+		this.bRefresh.setVisible(false);
+		this.bRefresh.setEnabled(false);
 
 		this.bNewGame.setBackground(Color.GRAY);
 		this.bContinue_Game.setBackground(Color.GRAY);
@@ -256,6 +282,9 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		centerPanel.setVisible(false);
 		this.bNewGame.setBackground(new Color(237, 215, 178));
 		this.bNewGame.setForeground(Color.BLACK);
+
+		this.bRefresh.setVisible(false);
+		this.bRefresh.setEnabled(false);
 
 		this.bLogin.setBackground(Color.GRAY);
 		this.bContinue_Game.setBackground(Color.GRAY);
@@ -282,6 +311,9 @@ public class BaseInterficie extends JFrame implements ActionListener {
 
 		centerPanel.setVisible(false);
 
+		this.bRefresh.setVisible(false);
+		this.bRefresh.setEnabled(false);
+
 		this.bContinue_Game.setBackground(new Color(237, 215, 178));
 		this.bContinue_Game.setForeground(Color.BLACK);
 
@@ -297,7 +329,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bLogOut.setForeground(Color.WHITE);
 		this.bRequests.setForeground(Color.WHITE);
 
-		ContinueGame ContinueGame = new ContinueGame(this, api);
+		ContinueGame = new ContinueGame(this, api);
 		centerPanel = ContinueGame.ContinueGameCreate();
 
 		centerPanel.setVisible(true);
@@ -313,6 +345,9 @@ public class BaseInterficie extends JFrame implements ActionListener {
 
 		this.bRequests.setBackground(new Color(237, 215, 178));
 		this.bRequests.setForeground(Color.BLACK);
+
+		this.bRefresh.setVisible(false);
+		this.bRefresh.setEnabled(false);
 
 		this.bLogin.setBackground(Color.GRAY);
 		this.bNewGame.setBackground(Color.GRAY);
@@ -341,6 +376,9 @@ public class BaseInterficie extends JFrame implements ActionListener {
 
 		this.bStatistics.setBackground(new Color(237, 215, 178));
 		this.bStatistics.setForeground(Color.BLACK);
+
+		this.bRefresh.setVisible(false);
+		this.bRefresh.setEnabled(false);
 
 		this.bLogin.setBackground(Color.GRAY);
 		this.bNewGame.setBackground(Color.GRAY);
@@ -371,6 +409,9 @@ public class BaseInterficie extends JFrame implements ActionListener {
 
 		this.bLogin.setBackground(new Color(237, 215, 178));
 		this.bLogin.setForeground(Color.BLACK);
+
+		this.bRefresh.setVisible(false);
+		this.bRefresh.setEnabled(false);
 
 		this.bLogOut.setBackground(Color.GRAY);
 		this.bNewGame.setBackground(Color.GRAY);
