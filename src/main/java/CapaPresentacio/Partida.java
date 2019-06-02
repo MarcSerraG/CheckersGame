@@ -27,7 +27,7 @@ public class Partida extends JPanel implements ActionListener {
 
 	BaseInterficie interficieBase;
 	JPanel panelTaulell, panelNord, panelSud, panelEst, panelOest, panelCentral;
-	JButton bTaules, bSeleccioInicial;
+	JButton bTaules, bSeleccioInicial, bBufar;
 	JLabel lMessage, lPlayerBlancas, lPlayerNegras; // (Blancas=0, Negras = 1)
 	Map<JButton, String> taulell2;
 	String posInicial = "", posFinal = "", idPartida, NomContrincant, ContrincantColor, JugadorColor;
@@ -141,19 +141,19 @@ public class Partida extends JPanel implements ActionListener {
 				for (int y = 0; y < 10; y++) {
 					switch (divisioTaulell[contador]) {
 					case "1":
-						taulell2.put(createButton("", size, color, peoNegre, ContrincantPesses("Black")), x + ";" + y);
+						taulell2.put(createButton(size, color, peoNegre, ContrincantPesses("Black")), x + ";" + y);
 						break;
 					case "0":
-						taulell2.put(createButton("", size, color, peoBlanca, ContrincantPesses("Red")), x + ";" + y);
+						taulell2.put(createButton(size, color, peoBlanca, ContrincantPesses("Red")), x + ";" + y);
 						break;
 					case "d":
-						taulell2.put(createButton("", size, color, DamaNegra, ContrincantPesses("Black")), x + ";" + y);
+						taulell2.put(createButton(size, color, DamaNegra, ContrincantPesses("Black")), x + ";" + y);
 						break;
 					case "D":
-						taulell2.put(createButton("", size, color, DamaBlanca, ContrincantPesses("Red")), x + ";" + y);
+						taulell2.put(createButton(size, color, DamaBlanca, ContrincantPesses("Red")), x + ";" + y);
 						break;
 					default:
-						taulell2.put(createButton("", size, color, null, true), x + ";" + y);
+						taulell2.put(createButton(size, color, null, true), x + ";" + y);
 						break;
 					}
 
@@ -183,8 +183,8 @@ public class Partida extends JPanel implements ActionListener {
 		return !ContrincantColor.equals(pessa);
 	}
 
-	private JButton createButton(String text, Dimension size, int color, ImageIcon peo, Boolean ContrincantPesses) {
-		JButton button = new JButton(text);
+	private JButton createButton(Dimension size, int color, ImageIcon peo, Boolean ContrincantPesses) {
+		JButton button = new JButton();
 		if (peo != null)
 			button.setIcon(peo);
 		button.setPreferredSize(size);
@@ -200,6 +200,19 @@ public class Partida extends JPanel implements ActionListener {
 		case 1:
 			button.setBackground(new Color(95, 95, 95));
 		}
+		return button;
+	}
+
+	private JButton createButton(Dimension size, Color color, String text) {
+		JButton button = new JButton(text);
+		button.setForeground(new Color(237, 215, 178));
+		button.setPreferredSize(size);
+		button.addActionListener(this);
+		button.setMinimumSize(size);
+		button.setMaximumSize(size);
+		button.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		button.setBackground(color);
+
 		return button;
 	}
 
@@ -273,7 +286,22 @@ public class Partida extends JPanel implements ActionListener {
 
 	private void PanellSud() {
 		panelSud.setLayout(new BorderLayout());
-		panelSud.add(Box.createRigidArea(new Dimension(0, 100)), BorderLayout.CENTER);
+
+		Dimension size = new Dimension(150, 25);
+
+		JPanel panelCSud = new JPanel();
+		panelCSud.setLayout(new BoxLayout(panelCSud, BoxLayout.X_AXIS));
+		panelCSud.setBackground(Color.DARK_GRAY);
+
+		bTaules = createButton(size, Color.GRAY, "Fer Taules");
+		bBufar = createButton(size, Color.GRAY, "Bufar");
+
+		panelCSud.add(bTaules);
+		panelCSud.add(Box.createRigidArea(new Dimension(130, 0)), BorderLayout.WEST);
+		panelCSud.add(bBufar);
+
+		panelSud.add(Box.createRigidArea(new Dimension(280, 100)), BorderLayout.WEST);
+		panelSud.add(panelCSud, BorderLayout.CENTER);
 		panelSud.add(lMessage, BorderLayout.EAST);
 
 		if (torn)
@@ -284,17 +312,12 @@ public class Partida extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-
-		MourePessa((JButton) e.getSource(), taulell2.get(e.getSource()));
-
-		/*
-		 * for (Map.Entry<JButton, String> entry : taulell2.entrySet()) { if
-		 * (entry.getKey() == e.getSource()) { MourePessa(entry); break; } }
-		 */
+		if (e.getSource() != bTaules && e.getSource() != bBufar)
+			MourePessa((JButton) e.getSource(), taulell2.get(e.getSource()));
 
 	}
 
-	private void MourePessa(JButton boto, String posicioBoto) { // id26
+	private void MourePessa(JButton boto, String posicioBoto) {
 
 		if (posInicial.equals("")) {
 			posInicial = posicioBoto;
