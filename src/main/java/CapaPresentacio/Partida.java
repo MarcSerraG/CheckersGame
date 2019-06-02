@@ -366,7 +366,7 @@ public class Partida extends JPanel implements ActionListener {
 							setAnticTaulell(mss);
 						}
 
-						json = new JSONObject(
+						/*json = new JSONObject(
 								interficieBase.getAPI().grabarTirada(interficieBase.getPlayerID(), idPartida));
 
 						err = json.getString("err");
@@ -378,7 +378,7 @@ public class Partida extends JPanel implements ActionListener {
 						else
 							lMessage.setText(err);
 
-						System.out.println(mss);
+						System.out.println(mss);*/
 
 					} else {
 						lMessage.setText(err.split(":")[1]);
