@@ -516,6 +516,47 @@ public class PartidesSQLOracle {
 	 * @return true si s'ha guardat correctament
 	 */
 	public boolean guardarMovimentsAnt(String idPartida, String movsAnt) {
+		
+		String sqldel =  "DELETE FROM MOVIMENTS WHERE partides_id = "+idPartida+"";
+		String sqlinsert;
+		try {
+			this.conn.ferDelete(sqldel);
+		} catch (SQLException e) {
+			System.out.println("0 dades borrades.");
+		}
+		
+		String[] mov = movsAnt.split("/");
+		String[] sep;
+		String tipus,inix,iniy,fix,fiy;
+		if (mov.length == 0) {
+			System.out.println("No hi han moviments per guardar. SPLIT "+mov.length);
+			return false;
+		}
+		
+		for (String m : mov) {
+			sep = m.split(";");
+			if (sep.length == 0 || sep.length < 5) {
+				System.out.println("No hi han moviments per guardar. SPLIT sep"+sep.length);
+				return false;
+			}
+			tipus = sep[0];
+			inix =  sep[1];
+			iniy = sep[2];
+			fix = sep[3];
+			fiy = sep[4];
+			sqlinsert =  "INSERT INTO MOVIMENTS (filaorigen,columnaorigen,filadesti,columnadesti,partides_id,tipus) "
+					+ "VALUES ("+inix+","+iniy+","+fix+","+fiy+","+idPartida+",'"+tipus+"'";
+			
+			try {
+				boolean rs = this.conn.crearInsert(sqlinsert);
+				return rs;
+			} catch (SQLException e) {
+				System.out.println("Error SQL al fer insert gaurdarMovimentsAnt: "+e);
+				return false;
+			}
+		}
+		
+		
 		return false;
 	}
 
