@@ -8,21 +8,18 @@ public class Taulell {
 	private Casella casMatCaselles[][];
 	private int intNumNegres;
 	private int intNumBlanques;
-	private int mida;
-	private Taulell taulellAnterior;
 	private final int UPRIGHT = 0;
 	private final int DOWNRIGHT = 1;
 	private final int DOWNLEFT = 2;
 	private final int UPLEFT = 3;
 
 	// Constructor
-	public Taulell(int mida) {
+	public Taulell() {
 
 		intNumBlanques = 0;
 		intNumNegres = 0;
-		this.mida = mida;
-		casMatCaselles = new Casella[10][10];
-		this.omplirTaulell(10, 10);
+		casMatCaselles = new Casella[8][8];
+		this.omplirTaulell();
 	}
 
 	public Taulell(String text) {
@@ -36,10 +33,6 @@ public class Taulell {
 		return casMatCaselles;
 	}
 
-	public int getMida() {
-		return mida;
-	}
-
 	// Retorna si algun jugador no te fitxes per moure
 	public boolean comprovarFitxes() {
 		return (intNumNegres == 0 || intNumBlanques == 0);
@@ -49,8 +42,7 @@ public class Taulell {
 		return this.casMatCaselles[x][y];
 	}
 
-	// Comprova si es factible realitzar el moviment, el fa, mata si cal i retorna
-	// si ha matat o no
+	// Comprova si es factible realitzar el moviment, el fa, mata si cal i retorna si ha matat o no
 	public boolean moviment(Casella casOrigen, Casella casDesti) throws IllegalArgumentException {
 
 		if (casOrigen.equals(casDesti)) throw new IllegalArgumentException("origin and destination are the same");
@@ -68,8 +60,7 @@ public class Taulell {
 			if (moviments.get(i)[0] == casDesti.getX() && moviments.get(i)[1] == casDesti.getY())
 				trobat = true;
 		}
-		if (!trobat)
-			throw new IllegalArgumentException("destination out of range");
+		if (!trobat) throw new IllegalArgumentException("destination out of range");
 		// Find if we can kill any token
 		casMatar = this.potMatar(casOrigen, casDesti);
 		// Remove killed token if there is any
@@ -91,146 +82,7 @@ public class Taulell {
 		}
 		return haMatat && potMoure;
 	}
-
-	// Modifica els possibles moviments del peo quan hi ha una fitxa al cami
-	//No es fa servir
-	private int[] casellaMatadaPeo(Casella casella, int[] mov) {
-
-		// If the color match
-		if (casMatCaselles[mov[0]][mov[1]].getFitxa().iColor == casella.getFitxa().iColor)
-			return null;
-		// If the color does not match
-		else {
-			int newMov[] = { mov[0], mov[1] };
-			if (casella.getFitxa() instanceof Peo) {
-				switch (casella.getFitxa().iColor) {
-				// White side, always up
-				case 0:
-					// Movement to the right
-					if (mov[1] > casella.getY()) {
-						newMov[0]--;
-						newMov[1]++;
-					}
-					// Movement to the left
-					else {
-						newMov[0]--;
-						newMov[1]--;
-					}
-					break;
-				// Black side, always down
-				case 1:
-					// Movement to the right
-					if (mov[1] > casella.getY()) {
-						newMov[0]++;
-						newMov[1]++;
-					}
-					// Movement to the left
-					else {
-						newMov[0]++;
-						newMov[1]--;
-					}
-					break;
-				}
-				// If the new movement is inside the game and it is empty
-				if (!(newMov[0] < 0 || newMov[0] > 9 || newMov[1] < 0 || newMov[1] > 9)
-						&& !(casMatCaselles[newMov[0]][newMov[1]].getTeFitxa())) {
-					return newMov;
-				}
-			}
-		}
-		return null;
-	}
-
-	// Modifica els possibles moviments de la dama quan hi ha una fitxa al cami
-	//No es fa servir
-	private void casellaMatadaDama(Casella casella, int[] mov, List<int[]> llista) {
-
-		if (casMatCaselles[mov[0]][mov[1]].getFitxa().iColor == casella.getFitxa().iColor) {
-			// If the color does not match
-			int newMov[] = { mov[0], mov[1] };
-			if (casella.getFitxa() instanceof Dama) {
-				// Movement up
-				if (mov[0] < casella.getX()) {
-					// Movement to the right
-					if (mov[1] > casella.getY()) {
-						newMov[0]--;
-						newMov[1]++;
-						if (!(newMov[0] < 0 || newMov[0] > 9 || newMov[1] < 0 || newMov[1] > 9)) {
-
-							if (casMatCaselles[newMov[0]][newMov[1]].getTeFitxa())
-								llista.remove(mov);
-							newMov[0]--;
-							newMov[1]++;
-
-							while (!(newMov[0] < 0 || newMov[0] > 9 || newMov[1] < 0 || newMov[1] > 9)) {
-								newMov[0]--;
-								newMov[1]++;
-								llista.remove(newMov);
-							}
-						}
-					}
-				}
-				// Movement to the left
-				else {
-					newMov[0]--;
-					newMov[1]--;
-					if (!(newMov[0] < 0 || newMov[0] > 9 || newMov[1] < 0 || newMov[1] > 9)) {
-
-						if (casMatCaselles[newMov[0]][newMov[1]].getTeFitxa())
-							llista.remove(mov);
-						newMov[0]--;
-						newMov[1]--;
-
-						while (!(newMov[0] < 0 || newMov[0] > 9 || newMov[1] < 0 || newMov[1] > 9)) {
-							newMov[0]--;
-							newMov[1]--;
-							llista.remove(newMov);
-						}
-					}
-				}
-			}
-			// Movement down
-			else {
-				// Movement to the right
-				if (mov[1] > casella.getY()) {
-					newMov[0]++;
-					newMov[1]++;
-					if (!(newMov[0] < 0 || newMov[0] > 9 || newMov[1] < 0 || newMov[1] > 9)) {
-
-						if (casMatCaselles[newMov[0]][newMov[1]].getTeFitxa())
-							llista.remove(mov);
-						newMov[0]++;
-						newMov[1]++;
-
-						while (!(newMov[0] < 0 || newMov[0] > 9 || newMov[1] < 0 || newMov[1] > 9)) {
-							newMov[0]++;
-							newMov[1]++;
-							llista.remove(newMov);
-						}
-					}
-				}
-				// Movement to the left
-				else {
-					newMov[0]++;
-					newMov[1]--;
-					if (!(newMov[0] < 0 || newMov[0] > 9 || newMov[1] < 0 || newMov[1] > 9)) {
-
-						if (casMatCaselles[newMov[0]][newMov[1]].getTeFitxa())
-							llista.remove(mov);
-						newMov[0]++;
-						newMov[1]--;
-
-						while (!(newMov[0] < 0 || newMov[0] > 9 || newMov[1] < 0 || newMov[1] > 9)) {
-							newMov[0]++;
-							newMov[1]--;
-							llista.remove(newMov);
-						}
-					}
-				}
-			}
-		}
-	}
-
+	
 	// Retorna la casella que s'ha de matar si es pot
 	public Casella potMatar(Casella casOrigen, Casella casDesti) {
 
@@ -311,26 +163,27 @@ public class Taulell {
 	}
 
 	// Recorre el taulell i fa new de les caselles per iniciar la partida
-	private void omplirTaulell(int llarg, int ample) {
+	private void omplirTaulell() {
 		boolean toca = false;
 		int color = 0;
 
-		for (int i = 0; i <= llarg - 1; i++) {
-			for (int j = 0; j <= ample - 1; j++) {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
 				if ((i % 2 == 0 && j % 2 != 0) || (i % 2 != 0 && j % 2 == 0)) {
-					if (i <= 3) {
+					if (i < 3) {
 						toca = true;
 						color = 1;
 						intNumNegres++;
 
 					}
-					if (i >= llarg - 4) {
+					else if (i > 4) {
 						toca = true;
 						color = 0;
 						intNumBlanques++;
 					}
-				} else
-					toca = false;
+					else toca = false;
+				} 
+				else toca = false;
 				casMatCaselles[i][j] = new Casella(i, j, toca, 0, color);
 			}
 		}
@@ -373,47 +226,14 @@ public class Taulell {
 		}
 	}
 
-	public boolean bufar(Casella posicio) {
-
-		if (posicio.getFitxa() == null)
-			throw new IllegalArgumentException("Empty position");
-
-		Casella[][] matriu = taulellAnterior.getMatriu();
-		Casella casMatar = null;
-		Casella posAnterior = null;
-
-		for (int i = 0; i < casMatCaselles.length; i++) {
-			for (int j = 0; j < casMatCaselles[i].length; j++) {
-				if (posicio.getFitxa().iID == matriu[i][j].getFitxa().iID) {
-					if (posicio.getX() == matriu[i][j].getX() && posicio.getY() == matriu[i][j].getY())
-						throw new IllegalArgumentException("same position");
-					posAnterior = matriu[i][j];
-					List<int[]> moviments = matriu[i][j].getFitxa().possiblesMoviments(matriu[i][j].getX(),
-							matriu[i][j].getY());
-					for (int[] mov : moviments)
-						casMatar = taulellAnterior.potMatar(matriu[i][j],
-								taulellAnterior.seleccionarCasella(mov[0], mov[1]));
-					if (casMatar != null) {
-
-						posicio.eliminarFitxa();
-						return true;
-					}
-				}
-			}
-		}
-		if (taulellAnterior.taulellAnterior != null)
-			return taulellAnterior.bufar(posAnterior);
-		return false;
-	}
-
 	// Retorna el taulell dibuixat amb la disposicio de les fitxes
 	public String toString() {
 
 		String text = "";
 
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-				if (j != mida - 1)
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (j != 7)
 					text += casMatCaselles[i][j] + ",";
 				else
 					text += casMatCaselles[i][j] + "\n";

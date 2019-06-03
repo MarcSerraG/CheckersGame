@@ -17,7 +17,7 @@ public class Partida {
 		this.usrContrincant = usrContrincant;
 		this.usrUsuariTorn = this.usrJugador;
 		this.boolPartidaEnCurs = true;
-		this.taulell = new Taulell(10);
+		this.taulell = new Taulell();
 	}
 	public String getID() {return this.strID;}
 	public Usuari getJugador() {return this.usrJugador;}
@@ -68,7 +68,7 @@ public class Partida {
 	
 	public boolean comprovarTaules(Casella origen, Casella desti) {
 
-		List<int[]>movimentsTaules = taulell.veurePossiblesMoviments(origen);
+		List<int[]>movimentsTaules = origen.getFitxa().possiblesMoviments(origen.getX(), origen.getY(), taulell.getMatriu());
 		
 		for (int i = 0; i < movimentsTaules.size(); i++) if(taulell.seleccionarCasella(movimentsTaules.get(i)[0], movimentsTaules.get(i)[1]).equals(desti)) return true;
 		return false;
