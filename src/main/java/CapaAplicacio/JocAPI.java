@@ -242,22 +242,7 @@ public class JocAPI {
 		if (id == null)
 			return crearJSON("", "No hi ha partida disponible.", "");
 
-		// return crearJSON(id, "", ""); // Remove comment only if the method fails
-		
-		String movsAnt = this.partSQL.getMovimentsAnt(id);  
-		if (movsAnt == null) 
-			movsAnt = ""; 
-		// return crearJSON("", "No hi ha moviments anteriors (null)", ""); 
-		String taulerAnt = this.partSQL.getTaulerAnt(idSessio, id);  
-		if (taulerAnt == null)  
-			taulerAnt = ""; 
-		// return crearJSON("", "No s'ha trobat tauler anterior", ""); 
- 
-		String taulerAct = this.partSQL.continuarPartida(id);  
-		if (taulerAct == null) 
-			return crearJSON("", "No s'ha trobat tauler actual", ""); 
- 
-		this.movTornAct = new Moviments(movsAnt, taulerAct, taulerAnt); 
+		this.instanciarMoviments(id);
 		return crearJSON(id, "", ""); 
 	} 
 
@@ -273,7 +258,7 @@ public class JocAPI {
 
 	public String obtenirTaulerAnt(String idSessio, String idPartida) {
 
-		String tauler = this.partSQL.getTaulerAnt(idSessio, idPartida);
+		String tauler = this.partSQL.getTaulerAnt(idPartida);
 
 		if (tauler == null)
 			return crearJSON("", "No s'ha trobat partida o sessio, o no hi ha tauler anterior", "");
@@ -340,9 +325,12 @@ public class JocAPI {
 			return crearJSON("perd", "", "");
 	}
 
-	// NO ES POT IMPLEMENTAR PER ARA...
+	// Implementació mínima... no comprova peça per peça ni diu si es pot matar
 	public String obtenirMovimentsPossibles(String idSessio, String idPartida) {
-		return null;
+		if (this.movTornAct == null)
+			return crearJSON("", "Error, no s'ha fet triaPartida abans...", "");
+		String possibles = this.movTornAct.movimentsPossibles();
+		return crearJSON(possibles, "", "");
 	}
 
 	public String ferMoviment(String idSessio, String idPartida, String posIni, String posFi) {
@@ -457,6 +445,23 @@ public class JocAPI {
 		json.put("err", err);
 		json.put("sErr", sErr);
 		return json.toString();
+	}
+	
+	private void instanciarMoviments(String id) {
+		String movsAnt = this.partSQL.getMovimentsAnt(id);  
+		if (movsAnt == null) 
+			movsAnt = ""; 
+		// return crearJSON("", "No hi ha moviments anteriors (null)", ""); 
+		String taulerAnt = this.partSQL.getTaulerAnt(id);  
+		if (taulerAnt == null)  
+			taulerAnt = ""; 
+		// return crearJSON("", "No s'ha trobat tauler anterior", ""); 
+ 
+		String taulerAct = this.partSQL.continuarPartida(id);  
+		if (taulerAct == null) 
+			taulerAct = "";
+ 
+		this.movTornAct = new Moviments(movsAnt, taulerAct, taulerAnt); 
 	}
 
 	// Converteix un string d'un taulell de la capa domini o aplicacio,
