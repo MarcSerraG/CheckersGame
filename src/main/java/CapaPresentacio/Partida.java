@@ -353,7 +353,7 @@ public class Partida extends JPanel implements ActionListener {
 							torn = false;
 						}
 
-						String nouTaulell = interficieBase.getAPI().obtenirTaulerAct(interficieBase.getPlayerID(),
+						String nouTaulell = interficieBase.getAPI().obtenirTaulerRes(interficieBase.getPlayerID(),
 								idPartida);
 						json = new JSONObject(nouTaulell);
 
