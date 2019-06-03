@@ -87,8 +87,9 @@ public class JocAPI {
 	public String logout(String idSessio) {
 
 		boolean errorSessio = !userSQL.canviarSessio(idSessio, false);
-		if (errorSessio)
+		if (errorSessio) {
 			return crearJSON("", "Error ID Sessió", "");
+		}
 
 		return crearJSON("", "", "");
 	}
@@ -491,5 +492,9 @@ public class JocAPI {
 		taulell = taulell.replace('D', '♕');
 		taulell = taulell.replace('d', '♛');
 		return taulell;
+	}
+
+	public ConnectionSQLOracle getConnectionSQL() {
+		return connSQL;
 	}
 }
