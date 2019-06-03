@@ -155,7 +155,7 @@ public class Taulell {
 			return true;
 		} else
 		// Black
-		if (color == 1 && casella.getX() == 9) {
+		if (color == 1 && casella.getX() == 7) {
 			casMatCaselles[casella.getX()][casella.getY()].setFitxa(new Dama(1));
 			return true;
 		}
