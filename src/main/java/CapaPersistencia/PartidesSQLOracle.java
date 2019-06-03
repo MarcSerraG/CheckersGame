@@ -47,7 +47,6 @@ public class PartidesSQLOracle {
 		try {
 			rsc = conn.ferSelect(sqlcompro);
 			if (rsc.next()) {
-				System.out.println("Hi han partides amb aquest contrincant.");
 				return null;
 			}
 			rsc.close();
@@ -232,7 +231,7 @@ public class PartidesSQLOracle {
 		ResultSet rs;
 		String id = "";
 		sql = "SELECT id FROM partides WHERE estat = 0 and (jugador = '" + contrincant + "'" + " and contrincant = '"
-				+ jugador + "' or jugador = '"+jugador+"' and contrincant = '"+contrincant+"')";
+				+ jugador + "' or jugador = '" + jugador + "' and contrincant = '" + contrincant + "')";
 		try {
 			rs = conn.ferSelect(sql);
 			if (rs.next())
@@ -463,7 +462,7 @@ public class PartidesSQLOracle {
 		String res = null;
 		String sql2;
 		ResultSet rs = null;
-		sql2 = "SELECT santerio FROM partides WHERE id ="+idPartida;
+		sql2 = "SELECT santerio FROM partides WHERE id =" + idPartida;
 		try {
 			rs = conn.ferSelect(sql2);
 			if (rs.next())
@@ -491,7 +490,7 @@ public class PartidesSQLOracle {
 
 			if (rs.next())
 				res = rs.getString("salva");
-			
+
 			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error SQL getTaulerRes: " + e);
@@ -523,47 +522,46 @@ public class PartidesSQLOracle {
 	 * @return true si s'ha guardat correctament
 	 */
 	public boolean guardarMovimentsAnt(String idPartida, String movsAnt) {
-		
-		String sqldel =  "DELETE FROM MOVIMENTS WHERE partides_id = "+idPartida+"";
+
+		String sqldel = "DELETE FROM MOVIMENTS WHERE partides_id = " + idPartida + "";
 		String sqlinsert;
 		try {
 			this.conn.ferDelete(sqldel);
 		} catch (SQLException e) {
 			System.out.println("0 dades borrades.");
 		}
-		
+
 		String[] mov = movsAnt.split("/");
 		String[] sep;
-		String tipus,inix,iniy,fix,fiy;
+		String tipus, inix, iniy, fix, fiy;
 		if (mov.length == 0) {
-			System.out.println("No hi han moviments per guardar. SPLIT "+mov.length);
+			System.out.println("No hi han moviments per guardar. SPLIT " + mov.length);
 			return false;
 		}
-		
+
 		for (String m : mov) {
 			sep = m.split(";");
 			if (sep.length == 0 || sep.length < 5) {
-				System.out.println("No hi han moviments per guardar. SPLIT sep"+sep.length);
+				System.out.println("No hi han moviments per guardar. SPLIT sep" + sep.length);
 				return false;
 			}
 			tipus = sep[0];
-			inix =  sep[1];
+			inix = sep[1];
 			iniy = sep[2];
 			fix = sep[3];
 			fiy = sep[4];
-			sqlinsert =  "INSERT INTO MOVIMENTS (filaorigen,columnaorigen,filadesti,columnadesti,partides_id,tipus) "
-					+ "VALUES ("+inix+","+iniy+","+fix+","+fiy+","+idPartida+",'"+tipus+"'";
-			
+			sqlinsert = "INSERT INTO MOVIMENTS (filaorigen,columnaorigen,filadesti,columnadesti,partides_id,tipus) "
+					+ "VALUES (" + inix + "," + iniy + "," + fix + "," + fiy + "," + idPartida + ",'" + tipus + "'";
+
 			try {
 				boolean rs = this.conn.crearInsert(sqlinsert);
 				return rs;
 			} catch (SQLException e) {
-				System.out.println("Error SQL al fer insert gaurdarMovimentsAnt: "+e);
+				System.out.println("Error SQL al fer insert gaurdarMovimentsAnt: " + e);
 				return false;
 			}
 		}
-		
-		
+
 		return false;
 	}
 
@@ -573,32 +571,32 @@ public class PartidesSQLOracle {
 	 * @param idPartida
 	 */
 	public String getMovimentsAnt(String idPartida) {
-		
+
 		String sql = "SELECT filaorigen,columnaorigen,filadesti,columnadesti,tipus "
-				+ "FROM MOVIMENTS WHERE partides_id = "+idPartida+"";
-		
+				+ "FROM MOVIMENTS WHERE partides_id = " + idPartida + "";
+
 		ResultSet rs;
 		String res;
 		try {
 			rs = this.conn.ferSelect(sql);
 			res = "";
 			while (rs.next()) {
-				res += rs.getString("tipus")+";";
-				res += rs.getString("filaorigen")+";";
-				res += rs.getString("columnaorigen")+";";
-				res += rs.getString("filadesti")+";";
-				res += rs.getString("columnadesti")+";";
+				res += rs.getString("tipus") + ";";
+				res += rs.getString("filaorigen") + ";";
+				res += rs.getString("columnaorigen") + ";";
+				res += rs.getString("filadesti") + ";";
+				res += rs.getString("columnadesti") + ";";
 				res += "/";
 			}
 			rs.close();
 			return res;
-			
+
 		} catch (SQLException e) {
-			
-			System.out.println("Error SQL getMovimentsAnt: "+e);
+
+			System.out.println("Error SQL getMovimentsAnt: " + e);
 			return null;
 		} catch (Exception e) {
-			System.out.println("Error getMovimentsAnt: "+e);
+			System.out.println("Error getMovimentsAnt: " + e);
 			return null;
 		}
 	}
