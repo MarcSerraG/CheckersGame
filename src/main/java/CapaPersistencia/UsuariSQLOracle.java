@@ -28,8 +28,8 @@ public class UsuariSQLOracle {
 			while (rs.next()) {
 				psw = rs.getString("CONTRASENYA");
 			}
+			rs.close();
 			return psw;
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return psw;
@@ -53,6 +53,7 @@ public class UsuariSQLOracle {
 			rs = conn.ferSelect(sql);
 			while (rs.next())
 				sortida += rs.getString("nom")+";";
+			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error sql usuarisCandidats: "+e);
 		} catch (Exception e) {
@@ -77,6 +78,7 @@ public class UsuariSQLOracle {
 				sortida += rs.getString("nom");
 				sortida += ";";
 			}
+			rs.close();
 		} catch (SQLException e) {
 			System.out.print(e);
 			return null;
@@ -96,10 +98,14 @@ public class UsuariSQLOracle {
 			while (rs.next()) {
 				con = rs.getInt("CONNECTAT");
 			}
-			if (con == 1)
+			if (con == 1) {
+				rs.close();
 				return true;
-			else
+			}
+			else {
+				rs.close();
 				return false;
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -121,7 +127,6 @@ public class UsuariSQLOracle {
 		else
 			sql = ConnectionSQLOracle.SQLUPDATE + " USUARIS SET connectat = 0";
 		sql += " WHERE NOM = '" + nomUsu + "'";
-
 		try {
 			if (conn == null)
 				return false;

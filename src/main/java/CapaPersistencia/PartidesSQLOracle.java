@@ -50,6 +50,7 @@ public class PartidesSQLOracle {
 				System.out.println("Hi han partides amb aquest contrincant.");
 				return null;
 			}
+			rsc.close();
 		} catch (SQLException e) {
 			System.out.println("Error de SQL partidaNova: " + e);
 			return null;
@@ -71,7 +72,7 @@ public class PartidesSQLOracle {
 			while (rs.next()) {
 				id += "" + rs.getInt("currval");
 			}
-
+			rs.close();
 			conn.ferCommit();
 			conn.setAutocommit(true);
 
@@ -112,6 +113,7 @@ public class PartidesSQLOracle {
 				System.out.println("Error sql no hi ha dades");
 				return false;
 			}
+			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error sql canviarTorn: " + e);
 			return false;
@@ -161,6 +163,7 @@ public class PartidesSQLOracle {
 			rsc = conn.ferSelect(sqlcompro);
 			if (rsc.next())
 				res = rsc.getString("salvat");
+			rsc.close();
 		} catch (SQLException e) {
 			System.out.println("Error SQL continaurPartida: " + e);
 			return null;
@@ -191,6 +194,7 @@ public class PartidesSQLOracle {
 			while (rs.next()) {
 				res.add(rs.getString("JUGADOR"));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error SQL getSolicitudsPendents: " + e);
 			return res;
@@ -236,9 +240,10 @@ public class PartidesSQLOracle {
 
 			if (id.isEmpty()) {
 				System.out.println("Error no hay partidas con ese id.");
+				rs.close();
 				return false;
 			}
-
+			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error SQL rebutja: " + e);
 			return false;
@@ -254,9 +259,10 @@ public class PartidesSQLOracle {
 
 			if (id.isEmpty()) {
 				System.out.println("Error no hay partidas con ese id.");
+				rs.close();
 				return false;
 			}
-			
+			rs.close();
 			conn.ferDelete(sql2);
 
 		} catch (SQLException e) {
@@ -294,6 +300,7 @@ public class PartidesSQLOracle {
 				} else
 					res.add(contrincant);
 			}
+			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error SQL getPartidesTorn: " + e);
 			return res;
@@ -382,7 +389,6 @@ public class PartidesSQLOracle {
 	 */
 	public String getPartida(String jugador, String contrincant) {
 
-		String res = null;
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
@@ -453,14 +459,14 @@ public class PartidesSQLOracle {
 	 */
 	public String getTaulerAnt(String idSessio, String idPartida) {
 		String res = null;
-		String sql2;;
+		String sql2;
 		ResultSet rs = null;
 		sql2 = "SELECT santerio FROM partides WHERE id ="+idPartida;
 		try {
 			rs = conn.ferSelect(sql2);
 			if (rs.next())
 				res = rs.getString("santerio");
-
+			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error SQL getTaulerAnt: " + e);
 			return null;
@@ -484,7 +490,8 @@ public class PartidesSQLOracle {
 
 			if (rs.next())
 				res = rs.getString("salva");
-
+			
+			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error SQL getTaulerRes: " + e);
 			return null;
@@ -582,7 +589,7 @@ public class PartidesSQLOracle {
 				res += rs.getString("columnadesti")+";";
 				res += "/";
 			}
-			
+			rs.close();
 			return res;
 			
 		} catch (SQLException e) {
@@ -621,8 +628,10 @@ public class PartidesSQLOracle {
 				salvat = rs.getString("salvat");
 			else {
 				System.out.println("Error actualitzarTaulell no hi ha dades compatibles");
+				rs.close();
 				return false;
 			}
+			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error SQL actualitzarTaulell: " + e);
 			return false;
