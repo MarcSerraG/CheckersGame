@@ -602,12 +602,12 @@ public class PartidesSQLOracle {
 	 */
 	public String getTorn(String idPartida) {
 
-		String res;
+		String res = "";
 
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro = "SELECT torn FROM partides WHERE (id = '" + idPartida + "' and estat between 1 AND 2";
+		sqlcompro = "SELECT torn FROM partides WHERE (id = '" + idPartida + "' and estat between 1 AND 2)";
 		try {
 			rs = conn.ferSelect(sqlcompro);
 			while (rs.next()) {
