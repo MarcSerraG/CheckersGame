@@ -9,7 +9,6 @@ public class Prova {
 		Usuari u1 = new Usuari("Blanques");
 		Usuari u2 = new Usuari("Negres");
 		Partida partida = new Partida("0000", u1, u2);
-		partida.getTaulell().seleccionarCasella(6, 1).setFitxa(new Dama(0));
 		Scanner keyboard = new Scanner(System.in);
 		int fOrigen, cOrigen, fDesti, cDesti, decisio;
 		

@@ -13,6 +13,7 @@ public class Dama extends Fitxa{
 		this.iID = this.hashCode();
 		this.iColor = iColor;
 	}
+	@Override
 	//Torna una llista de moviments possibles de dama
 	public List<int[]> possiblesMoviments(int x, int y, Casella[][] matCas) throws IllegalArgumentException{
 		
@@ -177,10 +178,5 @@ public class Dama extends Fitxa{
 	public String toString() {
 		if(iColor == 0) return "D";
 		else return "d";
-	}
-	@Override
-	public List<int[]> possiblesMoviments(int x, int y) throws IllegalArgumentException {
-		
-		return null;
 	}
 }

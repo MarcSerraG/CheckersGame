@@ -65,10 +65,9 @@ public class Taulell {
 		boolean haMatat = false;
 		boolean potMoure = false;
 		// Store all the possible movements
-		List<int[]> moviments = this.veurePossiblesMoviments(casOrigen);
+		List<int[]> moviments = casOrigen.getFitxa().possiblesMoviments(casOrigen.getX(), casOrigen.getY(), casMatCaselles);
 		// Find out if the destination position is within possible movements
 		for (int i = 0; i < moviments.size(); i++) {
-			System.out.println(moviments.get(i)[0] + moviments.get(i)[1]);
 			if (moviments.get(i)[0] == casDesti.getX() && moviments.get(i)[1] == casDesti.getY())
 				trobat = true;
 		}
@@ -90,43 +89,14 @@ public class Taulell {
 		casOrigen.eliminarFitxa();
 		this.canviDama(casDesti.getFitxa().iColor, casDesti);
 		// Look if in the next position there is any movement available
-		if (this.veurePossiblesMoviments(casDesti).size() != 0 && haMatat) {
+		if (casDesti.getFitxa().possiblesMoviments(casOrigen.getX(), casOrigen.getY(), casMatCaselles).size() != 0 && haMatat) {
 			potMoure = true;
 		}
 		return haMatat && potMoure;
 	}
 
-	// Calcula totes les caselles possibles on la fitxa es pot moure
-	public List<int[]> veurePossiblesMoviments(Casella casOrigen) throws IllegalArgumentException {
-
-		int[] movMatada = null;
-		List<int[]> moviment;
-		// Get full movements
-		if (casOrigen.getFitxa() instanceof Peo) {
-			moviment = casOrigen.getFitxa().possiblesMoviments(casOrigen.getX(), casOrigen.getY());
-			// Go through all possibilities
-			for (int i = 0; i < moviment.size(); i++) {
-				int[] mov = moviment.get(i);
-				// If a position is full
-				if (casMatCaselles[mov[0]][mov[1]].getTeFitxa()) {
-					movMatada = this.casellaMatadaPeo(casOrigen, mov);
-					if (movMatada != null)
-						moviment.set(i, movMatada);
-					else {
-						moviment.remove(i);
-						i--;
-					}
-				}
-			}
-		} else {
-			Dama d = (Dama) casOrigen.getFitxa();
-			moviment = d.possiblesMoviments(casOrigen.getX(), casOrigen.getY(), casMatCaselles);
-		}
-		return moviment;
-	}
-
 	// Modifica els possibles moviments del peo quan hi ha una fitxa al cami
-	// Modifica els possibles moviments del peo quan hi ha una fitxa al cami
+	//No es fa servir
 	private int[] casellaMatadaPeo(Casella casella, int[] mov) {
 
 		// If the color match
@@ -175,6 +145,7 @@ public class Taulell {
 	}
 
 	// Modifica els possibles moviments de la dama quan hi ha una fitxa al cami
+	//No es fa servir
 	private void casellaMatadaDama(Casella casella, int[] mov, List<int[]> llista) {
 
 		if (casMatCaselles[mov[0]][mov[1]].getFitxa().iColor == casella.getFitxa().iColor) {

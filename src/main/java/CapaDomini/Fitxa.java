@@ -9,5 +9,5 @@ public abstract class Fitxa {
 	protected int iColor;
 	
 	//Torna una llista de moviments possibles sense comprobar si les caselles existeixen
-	public abstract List<int[]> possiblesMoviments(int x, int y) throws IllegalArgumentException;	
+	public abstract List<int[]> possiblesMoviments(int x, int y, Casella[][] casMat) throws IllegalArgumentException;	
 }

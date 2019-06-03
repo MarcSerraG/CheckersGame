@@ -21,10 +21,9 @@ public class Peo extends Fitxa {
 	}
 
 	// Torna una llista de moviments possibles de peo
-	public List<int[]> possiblesMoviments(int x, int y) throws IllegalArgumentException {
+	public List<int[]> possiblesMoviments(int x, int y, Casella[][]casMat) throws IllegalArgumentException {
 
-		if (x < 0 || x > 9 || y < 0 || y > 9)
-			throw new IllegalArgumentException("Position out of bounds");
+		if (x < 0 || x > 7 || y < 0 || y > 7) throw new IllegalArgumentException("Position out of bounds");
 
 		Vector<int[]> llista = new Vector<int[]>();
 		int mov1[] = new int[2];
@@ -35,23 +34,52 @@ public class Peo extends Fitxa {
 		case 0:
 			mov1[0] = x - 1;
 			mov1[1] = y + 1;
+			if(casMat[mov1[0]][mov1[1]].getTeFitxa()) {
+				if(casMat[mov1[0]][mov1[1]].getFitxa().iColor != this.iColor) {
+					mov1[0] -= 1;
+					mov1[1] += 1;
+				}
+				if((!casMat[mov1[0]][mov1[1]].getTeFitxa()) && (!(mov1[0] < 0 || mov1[0] > 7 || mov1[1] < 0 || mov1[1] > 7))) llista.add(mov1);
+			}
+			else llista.add(mov1);
+			
 			mov2[0] = x - 1;
 			mov2[1] = y - 1;
+			if(casMat[mov2[0]][mov2[1]].getTeFitxa()) {
+				if(casMat[mov2[0]][mov2[1]].getFitxa().iColor != this.iColor) {
+					mov2[0] -= 1;
+					mov2[1] -= 1;
+				}
+				if((!casMat[mov2[0]][mov2[1]].getTeFitxa()) && (!(mov2[0] < 0 || mov2[0] > 7 || mov2[1] < 0 || mov2[1] > 7))) llista.add(mov2);
+			}
+			else llista.add(mov2);
 			break;
 
 		// In case it is black it can only go down
 		case 1:
 			mov1[0] = x + 1;
 			mov1[1] = y + 1;
+			if(casMat[mov1[0]][mov1[1]].getTeFitxa()) {
+				if(casMat[mov1[0]][mov1[1]].getFitxa().iColor != this.iColor) {
+					mov1[0] += 1;
+					mov1[1] += 1;
+				}
+				if((!casMat[mov1[0]][mov1[1]].getTeFitxa()) && (!(mov1[0] < 0 || mov1[0] > 7 || mov1[1] < 0 || mov1[1] > 7))) llista.add(mov1);
+			}
+			else llista.add(mov1);
+			
 			mov2[0] = x + 1;
 			mov2[1] = y - 1;
+			if(casMat[mov2[0]][mov2[1]].getTeFitxa()) {
+				if(casMat[mov2[0]][mov2[1]].getFitxa().iColor != this.iColor) {
+					mov2[0] += 1;
+					mov2[1] -= 1;
+				}
+				if((!casMat[mov2[0]][mov2[1]].getTeFitxa()) && (!(mov2[0] < 0 || mov2[0] > 7 || mov2[1] < 0 || mov2[1] > 7))) llista.add(mov2);
+			}
+			else llista.add(mov2);
 			break;
 		}
-		// Select only positions inside the game
-		if (!(mov1[0] < 0 || mov1[0] > 9 || mov1[1] < 0 || mov1[1] > 9))
-			llista.add(mov1);
-		if (!(mov2[0] < 0 || mov2[0] > 9 || mov2[1] < 0 || mov2[1] > 9))
-			llista.add(mov2);
 		return llista;
 	}
 
