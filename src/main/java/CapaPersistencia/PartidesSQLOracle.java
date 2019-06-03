@@ -600,6 +600,34 @@ public class PartidesSQLOracle {
 			return null;
 		}
 	}
+	
+	/**
+	 * Retorna el nom de l'usuari que té el torn
+	 * @param idPartida
+	 * @return
+	 */
+	public String getTorn(String idPartida) {
+
+		String res;
+
+		ResultSet rs = null;
+		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
+
+		sqlcompro = "SELECT torn FROM partides WHERE (id = '" + idPartida + "' and estat between 1 AND 2";
+		try {
+			rs = conn.ferSelect(sqlcompro);
+			while (rs.next()) {
+				res = rs.getString("TORN");
+			}
+		} catch (SQLException e) {
+			System.out.println("Error SQL getPartidesTorn: " + e);
+			return res;
+		} catch (Exception e) {
+			System.out.println("Error getPartidesTorn: " + e);
+		}
+		return res;
+	}
+	
 
 	/**
 	 * PRIVATES
