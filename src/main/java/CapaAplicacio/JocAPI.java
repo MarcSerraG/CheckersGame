@@ -344,10 +344,12 @@ public class JocAPI {
 		int yFi = Integer.parseInt(posFi.split(";")[1]);
 
 		boolean moviment = this.movTornAct.ferMoure(xIni, yIni, xFi, yFi);
-		if (moviment)
+		if (moviment) {
+			System.out.println("Moviment bé!!");
 			return crearJSON("true", "", "");
 		}
 		else {
+			System.out.println("Falla moviment!!");
 			return crearJSON("false", "", "");
 		}
 
