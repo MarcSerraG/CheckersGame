@@ -231,14 +231,14 @@ public class JocAPI {
 
 	public String triaPartida(String idSessio, String usuari) {
 
-		String id = this.partSQL.getPartida(idSessio, usuari);
+		String idPartida = this.partSQL.getPartida(idSessio, usuari);
 		contrincant = usuari;
 
 		if (id == null)
 			return crearJSON("", "No hi ha partida disponible.", "");
 
-		this.instanciarMoviments(id);
-		return crearJSON(id, "", ""); 
+		this.instanciarMoviments(idSessio, idPartida);
+		return crearJSON(idPartida, "", ""); 
 	} 
 
 	public String obtenirColor(String idSessio, String idPartida) {
@@ -379,7 +379,7 @@ public class JocAPI {
 
 	public String ferBufa(String idSessio, String idPartida, String pos) {
 
-		this.instanciarMoviments(idPartida);
+		this.instanciarMoviments(idSessio, idPartida);
 		
 		int xIni = Integer.parseInt(pos.split(";")[0]);
 		int yIni = Integer.parseInt(pos.split(";")[1]);
@@ -440,21 +440,23 @@ public class JocAPI {
 		return json.toString();
 	}
 	
-	private void instanciarMoviments(String id) {
-		String movsAnt = this.partSQL.getMovimentsAnt(id);  
+	private void instanciarMoviments(String idSessio, String idPartida) {
+		String movsAnt = this.partSQL.getMovimentsAnt(idPartida);  
 		if (movsAnt == null) 
 			movsAnt = ""; 
 		// return crearJSON("", "No hi ha moviments anteriors (null)", ""); 
-		String taulerAnt = this.partSQL.getTaulerAnt(id);  
+		String taulerAnt = this.partSQL.getTaulerAnt(idPartida);  
 		if (taulerAnt == null)  
 			taulerAnt = ""; 
 		// return crearJSON("", "No s'ha trobat tauler anterior", ""); 
  
-		String taulerAct = this.partSQL.continuarPartida(id);  
+		String taulerAct = this.partSQL.continuarPartida(idPartida);  
 		if (taulerAct == null) 
 			taulerAct = "";
+		
+		boolean tornJugador = this.partSQL.getTorn(idPartida).equals(idSessio);
  
-		this.movTornAct = new Moviments(movsAnt, taulerAct, taulerAnt); 
+		this.movTornAct = new Moviments(movsAnt, taulerAct, taulerAnt, tornJugador); 
 	}
 
 	// Converteix un string d'un taulell de la capa domini o aplicacio,
