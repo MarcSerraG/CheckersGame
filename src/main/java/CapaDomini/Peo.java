@@ -39,7 +39,9 @@ public class Peo extends Fitxa {
 					mov1[0] -= 1;
 					mov1[1] += 1;
 				}
-				if((!casMat[mov1[0]][mov1[1]].getTeFitxa()) && (!(mov1[0] < 0 || mov1[0] > 7 || mov1[1] < 0 || mov1[1] > 7))) llista.add(mov1);
+				if(!(mov1[0] < 0 || mov1[0] > 7 || mov1[1] < 0 || mov1[1] > 7)) {
+					if(!casMat[mov1[0]][mov1[1]].getTeFitxa())llista.add(mov1);
+				}
 			}
 			else llista.add(mov1);
 			
@@ -50,7 +52,9 @@ public class Peo extends Fitxa {
 					mov2[0] -= 1;
 					mov2[1] -= 1;
 				}
-				if((!casMat[mov2[0]][mov2[1]].getTeFitxa()) && (!(mov2[0] < 0 || mov2[0] > 7 || mov2[1] < 0 || mov2[1] > 7))) llista.add(mov2);
+				if(!(mov2[0] < 0 || mov2[0] > 7 || mov2[1] < 0 || mov2[1] > 7)) {
+					if(!casMat[mov2[0]][mov2[1]].getTeFitxa()) llista.add(mov2);
+				}
 			}
 			else llista.add(mov2);
 			break;
@@ -64,7 +68,9 @@ public class Peo extends Fitxa {
 					mov1[0] += 1;
 					mov1[1] += 1;
 				}
-				if((!casMat[mov1[0]][mov1[1]].getTeFitxa()) && (!(mov1[0] < 0 || mov1[0] > 7 || mov1[1] < 0 || mov1[1] > 7))) llista.add(mov1);
+				if(!(mov1[0] < 0 || mov1[0] > 7 || mov1[1] < 0 || mov1[1] > 7)) {
+					if(!casMat[mov1[0]][mov1[1]].getTeFitxa())llista.add(mov1);
+				}
 			}
 			else llista.add(mov1);
 			
@@ -75,7 +81,9 @@ public class Peo extends Fitxa {
 					mov2[0] += 1;
 					mov2[1] -= 1;
 				}
-				if((!casMat[mov2[0]][mov2[1]].getTeFitxa()) && (!(mov2[0] < 0 || mov2[0] > 7 || mov2[1] < 0 || mov2[1] > 7))) llista.add(mov2);
+				if(!(mov2[0] < 0 || mov2[0] > 7 || mov2[1] < 0 || mov2[1] > 7)) {
+					if(!casMat[mov2[0]][mov2[1]].getTeFitxa())llista.add(mov2);
+				}
 			}
 			else llista.add(mov2);
 			break;

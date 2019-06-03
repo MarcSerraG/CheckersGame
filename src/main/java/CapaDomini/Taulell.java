@@ -53,12 +53,9 @@ public class Taulell {
 	// si ha matat o no
 	public boolean moviment(Casella casOrigen, Casella casDesti) throws IllegalArgumentException {
 
-		if (casOrigen.equals(casDesti))
-			throw new IllegalArgumentException("origin and destination are the same");
-		if (!casOrigen.getTeFitxa())
-			throw new IllegalArgumentException("origin empty");
-		if (casDesti.getTeFitxa())
-			throw new IllegalArgumentException("destination full");
+		if (casOrigen.equals(casDesti)) throw new IllegalArgumentException("origin and destination are the same");
+		if (!casOrigen.getTeFitxa()) throw new IllegalArgumentException("origin empty");
+		if (casDesti.getTeFitxa()) throw new IllegalArgumentException("destination full");
 
 		Casella casMatar = null;
 		boolean trobat = false;
@@ -89,7 +86,7 @@ public class Taulell {
 		casOrigen.eliminarFitxa();
 		this.canviDama(casDesti.getFitxa().iColor, casDesti);
 		// Look if in the next position there is any movement available
-		if (casDesti.getFitxa().possiblesMoviments(casOrigen.getX(), casOrigen.getY(), casMatCaselles).size() != 0 && haMatat) {
+		if (casDesti.getFitxa().possiblesMoviments(casDesti.getX(), casDesti.getY(), casMatCaselles).size() != 0 && haMatat) {
 			potMoure = true;
 		}
 		return haMatat && potMoure;
