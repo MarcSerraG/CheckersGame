@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 /*
  * Moviments son Strings amb la següent estructura:
  * moviment;X;Y;X;Y
@@ -16,6 +17,12 @@ import java.util.List;
  * 
  */
 public class Moviments {
+	
+	private static Moviments instancia;
+	
+	public static Moviments getInstance() {
+		return Moviments.instancia;
+	}
 	
 	private List<String> listMovs; // Moviments torn actual, encara per fer...
 	private List<String> listMovsAnt; // Moviments torn anterior
@@ -47,7 +54,12 @@ public class Moviments {
 		else {
 			this.taulAnt.reconstruirTaulell(taulAnterior);
 		}
-		this.tornAcabat = false;
+		
+		if (torn)
+			this.tornAcabat = false;
+		else
+			this.tornAcabat = true;
+		
 		if (taulAnterior.isEmpty())
 			this.potBufar = false;
 		else
@@ -58,6 +70,8 @@ public class Moviments {
 			if (mov.contains("matar"))
 				this.potBufar = false;
 		}
+		
+		Moviments.instancia = this;
 	}
 	
 	public Taulell getTaulellActual() {return this.taulActual;}
@@ -120,12 +134,16 @@ public class Moviments {
 		Casella casDesti = this.taulActual.seleccionarCasella(xFi, yFi);
 		boolean potMatar = this.taulActual.potMatar(casOrigen, casDesti) != null;
 		if (this.taulActual.moviment(casOrigen, casDesti)) {
+			String moviment = "";
 			if (potMatar) 
-				this.listMovs.add("matar;" + xIni + ";" + yIni + ";" + xFi + ";" + yFi);
+				moviment = "matar;" + xIni + ";" + yIni + ";" + xFi + ";" + yFi;
 			else {
-				this.listMovs.add("moure;" + xIni + ";" + yIni + ";" + xFi + ";" + yFi);
+				moviment = "moure;" + xIni + ";" + yIni + ";" + xFi + ";" + yFi;
 				this.tornAcabat = true; // Si no ha matat, s'acaba el torn
 			}
+			this.listMovs.add(moviment);
+			System.out.println(moviment);
+			System.out.println(this.listMovs.get(0));
 			this.potBufar = false;
 			return true;
 		}
