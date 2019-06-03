@@ -53,6 +53,12 @@ public class Moviments {
 			this.potBufar = false;
 		else
 			this.potBufar = true;
+		
+		// Si en el torn anterior s'ha matat, no pot bufar
+		for (String mov : this.listMovsAnt) {
+			if (mov.contains("matar"))
+				this.potBufar = false;
+		}
 	}
 	
 	public Taulell getTaulellActual() {return this.taulActual;}
@@ -137,7 +143,7 @@ public class Moviments {
 		return movs;
 	}
 	
-	// Retorna "continua" si no s'ha acabat la partida
+	// Retorna "Continua" si no s'ha acabat la partida
 	// Altrament retorna qui ha guanyat
 	public String partidaAcabada() {
 		String res = "";
@@ -156,6 +162,15 @@ public class Moviments {
 			res = "Continua";
 		
 		return res;
+	}
+	
+	public String movimentsPossibles() {
+		String possibles = "";
+		if (this.potBufar)
+			possibles += "bufar" + ";";
+		if (!this.tornAcabat && partidaAcabada().equals("Continua"))
+			possibles += "moure";
+		return possibles;
 	}
 	
 	// Compta les ocurrencies d'un char en un string
