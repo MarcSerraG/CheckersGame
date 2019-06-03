@@ -59,7 +59,7 @@ public class PartidesSQLOracle {
 		//
 
 		sql += "partides " + "(jugador,contrincant,data_inici,salvat,estat,torn) " + "VALUES ('" + jugador + "','"
-				+ contrincant + "',sysdate,'" + new CapaDomini.Taulell(10).toString() + "',0,'" + jugador + "')";
+				+ contrincant + "',sysdate,'" + new CapaDomini.Taulell().toString() + "',0,'" + jugador + "')";
 
 		// select nomseq.currval from dual;
 		sql2 += "partides_sequence.currval from dual";

@@ -46,11 +46,19 @@ public class PartidesSQLTest {
 		}
 	}
 	@Test
-	public void testGet() {
+	public void testGetPartides() {
 		try {
-		}
-		catch(IllegalArgumentException e) {
-			assertEquals("Position out of bounds", e.getMessage());
+			ResultSet rs = connection.ferSelect("SELECT estat FROM PARTIDES WHERE id = 41");
+			
+			if (!rs.next()) 
+				fail("Expected result on command");
+			else
+				assertEquals(rs.getInt("ESTAT"), 3);
+		} catch (SQLException e) {
+			fail("Error testGetUser "+e.getMessage());
+		
+		} catch (Exception e) {
+			fail("Error testGetUser "+e.getMessage());
 		}
 	}
 
