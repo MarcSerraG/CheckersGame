@@ -67,10 +67,13 @@ public class Dama extends Fitxa {
 
 						pos[0]--;
 						pos[1]++;
-						if (!matCas[pos[0]][pos[1]].getTeFitxa()) {
-							int[] j = { pos[0], pos[1] };
-							llista.add(j);
-							return llista;
+						if (!(pos[0] < 0 || pos[0] > 7 || pos[1] < 0 || pos[1] > 7)) {
+							if (!matCas[pos[0]][pos[1]].getTeFitxa()) {
+								int[] j = { pos[0], pos[1] };
+								llista.add(j);
+								return llista;
+							} else
+								return llista;
 						} else
 							return llista;
 					} else
@@ -125,12 +128,15 @@ public class Dama extends Fitxa {
 
 						pos[0]++;
 						pos[1]--;
-						if (!matCas[pos[0]][pos[1]].getTeFitxa()) {
-							int[] j = { pos[0], pos[1] };
-							llista.add(j);
-							return llista;
-						} else
-							return llista;
+						if (!(pos[0] < 0 || pos[0] > 7 || pos[1] < 0 || pos[1] > 7)) {
+							if (!matCas[pos[0]][pos[1]].getTeFitxa()) {
+								int[] j = { pos[0], pos[1] };
+								llista.add(j);
+								return llista;
+							} else
+								return llista;
+						}
+						return llista;
 					} else
 						return llista;
 				}
@@ -153,9 +159,12 @@ public class Dama extends Fitxa {
 
 						pos[0]--;
 						pos[1]--;
-						if (!matCas[pos[0]][pos[1]].getTeFitxa()) {
-							llista.add(pos);
-							return llista;
+						if (!(pos[0] < 0 || pos[0] > 7 || pos[1] < 0 || pos[1] > 7)) {
+							if (!matCas[pos[0]][pos[1]].getTeFitxa()) {
+								llista.add(pos);
+								return llista;
+							} else
+								return llista;
 						} else
 							return llista;
 					} else
