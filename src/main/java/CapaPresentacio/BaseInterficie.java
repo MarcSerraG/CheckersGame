@@ -220,11 +220,9 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		// Per futures versions es pot millorar la crida
 
 		if (e.getSource() == this.bLogin) {
-			System.out.print("Boto Login!");
 			actionLogin();
 		} else {
 			if (e.getSource() == this.bNewGame) {
-				System.out.println("Boto new game");
 				actionNewGame();
 			} else {
 				if (e.getSource() == this.bContinue_Game) {
