@@ -27,7 +27,6 @@ public class BaseInterficie extends JFrame implements ActionListener {
 	private JLabel versio;
 	private JocAPI api;
 	private Login log;
-	private Partida par;
 	private static NewGame newGame;
 	private ContinueGame ContinueGame;
 
