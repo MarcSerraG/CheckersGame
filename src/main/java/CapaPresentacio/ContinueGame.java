@@ -396,7 +396,6 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 		String usuaris[] = APIplayers.split(";");
 
 		for (String s : usuaris) {
-			System.out.println(s);
 			if (s.equals(contrincant))
 				return interficieBase.getPlayerID();
 		}

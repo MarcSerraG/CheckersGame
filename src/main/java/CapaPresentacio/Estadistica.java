@@ -6,6 +6,7 @@ import java.awt.Font;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -119,7 +120,7 @@ public class Estadistica extends JPanel {
 		String[] st = stat.split(";");
 
 		if (st.length == 0)
-			System.out.println("Error no hi ha estadistiques.");
+			JOptionPane.showMessageDialog(null, "Error no hi ha estadistiques.");
 		else {
 			int rk = 0;
 

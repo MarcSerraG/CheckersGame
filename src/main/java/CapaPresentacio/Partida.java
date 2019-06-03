@@ -108,8 +108,6 @@ public class Partida extends JPanel implements ActionListener {
 		Dimension size = new Dimension(50, 50);
 
 		String[] divisioTaulell = taulellSQL.split("[,\n]");
-		for (String a : divisioTaulell)
-			System.out.print(a);
 
 		try {
 
@@ -255,7 +253,6 @@ public class Partida extends JPanel implements ActionListener {
 		String err = json.getString("err");
 		ClJugador = json.getString("res");
 		String sErr = json.getString("sErr");
-		System.out.println(ClJugador);
 
 		if (err.equals("")) {
 			JugadorColor = ClJugador;
@@ -330,7 +327,6 @@ public class Partida extends JPanel implements ActionListener {
 		} else {
 			if (posFinal.equals("")) {
 				posFinal = posicioBoto;
-				System.out.println(posInicial + " " + posFinal);
 				String moviment = interficieBase.getAPI().ferMoviment(interficieBase.getPlayerID(), idPartida,
 						posInicial, posFinal);
 
