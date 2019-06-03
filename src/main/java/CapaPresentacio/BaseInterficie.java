@@ -438,11 +438,18 @@ public class BaseInterficie extends JFrame implements ActionListener {
 	}
 
 	public void CloseConnection() {
-
-		// Desconecta del servidor l'usuari i tanca la aplicacio
-		if (log.user != null)
-			api.logout(log.user);
-		System.exit(0);
+		try {
+			// Desconecta del servidor l'usuari i tanca la aplicacio
+			if (log.user != null)
+				api.logout(log.user);
+			else {
+				api.getConnectionSQL().tancaConeccio();
+				JOptionPane.showMessageDialog(null, "Server Connection Closed");
+			}
+			System.exit(0);
+		} catch (Exception e) {
+			this.setTitle(e.toString());
+		}
 
 	}
 
