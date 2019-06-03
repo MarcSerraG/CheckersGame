@@ -359,7 +359,7 @@ public class JocAPI {
 		if (estatTauler == null)
 			return crearJSON("", "", "No s'ha pogut carregar la partida");
 
-		Taulell tauler = new Taulell(10);
+		Taulell tauler = new Taulell();
 		tauler.reconstruirTaulell(estatTauler);
 
 		int xIni = Integer.parseInt(posIni.split(";")[0]);
@@ -396,7 +396,7 @@ public class JocAPI {
 		if (estatTauler == null)
 			return crearJSON("", "No s'ha pogut carregar la partida", "");
 
-		Taulell tauler = new Taulell(10);
+		Taulell tauler = new Taulell();
 		tauler.reconstruirTaulell(estatTauler);
 
 		int xIni = Integer.parseInt(pos.split(";")[0]);
@@ -421,7 +421,7 @@ public class JocAPI {
 		if (estatTauler == null)
 			return crearJSON("", "No s'ha pogut carregar la partida", "");
 
-		Taulell tauler = new Taulell(10);
+		Taulell tauler = new Taulell();
 		tauler.reconstruirTaulell(estatTauler);
 
 		int xIni = Integer.parseInt(pos.split(";")[0]);
@@ -448,7 +448,7 @@ public class JocAPI {
 		if (estatTauler == null)
 			return crearJSON("", "No s'ha pogut carregar la partida", "");
 
-		Taulell tauler = new Taulell(10);
+		Taulell tauler = new Taulell();
 		tauler.reconstruirTaulell(estatTauler);
 
 		int xIni = Integer.parseInt(Pos.split(";")[0]);
