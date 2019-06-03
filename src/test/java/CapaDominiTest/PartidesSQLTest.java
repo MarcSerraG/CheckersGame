@@ -31,17 +31,23 @@ public class PartidesSQLTest {
 	@Test
 	public void testGetUser() {
 		try {
-			ResultSet rs = connection.ferSelect("SELECT nom, FROM USUARIS id = 12");
+			ResultSet rs = connection.ferSelect("SELECT nom FROM USUARIS WHERE nom = 'Marc'");
+			
+			if (!rs.next()) 
+				fail("Expected result on command");
+			else
+				assertEquals(rs.getString("NOM"), "Marc");
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("Error testGetUser "+e.getMessage());
+			
+		} catch (Exception e) {
+			fail("Error testGetUser "+e.getMessage());
 		}
 	}
 	@Test
-	public void testDamaPossiblesMoviments() {
+	public void testGet() {
 		try {
-			fail("Error testDama PossiblesMoviments");
 		}
 		catch(IllegalArgumentException e) {
 			assertEquals("Position out of bounds", e.getMessage());
