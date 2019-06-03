@@ -43,11 +43,11 @@ public class Moviments {
 		
 		this.listMovs = new ArrayList<String>();
 		
-		this.taulActual = new Taulell(10);
+		this.taulActual = new Taulell();
 		if (!taulActual.isEmpty())
 			this.taulActual.reconstruirTaulell(taulActual);
 		
-		this.taulAnt = new Taulell(10);
+		this.taulAnt = new Taulell();
 		if (taulAnterior.isEmpty() && !taulActual.isEmpty()) {
 			this.taulAnt.reconstruirTaulell(taulActual);
 		}
@@ -109,7 +109,7 @@ public class Moviments {
 		if (!casSelec.getTeFitxa())
 			return false;
 		
-		List<int[]> movimentsFitxa = this.taulAnt.veurePossiblesMoviments(casSelec);
+		List<int[]> movimentsFitxa = casSelec.getFitxa().possiblesMoviments(x, y, this.taulAnt.getMatriu());
 		
 		for (int[] pos : movimentsFitxa) {
 			Casella casDesti = this.taulAnt.seleccionarCasella(pos[0], pos[1]);
@@ -127,8 +127,10 @@ public class Moviments {
 	}
 	
 	public boolean ferMoure(int xIni, int yIni, int xFi, int yFi) {
-		if (this.tornAcabat)
+		if (this.tornAcabat) {
+			System.out.println("Torn acabat!");
 			return false;
+		}
 		
 		Casella casOrigen = this.taulActual.seleccionarCasella(xIni, yIni);
 		Casella casDesti = this.taulActual.seleccionarCasella(xFi, yFi);

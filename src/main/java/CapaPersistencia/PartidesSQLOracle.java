@@ -611,14 +611,16 @@ public class PartidesSQLOracle {
 		String res = "";
 
 		ResultSet rs = null;
+		
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro = "SELECT torn FROM partides WHERE (id = '" + idPartida + "' and estat between 1 AND 2)";
+		sqlcompro += "torn FROM partides WHERE (id = " + idPartida + " and estat between 1 AND 2)";
 		try {
 			rs = conn.ferSelect(sqlcompro);
-			while (rs.next()) {
-				res = rs.getString("TORN");
+			if (rs.next()) {
+				res = rs.getString("torn");
 			}
+			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error SQL getPartidesTorn: " + e);
 			return res;
