@@ -278,7 +278,7 @@ public class Partida extends JPanel implements ActionListener {
 		LabelVermelles.setForeground(new Color(237, 215, 178));
 
 		ColorJugadorsPanel.add(LabelNegres);
-		ColorJugadorsPanel.add(Box.createRigidArea(new Dimension(0, 400)));
+		ColorJugadorsPanel.add(Box.createRigidArea(new Dimension(0, 370)));
 		ColorJugadorsPanel.add(LabelVermelles);
 		panelEst.add(Box.createRigidArea(new Dimension(150, 0)));
 
