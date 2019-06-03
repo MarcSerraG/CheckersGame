@@ -39,6 +39,7 @@ public class ConnectionSQLOracle {
 			System.out.println(sql);
 			st = conn.createStatement();
 			st.execute(sql);
+			st.close();
 		} catch (SQLException e) {
 			System.out.println("Error en Select de " + sql + " tipus de error " + e);
 		}
@@ -84,6 +85,7 @@ public class ConnectionSQLOracle {
 			System.out.println(sql);
 			st = conn.createStatement();
 			st.executeUpdate(sql);
+			st.close();
 			return true;
 		} catch (SQLException e) {
 			System.out.println("Error en Select de " + sql + " tipus de error " + e);
@@ -98,24 +100,4 @@ public class ConnectionSQLOracle {
 	public void setAutocommit(boolean opt) throws SQLException {
 		conn.setAutoCommit(opt);
 	}
-
-	public static void main(String[] args) {
-		// Sa dimportar odbc.jar
-		try {
-
-			ConnectionSQLOracle cn = new ConnectionSQLOracle();
-			UsuariSQLOracle usu = new UsuariSQLOracle(cn);
-			// usu.insertUsuari("Marc", "1234", "msg@gmail.com","0");
-			// System.out.println(usu.getConnectat("Marc"));
-			// System.out.println(tb.toString());
-			PartidesSQLOracle pat = new PartidesSQLOracle(cn);
-			pat.rebutjaSolicitud("Marc", "Prova2");
-			// System.out.println(id);
-			// System.out.println(pat.getTaullelnou().toString());
-
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-	}
-
 }
