@@ -383,21 +383,19 @@ public class JocAPI {
 
 	public String ferBufa(String idSessio, String idPartida, String pos) {
 
-		String estatTauler = this.partSQL.continuarPartida(idPartida);
-		if (estatTauler == null)
-			return crearJSON("", "No s'ha pogut carregar la partida", "");
-
-		Taulell tauler = new Taulell(10);
-		tauler.reconstruirTaulell(estatTauler);
-
+		this.instanciarMoviments(idPartida);
+		
 		int xIni = Integer.parseInt(pos.split(";")[0]);
 		int yIni = Integer.parseInt(pos.split(";")[1]);
-
-		Casella cas = tauler.seleccionarCasella(xIni, yIni);
-		if (tauler.bufar(cas))
-			return crearJSON("true", "", "");
+		
+		boolean bufa = this.movTornAct.ferBufa(xIni, yIni);
+		String res;
+		if (bufa)
+			res = "true";
 		else
-			return crearJSON("false", "", "");
+			res = "false";
+		
+		return crearJSON(res, "", "");
 	}
 
 	public String acceptaTaules(String idSessio, String idPartida) {
