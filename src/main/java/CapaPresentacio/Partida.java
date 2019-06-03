@@ -49,7 +49,7 @@ public class Partida extends JPanel implements ActionListener {
 		panelTaulell = new JPanel();
 
 		panelCentral = new JPanel();
-		panelCentral.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+		panelCentral.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 5));
 		panelCentral.setBackground(Color.ORANGE);
 
 		panelTaulell.setLayout(new BorderLayout());
