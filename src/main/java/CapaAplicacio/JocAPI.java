@@ -164,14 +164,6 @@ public class JocAPI {
 
 		nomsUsuaris = nomsUsuaris.substring(0, nomsUsuaris.length()); // Borrar ultim ;
 		return crearJSON(nomsUsuaris, "", "");
-
-		// res = this.partSQL.getSolicitudsPendents(idSessio);
-		/*
-		 * if (res == null) System.out.println("Hi ha hagut un problema de connexió.");
-		 * else { if (res.equals(""))
-		 * System.out.println("No sa pogut afegir la partida a la BBDD."); else
-		 * System.out.println(res); }
-		 */
 	}
 
 	public void acceptaSol(String idSessio, String usuari) {
@@ -290,8 +282,6 @@ public class JocAPI {
 
 		if (tauler == null)
 			return crearJSON("", "No s'ha trobat partida o sessio", "");
-
-		// tauler = taulellConversor(tauler);
 
 		return crearJSON(tauler, "", "");
 	}
