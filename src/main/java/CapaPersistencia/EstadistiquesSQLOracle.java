@@ -31,10 +31,8 @@ public class EstadistiquesSQLOracle {
 		int numPar = 0, numWin = 0,numT = 0,numLose = 0;
 		float ratio = 0.00f;
 		sql += " COUNT(*) from partides where estat = 3 and (jugador = '"+idUsuari+"' or contrincant = '"+idUsuari+"')";
-		System.out.println(sql);
 		try {
 			rs = this.conn.ferSelect(sql);
-			System.out.println(rs);
 			if (rs.next())
 				numPar = rs.getInt("COUNT(*)");
 			else

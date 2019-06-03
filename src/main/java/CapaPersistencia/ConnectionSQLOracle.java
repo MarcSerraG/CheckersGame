@@ -36,7 +36,6 @@ public class ConnectionSQLOracle {
 	public void ferDelete(String sql) throws SQLException {
 		Statement st = null;
 		try {
-			System.out.println(sql);
 			st = conn.createStatement();
 			st.execute(sql);
 			st.close();
@@ -82,7 +81,6 @@ public class ConnectionSQLOracle {
 	public boolean crearInsert(String sql) throws SQLException {
 		Statement st = null;
 		try {
-			System.out.println(sql);
 			st = conn.createStatement();
 			st.executeUpdate(sql);
 			st.close();

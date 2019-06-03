@@ -80,7 +80,7 @@ public class UsuariSQLOracle {
 			}
 			rs.close();
 		} catch (SQLException e) {
-			System.out.print(e);
+			System.out.print("Error SQL retorna Usuaris: "+e.getMessage());
 			return null;
 
 		}

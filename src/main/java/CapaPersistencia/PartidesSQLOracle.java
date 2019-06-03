@@ -248,8 +248,6 @@ public class PartidesSQLOracle {
 			System.out.println("Error SQL rebutja: " + e);
 			return false;
 		}
-		
-		System.out.println(id);
 		String sql2 = "DELETE FROM partides WHERE id = " + id + "";
 
 		try {

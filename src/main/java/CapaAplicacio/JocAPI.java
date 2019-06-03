@@ -104,7 +104,6 @@ public class JocAPI {
 	}
 
 	public String getEstadistics(String idSessio) {
-		System.out.println("idSessio" + idSessio);
 		String res = this.statSQL.getEstadistiquesUsuari(idSessio);
 		if (res == null)
 			return crearJSON("", "SQL error no hi han dades suficients", "");
@@ -429,10 +428,11 @@ public class JocAPI {
 		int yIni = Integer.parseInt(pos.split(";")[1]);
 
 		Casella cas = tauler.seleccionarCasella(xIni, yIni);
-		if (tauler.bufar(cas))
+		/*if (tauler.bufar(cas))
 			return crearJSON("true", "", "");
 		else
-			return crearJSON("false", "", "");
+			return crearJSON("false", "", "");*/
+		return crearJSON("res","","");
 	}
 
 	public String acceptaTaules(String idSessio, String idPartida) {
