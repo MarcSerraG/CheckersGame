@@ -337,6 +337,7 @@ public class PartidesSQLOracle {
 				} else
 					res.add(contrincant);
 			}
+			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error SQL getPartidesTorn: " + e);
 			return res;
@@ -371,6 +372,7 @@ public class PartidesSQLOracle {
 				else
 					res.add(nomguanyador + ",perdut");
 			}
+			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error SQL getPartidesAcabada: " + e);
 			return null;
@@ -400,6 +402,7 @@ public class PartidesSQLOracle {
 			rs = conn.ferSelect(sqlcompro);
 			if (rs.next())
 				return rs.getString("id");
+			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error sql getPartida: " + e);
 			return null;
@@ -409,6 +412,7 @@ public class PartidesSQLOracle {
 			rs = conn.ferSelect(sqlcompro);
 			if (rs.next())
 				return rs.getString("id");
+			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error sql getPartida: " + e);
 			return null;
@@ -437,7 +441,7 @@ public class PartidesSQLOracle {
 					return "Red";
 				else if (rs.getString("contrincant").equals(idSessio))
 					return "Black";
-
+			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error SQL getColor: " + e);
 			return null;
@@ -474,7 +478,6 @@ public class PartidesSQLOracle {
 		} catch (Exception e) {
 			System.out.println("Error getTaulerAnt: " + e);
 			return null;
-
 		}
 		return res;
 	}
