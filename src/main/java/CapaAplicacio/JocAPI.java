@@ -457,6 +457,7 @@ public class JocAPI {
 			taulerAct = "";
 		
 		boolean tornJugador = this.partSQL.getTorn(idPartida).equals(idSessio);
+		System.out.println(this.partSQL.getTorn(idPartida));
  
 		this.movTornAct = new Moviments(movsAnt, taulerAct, taulerAnt, tornJugador); 
 	}
