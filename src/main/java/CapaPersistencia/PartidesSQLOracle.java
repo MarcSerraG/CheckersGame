@@ -451,7 +451,7 @@ public class PartidesSQLOracle {
 	 * @param idPartida
 	 * @return
 	 */
-	public String getTaulerAnt(String idSessio, String idPartida) {
+	public String getTaulerAnt(String idPartida) {
 		String res = null;
 		String sql2;;
 		ResultSet rs = null;
