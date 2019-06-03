@@ -24,7 +24,7 @@ public class Moviments {
 	private boolean tornAcabat;
 	private boolean potBufar;
 	
-	public Moviments(String movsAnt, String taulActual, String taulAnterior) {
+	public Moviments(String movsAnt, String taulActual, String taulAnterior, boolean torn) {
 		
 		this.listMovsAnt = new ArrayList<String>();
 		
@@ -35,17 +35,16 @@ public class Moviments {
 		}
 		
 		this.listMovs = new ArrayList<String>();
-		System.out.println(taulActual);
-		System.out.println();
-		System.out.println(taulAnterior);
+		
 		this.taulActual = new Taulell(10);
-		this.taulActual.reconstruirTaulell(taulActual);
-		if (taulAnterior.isEmpty()) {
-			this.taulAnt = new Taulell(10);
+		if (!taulActual.isEmpty())
+			this.taulActual.reconstruirTaulell(taulActual);
+		
+		this.taulAnt = new Taulell(10);
+		if (taulAnterior.isEmpty() && !taulActual.isEmpty()) {
 			this.taulAnt.reconstruirTaulell(taulActual);
 		}
 		else {
-			this.taulAnt = new Taulell(10);
 			this.taulAnt.reconstruirTaulell(taulAnterior);
 		}
 		this.tornAcabat = false;
@@ -166,10 +165,10 @@ public class Moviments {
 	
 	public String movimentsPossibles() {
 		String possibles = "";
-		if (this.potBufar)
-			possibles += "bufar" + ";";
 		if (!this.tornAcabat && partidaAcabada().equals("Continua"))
-			possibles += "moure";
+			possibles += "moure" + ";";
+		if (this.potBufar)
+			possibles += "bufar";
 		return possibles;
 	}
 	
