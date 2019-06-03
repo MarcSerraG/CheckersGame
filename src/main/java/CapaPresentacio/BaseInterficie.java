@@ -103,7 +103,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bRefresh = createButton("Refresh", size);
 
 		// Versio
-		this.versio = new JLabel("Version: 0.1 (Beta)");
+		this.versio = new JLabel("Version: 0.0.1 (Pre-Alpha)");
 
 		// Definim el color de fons dels colors a gris menys el de login ja que sera el
 		// seleccionat sempre la primera vegada

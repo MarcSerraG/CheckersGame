@@ -49,7 +49,7 @@ public class Partida extends JPanel implements ActionListener {
 		panelTaulell = new JPanel();
 
 		panelCentral = new JPanel();
-		panelCentral.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+		panelCentral.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 5));
 		panelCentral.setBackground(Color.ORANGE);
 
 		panelTaulell.setLayout(new BorderLayout());
@@ -365,21 +365,18 @@ public class Partida extends JPanel implements ActionListener {
 						} else {
 							setAnticTaulell(mss);
 						}
-
-						json = new JSONObject(
-								interficieBase.getAPI().grabarTirada(interficieBase.getPlayerID(), idPartida));
-
-						err = json.getString("err");
-						mss = json.getString("res");
-						sErr = json.getString("sErr");
-
-						if (err.equals(""))
-							lMessage.setText(mss);
-						else
-							lMessage.setText(err);
-
-						System.out.println(mss);
-
+						/*
+						 * json = new
+						 * JSONObject(interficieBase.getAPI().grabarTirada(interficieBase.getPlayerID(),
+						 * idPartida));
+						 * 
+						 * err = json.getString("err"); mss = json.getString("res"); sErr =
+						 * json.getString("sErr");
+						 * 
+						 * if (err.equals("")) lMessage.setText(mss); else lMessage.setText(err);
+						 * 
+						 * System.out.println(mss);
+						 */
 					} else {
 						lMessage.setText(err.split(":")[1]);
 						posInicial = "";
