@@ -458,7 +458,7 @@ public class JocAPI {
 		if (!cas.getTeFitxa())
 			return crearJSON("", "No hi ha fitxa a la posicio donada", "");
 
-		List<int[]> moviments = tauler.veurePossiblesMoviments(cas);
+		List<int[]> moviments = cas.getFitxa().possiblesMoviments(cas.getX(), cas.getY(), tauler.getMatriu());
 
 		if (moviments.isEmpty())
 			return crearJSON("", "You can't move", "");
