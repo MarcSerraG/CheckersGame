@@ -98,7 +98,7 @@ public class Partida extends JPanel implements ActionListener {
 		panelCentral.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
 		panelCentral.setBackground(Color.ORANGE);
 
-		GridLayout layoutTaulell = new GridLayout(10, 10);
+		GridLayout layoutTaulell = new GridLayout(8, 8);
 		panelCentral.setLayout(layoutTaulell);
 
 		int color = -1;
@@ -129,7 +129,7 @@ public class Partida extends JPanel implements ActionListener {
 			myImage4 = myImage4.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
 			ImageIcon DamaNegra = new ImageIcon(myImage4);
 
-			for (int x = 0; x < 10; x++) {
+			for (int x = 0; x < 8; x++) {
 				switch (color) {
 				case -1:
 				case 0:
@@ -140,7 +140,7 @@ public class Partida extends JPanel implements ActionListener {
 					break;
 				}
 
-				for (int y = 0; y < 10; y++) {
+				for (int y = 0; y < 8; y++) {
 					switch (divisioTaulell[contador]) {
 					case "1":
 						taulell2.put(createButton(size, color, peoNegre, ContrincantPesses("Black")), x + ";" + y);
