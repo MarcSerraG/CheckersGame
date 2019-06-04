@@ -135,22 +135,22 @@ public class Moviments {
 		Casella casOrigen = this.taulActual.seleccionarCasella(xIni, yIni);
 		Casella casDesti = this.taulActual.seleccionarCasella(xFi, yFi);
 		boolean potMatar = this.taulActual.potMatar(casOrigen, casDesti) != null;
-		if (this.taulActual.moviment(casOrigen, casDesti)) {
-			String moviment = "";
-			if (potMatar) 
+		String moviment = "";
+		try {
+			if (this.taulActual.moviment(casOrigen, casDesti)) {
 				moviment = "matar;" + xIni + ";" + yIni + ";" + xFi + ";" + yFi;
+			}
 			else {
 				moviment = "moure;" + xIni + ";" + yIni + ";" + xFi + ";" + yFi;
-				this.tornAcabat = true; // Si no ha matat, s'acaba el torn
+				this.tornAcabat = true;
 			}
 			this.listMovs.add(moviment);
-			System.out.println(moviment);
-			System.out.println(this.listMovs.get(0));
 			this.potBufar = false;
 			return true;
 		}
-		System.out.println("No s'ha pogut moure?");
-		return false;
+		catch (Exception e) {
+			return false;
+		}
 	}
 	
 	public String movsToString() {
