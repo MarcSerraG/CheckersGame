@@ -146,12 +146,7 @@ public class JocAPI {
 		}
 	}
 
-	/**
-	 * TODO
-	 * 
-	 * @param idSessio
-	 * @return
-	 */
+
 	public String solicituds(String idSessio) {
 
 		List<String> solicituds = this.partSQL.getSolicitudsPendents(idSessio);
@@ -250,20 +245,6 @@ public class JocAPI {
 		if (id == null)
 			return crearJSON("", "No hi ha partida disponible.", "");
 
-		// return crearJSON(id, "", ""); // Remove comment only if the method fails
-		/*
-		 * String movsAnt = this.partSQL.getMovimentsAnt(id); if (movsAnt == null)
-		 * return crearJSON("", "No hi ha moviments anteriors (null)", ""); String
-		 * taulerAnt = this.partSQL.getTaulerAnt(idSessio, id); if (taulerAnt == null)
-		 * return crearJSON("", "No s'ha trobat tauler anterior", "");
-		 * 
-		 * String taulerAct = this.partSQL.continuarPartida(id); if (taulerAct == null)
-		 * return crearJSON("", "No s'ha trobat tauler actual", "");
-		 * 
-		 * 
-		 * this.movTornAct = new Moviments(movsAnt, taulerAct, taulerAnt);
-		 * 
-		 */
 		return crearJSON(id, "", "");
 	}
 
@@ -322,6 +303,7 @@ public class JocAPI {
 	}
 
 	public String grabarTirada(String idSessio, String idPartida) {
+		// NO FUNCIONA EN AQUESTA VERSIÓ
 		// TODO: Comprovar / implementar taules...
 
 		String movs = this.movTornAct.movsToString();
