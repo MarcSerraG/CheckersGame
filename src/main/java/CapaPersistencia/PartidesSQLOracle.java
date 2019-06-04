@@ -391,9 +391,9 @@ public class PartidesSQLOracle {
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
-		sqlcompro = "SELECT id FROM PARTIDES WHERE" + " jugador = '" + jugador + "' and contrincant ='" + contrincant
+		sqlcompro = "SELECT id FROM PARTIDES WHERE" + " (jugador = '" + jugador + "' and contrincant ='" + contrincant
 				+ "' or " + "jugador = '" + contrincant + "' and contrincant ='" + jugador
-				+ "' and estat between 1 and 2";
+				+ "') and estat between 1 and 2";
 
 		try {
 			rs = conn.ferSelect(sqlcompro);
@@ -621,6 +621,7 @@ public class PartidesSQLOracle {
 				res = rs.getString("torn");
 			}
 			rs.close();
+			return res;
 		} catch (SQLException e) {
 			System.out.println("Error SQL getPartidesTorn: " + e);
 			return res;
