@@ -46,7 +46,7 @@ public class Dama extends Fitxa {
 	}
 
 	// Retorna una llista que va omplint en diagonal fins que troba una fitxa
-	public List<int[]> calcularDiagonal(int x, int y, Casella[][] matCas, int dir) {
+	private List<int[]> calcularDiagonal(int x, int y, Casella[][] matCas, int dir) {
 		// dir 0 = UPRIGHT
 		// dir 1 = DOWNRIGHT
 		// dir 2 = DOWNLEFT
