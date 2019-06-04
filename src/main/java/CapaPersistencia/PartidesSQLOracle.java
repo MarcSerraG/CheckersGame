@@ -551,7 +551,7 @@ public class PartidesSQLOracle {
 			fix = sep[3];
 			fiy = sep[4];
 			sqlinsert = "INSERT INTO MOVIMENTS (filaorigen,columnaorigen,filadesti,columnadesti,partides_id,tipus) "
-					+ "VALUES (" + inix + "," + iniy + "," + fix + "," + fiy + "," + idPartida + ",'" + tipus + "'";
+					+ "VALUES (" + inix + "," + iniy + "," + fix + "," + fiy + "," + idPartida + ",'" + tipus + "')";
 
 			try {
 				boolean rs = this.conn.crearInsert(sqlinsert);
