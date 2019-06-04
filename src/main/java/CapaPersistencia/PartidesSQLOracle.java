@@ -621,6 +621,7 @@ public class PartidesSQLOracle {
 				res = rs.getString("torn");
 			}
 			rs.close();
+			return res;
 		} catch (SQLException e) {
 			System.out.println("Error SQL getPartidesTorn: " + e);
 			return res;
