@@ -149,6 +149,7 @@ public class Moviments {
 			this.potBufar = false;
 			return true;
 		}
+		System.out.println("No s'ha pogut moure?");
 		return false;
 	}
 	
