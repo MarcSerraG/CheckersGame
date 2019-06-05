@@ -51,7 +51,7 @@ public class Moviments {
 		if (taulAnterior.isEmpty() && !taulActual.isEmpty()) {
 			this.taulAnt.reconstruirTaulell(taulActual);
 		}
-		else {
+		else if (!taulAnterior.isEmpty()) {
 			this.taulAnt.reconstruirTaulell(taulAnterior);
 		}
 		
