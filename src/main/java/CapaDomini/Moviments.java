@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 /*
  * Moviments son Strings amb la següent estructura:
  * moviment;X;Y;X;Y
@@ -17,6 +18,12 @@ import java.util.List;
  */
 public class Moviments {
 	
+	private static Moviments instancia;
+	
+	public static Moviments getInstance() {
+		return Moviments.instancia;
+	}
+	
 	private List<String> listMovs; // Moviments torn actual, encara per fer...
 	private List<String> listMovsAnt; // Moviments torn anterior
 	private Taulell taulActual; // Taulell torn actual
@@ -24,7 +31,7 @@ public class Moviments {
 	private boolean tornAcabat;
 	private boolean potBufar;
 	
-	public Moviments(String movsAnt, String taulActual, String taulAnterior) {
+	public Moviments(String movsAnt, String taulActual, String taulAnterior, boolean torn) {
 		
 		this.listMovsAnt = new ArrayList<String>();
 		
@@ -35,16 +42,36 @@ public class Moviments {
 		}
 		
 		this.listMovs = new ArrayList<String>();
-		this.taulActual = new Taulell(taulActual);
-		if (taulAnterior.isEmpty())
-			this.taulAnt = new Taulell(taulActual);
+		
+		this.taulActual = new Taulell();
+		if (!taulActual.isEmpty())
+			this.taulActual.reconstruirTaulell(taulActual);
+		
+		this.taulAnt = new Taulell();
+		if (taulAnterior.isEmpty() && !taulActual.isEmpty()) {
+			this.taulAnt.reconstruirTaulell(taulActual);
+		}
+		else if (!taulAnterior.isEmpty()) {
+			this.taulAnt.reconstruirTaulell(taulAnterior);
+		}
+		
+		if (torn)
+			this.tornAcabat = false;
 		else
-			this.taulAnt = new Taulell(taulAnterior);
-		this.tornAcabat = false;
+			this.tornAcabat = true;
+		
 		if (taulAnterior.isEmpty())
 			this.potBufar = false;
 		else
 			this.potBufar = true;
+		
+		// Si en el torn anterior s'ha matat, no pot bufar
+		for (String mov : this.listMovsAnt) {
+			if (mov.contains("matar"))
+				this.potBufar = false;
+		}
+		
+		Moviments.instancia = this;
 	}
 	
 	public Taulell getTaulellActual() {return this.taulActual;}
@@ -82,7 +109,7 @@ public class Moviments {
 		if (!casSelec.getTeFitxa())
 			return false;
 		
-		List<int[]> movimentsFitxa = this.taulAnt.veurePossiblesMoviments(casSelec);
+		List<int[]> movimentsFitxa = casSelec.getFitxa().possiblesMoviments(x, y, this.taulAnt.getMatriu());
 		
 		for (int[] pos : movimentsFitxa) {
 			Casella casDesti = this.taulAnt.seleccionarCasella(pos[0], pos[1]);
@@ -100,23 +127,30 @@ public class Moviments {
 	}
 	
 	public boolean ferMoure(int xIni, int yIni, int xFi, int yFi) {
-		if (this.tornAcabat)
+		if (this.tornAcabat) {
+			System.out.println("Torn acabat!");
 			return false;
+		}
 		
 		Casella casOrigen = this.taulActual.seleccionarCasella(xIni, yIni);
 		Casella casDesti = this.taulActual.seleccionarCasella(xFi, yFi);
 		boolean potMatar = this.taulActual.potMatar(casOrigen, casDesti) != null;
-		if (this.taulActual.moviment(casOrigen, casDesti)) {
-			if (potMatar) 
-				this.listMovs.add("matar;" + xIni + ";" + yIni + ";" + xFi + ";" + yFi);
-			else {
-				this.listMovs.add("moure;" + xIni + ";" + yIni + ";" + xFi + ";" + yFi);
-				this.tornAcabat = true; // Si no ha matat, s'acaba el torn
+		String moviment = "";
+		try {
+			if (this.taulActual.moviment(casOrigen, casDesti)) {
+				moviment = "matar;" + xIni + ";" + yIni + ";" + xFi + ";" + yFi;
 			}
+			else {
+				moviment = "moure;" + xIni + ";" + yIni + ";" + xFi + ";" + yFi;
+				this.tornAcabat = true;
+			}
+			this.listMovs.add(moviment);
 			this.potBufar = false;
 			return true;
 		}
-		return false;
+		catch (Exception e) {
+			return false;
+		}
 	}
 	
 	public String movsToString() {
@@ -129,7 +163,7 @@ public class Moviments {
 		return movs;
 	}
 	
-	// Retorna "continua" si no s'ha acabat la partida
+	// Retorna "Continua" si no s'ha acabat la partida
 	// Altrament retorna qui ha guanyat
 	public String partidaAcabada() {
 		String res = "";
@@ -141,13 +175,22 @@ public class Moviments {
 		int damesNegres = countOccurrences(taulellAct, 'd');
 		
 		if (peonsBlancs == 0 && damesBlancs == 0)
-			res = "Red";
-		else if (peonsNegres == 0 && damesNegres == 0)
 			res = "Black";
+		else if (peonsNegres == 0 && damesNegres == 0)
+			res = "Red";
 		else
 			res = "Continua";
 		
 		return res;
+	}
+	
+	public String movimentsPossibles() {
+		String possibles = "";
+		if (!this.tornAcabat && partidaAcabada().equals("Continua"))
+			possibles += "moure" + ";";
+		if (this.potBufar)
+			possibles += "bufar";
+		return possibles;
 	}
 	
 	// Compta les ocurrencies d'un char en un string
