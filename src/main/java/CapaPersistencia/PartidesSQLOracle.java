@@ -390,6 +390,7 @@ public class PartidesSQLOracle {
 
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
+		String res = "";
 
 		sqlcompro = "SELECT id FROM PARTIDES WHERE" + " (jugador = '" + jugador + "' and contrincant ='" + contrincant
 				+ "' or " + "jugador = '" + contrincant + "' and contrincant ='" + jugador
@@ -397,8 +398,11 @@ public class PartidesSQLOracle {
 
 		try {
 			rs = conn.ferSelect(sqlcompro);
-			if (rs.next())
-				return rs.getString("id");
+			if (rs.next()) {
+				res = rs.getString("id");
+				rs.close();
+				return res;
+			}
 			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error sql getPartida: " + e);
@@ -407,8 +411,11 @@ public class PartidesSQLOracle {
 
 		try {
 			rs = conn.ferSelect(sqlcompro);
-			if (rs.next())
-				return rs.getString("id");
+			if (rs.next()) {
+				res = rs.getString("id");
+				rs.close();
+				return res;
+			}
 			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error sql getPartida: " + e);
