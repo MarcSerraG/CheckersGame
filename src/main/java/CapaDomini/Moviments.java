@@ -175,9 +175,9 @@ public class Moviments {
 		int damesNegres = countOccurrences(taulellAct, 'd');
 		
 		if (peonsBlancs == 0 && damesBlancs == 0)
-			res = "Red";
-		else if (peonsNegres == 0 && damesNegres == 0)
 			res = "Black";
+		else if (peonsNegres == 0 && damesNegres == 0)
+			res = "Red";
 		else
 			res = "Continua";
 		

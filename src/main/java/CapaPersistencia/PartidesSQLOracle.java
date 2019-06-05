@@ -686,4 +686,19 @@ public class PartidesSQLOracle {
 		}
 
 	}
+
+	public boolean acabarPartida(String guanyador, String idPartida) {
+		String sql = "";
+		sql = ConnectionSQLOracle.SQLUPDATE + " partides SET (nom_guanyador = '" + guanyador + "', estat = 3)";
+		sql += " WHERE id = " + idPartida + "";
+
+		try {
+			if (conn == null)
+				return false;
+			return conn.crearInsert(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

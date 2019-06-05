@@ -311,8 +311,10 @@ public class JocAPI {
 		String resultat = this.movTornAct.partidaAcabada();
 		String idColor = this.partSQL.getColor(idSessio, idPartida);
 
-		if (resultat.equalsIgnoreCase(idColor))
+		if (resultat.equalsIgnoreCase(idColor)) {
+			this.partSQL.acabarPartida(idSessio, idPartida);
 			return crearJSON("guanya", "", "");
+		}
 		else if (resultat.equalsIgnoreCase("taules"))
 			return crearJSON("taules", "", "");
 		else if (resultat.equalsIgnoreCase("continua"))
