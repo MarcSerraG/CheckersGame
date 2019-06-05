@@ -349,7 +349,7 @@ public class Partida extends JPanel implements ActionListener {
 							torn = false;
 						}
 
-						String nouTaulell = interficieBase.getAPI().obtenirTaulerAct(interficieBase.getPlayerID(),
+						String nouTaulell = interficieBase.getAPI().obtenirTaulerRes(interficieBase.getPlayerID(),
 								idPartida);
 						json = new JSONObject(nouTaulell);
 
@@ -361,18 +361,21 @@ public class Partida extends JPanel implements ActionListener {
 						} else {
 							setAnticTaulell(mss);
 						}
-						/*
-						 * json = new
-						 * JSONObject(interficieBase.getAPI().grabarTirada(interficieBase.getPlayerID(),
-						 * idPartida));
-						 * 
-						 * err = json.getString("err"); mss = json.getString("res"); sErr =
-						 * json.getString("sErr");
-						 * 
-						 * if (err.equals("")) lMessage.setText(mss); else lMessage.setText(err);
-						 * 
-						 * System.out.println(mss);
-						 */
+
+						json = new JSONObject(
+								interficieBase.getAPI().grabarTirada(interficieBase.getPlayerID(), idPartida));
+
+						err = json.getString("err");
+						mss = json.getString("res");
+						sErr = json.getString("sErr");
+
+						if (err.equals(""))
+							lMessage.setText(mss);
+						else
+							lMessage.setText(err);
+
+						System.out.println(mss);
+
 					} else {
 						lMessage.setText(err.split(":")[1]);
 						posInicial = "";

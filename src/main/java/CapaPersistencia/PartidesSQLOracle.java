@@ -390,6 +390,7 @@ public class PartidesSQLOracle {
 
 		ResultSet rs = null;
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
+		String res = "";
 
 		sqlcompro = "SELECT id FROM PARTIDES WHERE" + " (jugador = '" + jugador + "' and contrincant ='" + contrincant
 				+ "' or " + "jugador = '" + contrincant + "' and contrincant ='" + jugador
@@ -397,8 +398,11 @@ public class PartidesSQLOracle {
 
 		try {
 			rs = conn.ferSelect(sqlcompro);
-			if (rs.next())
-				return rs.getString("id");
+			if (rs.next()) {
+				res = rs.getString("id");
+				rs.close();
+				return res;
+			}
 			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error sql getPartida: " + e);
@@ -407,8 +411,11 @@ public class PartidesSQLOracle {
 
 		try {
 			rs = conn.ferSelect(sqlcompro);
-			if (rs.next())
-				return rs.getString("id");
+			if (rs.next()) {
+				res = rs.getString("id");
+				rs.close();
+				return res;
+			}
 			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error sql getPartida: " + e);
@@ -434,19 +441,28 @@ public class PartidesSQLOracle {
 			rs = conn.ferSelect(sql);
 
 			if (rs.next())
-				if (rs.getString("jugador").equals(idSessio))
+				if (rs.getString("jugador").equals(idSessio)) {
+					rs.close();
 					return "Red";
-				else if (rs.getString("contrincant").equals(idSessio))
+				}
+				else if (rs.getString("contrincant").equals(idSessio)) {
+					rs.close();
 					return "Black";
+				}
 			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error SQL getColor: " + e);
-			return null;
 
 		} catch (Exception e) {
 			System.out.println("Error getColor: " + e);
-			return null;
-
+		}
+		finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
@@ -458,7 +474,7 @@ public class PartidesSQLOracle {
 	 * @param idPartida
 	 * @return
 	 */
-	public String getTaulerAnt(String idSessio, String idPartida) {
+	public String getTaulerAnt(String idPartida) {
 		String res = null;
 		String sql2;
 		ResultSet rs = null;
@@ -551,7 +567,7 @@ public class PartidesSQLOracle {
 			fix = sep[3];
 			fiy = sep[4];
 			sqlinsert = "INSERT INTO MOVIMENTS (filaorigen,columnaorigen,filadesti,columnadesti,partides_id,tipus) "
-					+ "VALUES (" + inix + "," + iniy + "," + fix + "," + fiy + "," + idPartida + ",'" + tipus + "'";
+					+ "VALUES (" + inix + "," + iniy + "," + fix + "," + fiy + "," + idPartida + ",'" + tipus + "')";
 
 			try {
 				boolean rs = this.conn.crearInsert(sqlinsert);
@@ -600,6 +616,37 @@ public class PartidesSQLOracle {
 			return null;
 		}
 	}
+	
+	/**
+	 * Retorna el nom de l'usuari que té el torn
+	 * @param idPartida
+	 * @return
+	 */
+	public String getTorn(String idPartida) {
+
+		String res = "";
+
+		ResultSet rs = null;
+		
+		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
+
+		sqlcompro += "torn FROM partides WHERE (id = " + idPartida + " and estat between 1 AND 2)";
+		try {
+			rs = conn.ferSelect(sqlcompro);
+			if (rs.next()) {
+				res = rs.getString("torn");
+			}
+			rs.close();
+			return res;
+		} catch (SQLException e) {
+			System.out.println("Error SQL getPartidesTorn: " + e);
+			return res;
+		} catch (Exception e) {
+			System.out.println("Error getPartidesTorn: " + e);
+		}
+		return res;
+	}
+	
 
 	/**
 	 * PRIVATES
@@ -654,5 +701,20 @@ public class PartidesSQLOracle {
 			return false;
 		}
 
+	}
+
+	public boolean acabarPartida(String guanyador, String idPartida) {
+		String sql = "";
+		sql = ConnectionSQLOracle.SQLUPDATE + " partides SET nom_guanyador = '" + guanyador + "', estat = 3";
+		sql += " WHERE id = " + idPartida + "";
+
+		try {
+			if (conn == null)
+				return false;
+			return conn.crearInsert(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

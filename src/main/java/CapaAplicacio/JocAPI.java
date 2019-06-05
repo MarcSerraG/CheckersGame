@@ -23,7 +23,6 @@ public class JocAPI {
 	private EstadistiquesSQLOracle statSQL;
 	private Moviments movTornAct;
 	private JSONObject json;
-	private String contrincant;
 
 	public JocAPI() throws Exception {
 		connSQL = new ConnectionSQLOracle();
@@ -32,7 +31,6 @@ public class JocAPI {
 		statSQL = new EstadistiquesSQLOracle(connSQL);
 		json = new JSONObject();
 		movTornAct = null;
-		contrincant = "";
 	}
 
 	/**
@@ -146,7 +144,7 @@ public class JocAPI {
 		}
 	}
 
-
+	
 	public String solicituds(String idSessio) {
 
 		List<String> solicituds = this.partSQL.getSolicitudsPendents(idSessio);
@@ -164,14 +162,6 @@ public class JocAPI {
 
 		nomsUsuaris = nomsUsuaris.substring(0, nomsUsuaris.length()); // Borrar ultim ;
 		return crearJSON(nomsUsuaris, "", "");
-
-		// res = this.partSQL.getSolicitudsPendents(idSessio);
-		/*
-		 * if (res == null) System.out.println("Hi ha hagut un problema de connexió.");
-		 * else { if (res.equals(""))
-		 * System.out.println("No sa pogut afegir la partida a la BBDD."); else
-		 * System.out.println(res); }
-		 */
 	}
 
 	public void acceptaSol(String idSessio, String usuari) {
@@ -239,14 +229,14 @@ public class JocAPI {
 
 	public String triaPartida(String idSessio, String usuari) {
 
-		String id = this.partSQL.getPartida(idSessio, usuari);
-		contrincant = usuari;
+		String idPartida = this.partSQL.getPartida(idSessio, usuari);
 
-		if (id == null)
+		if (idPartida == null)
 			return crearJSON("", "No hi ha partida disponible.", "");
 
-		return crearJSON(id, "", "");
-	}
+		this.instanciarMoviments(idSessio, idPartida);
+		return crearJSON(idPartida, "", ""); 
+	} 
 
 	public String obtenirColor(String idSessio, String idPartida) {
 
@@ -260,7 +250,7 @@ public class JocAPI {
 
 	public String obtenirTaulerAnt(String idSessio, String idPartida) {
 
-		String tauler = this.partSQL.getTaulerAnt(idSessio, idPartida);
+		String tauler = this.partSQL.getTaulerAnt(idPartida);
 
 		if (tauler == null)
 			return crearJSON("", "No s'ha trobat partida o sessio, o no hi ha tauler anterior", "");
@@ -274,8 +264,6 @@ public class JocAPI {
 
 		if (tauler == null)
 			return crearJSON("", "No s'ha trobat partida o sessio", "");
-
-		// tauler = taulellConversor(tauler);
 
 		return crearJSON(tauler, "", "");
 	}
@@ -305,7 +293,9 @@ public class JocAPI {
 	public String grabarTirada(String idSessio, String idPartida) {
 		// NO FUNCIONA EN AQUESTA VERSIÓ
 		// TODO: Comprovar / implementar taules...
-
+		
+		this.movTornAct = Moviments.getInstance();
+		
 		String movs = this.movTornAct.movsToString();
 		if (movs == null || movs.isEmpty())
 			return crearJSON("", "No hi han moviments en aquest torn", "");
@@ -316,12 +306,15 @@ public class JocAPI {
 
 		String taulellRes = this.movTornAct.getTaulellActual().toString();
 		this.partSQL.guardarEstatTauler(idPartida, taulellRes);
+		this.partSQL.canviarTorn(idPartida, idSessio);
 
 		String resultat = this.movTornAct.partidaAcabada();
 		String idColor = this.partSQL.getColor(idSessio, idPartida);
 
-		if (resultat.equalsIgnoreCase(idColor))
+		if (resultat.equalsIgnoreCase(idColor)) {
+			this.partSQL.acabarPartida(idSessio, idPartida);
 			return crearJSON("guanya", "", "");
+		}
 		else if (resultat.equalsIgnoreCase("taules"))
 			return crearJSON("taules", "", "");
 		else if (resultat.equalsIgnoreCase("continua"))
@@ -330,43 +323,35 @@ public class JocAPI {
 			return crearJSON("perd", "", "");
 	}
 
-	// NO ES POT IMPLEMENTAR PER ARA...
+	// Implementació mínima... no comprova peça per peça ni diu si es pot matar
 	public String obtenirMovimentsPossibles(String idSessio, String idPartida) {
-		return null;
+		if (this.movTornAct == null)
+			return crearJSON("", "Error, no s'ha fet triaPartida abans...", "");
+		String possibles = this.movTornAct.movimentsPossibles();
+		return crearJSON(possibles, "", "");
 	}
 
 	public String ferMoviment(String idSessio, String idPartida, String posIni, String posFi) {
+		
+		this.movTornAct = Moviments.getInstance();
 
 		String estatTauler = this.partSQL.continuarPartida(idPartida);
 		if (estatTauler == null)
 			return crearJSON("", "", "No s'ha pogut carregar la partida");
 
-		Taulell tauler = new Taulell();
-		tauler.reconstruirTaulell(estatTauler);
 
 		int xIni = Integer.parseInt(posIni.split(";")[0]);
 		int yIni = Integer.parseInt(posIni.split(";")[1]);
 		int xFi = Integer.parseInt(posFi.split(";")[0]);
 		int yFi = Integer.parseInt(posFi.split(";")[1]);
 
-		Casella casIni = tauler.seleccionarCasella(xIni, yIni);
-		Casella casFi = tauler.seleccionarCasella(xFi, yFi);
-
-		boolean moviment;
-
-		try {
-
-			moviment = tauler.moviment(casIni, casFi);
-			this.partSQL.guardarEstatTauler(idPartida, tauler.toString());
-
-		} catch (Exception e) {
-			return crearJSON("", e.toString(), "");
-		}
-
-		if (moviment)
+		boolean moviment = this.movTornAct.ferMoure(xIni, yIni, xFi, yFi);
+		if (moviment) {
+			System.out.println("Moviment bé!!");
 			return crearJSON("true", "", "");
+		}
 		else {
-			partSQL.canviarTorn(idPartida, contrincant);
+			System.out.println("Falla moviment!!");
 			return crearJSON("false", "", "");
 		}
 
@@ -398,23 +383,20 @@ public class JocAPI {
 	}
 
 	public String ferBufa(String idSessio, String idPartida, String pos) {
-
-		String estatTauler = this.partSQL.continuarPartida(idPartida);
-		if (estatTauler == null)
-			return crearJSON("", "No s'ha pogut carregar la partida", "");
-
-		Taulell tauler = new Taulell();
-		tauler.reconstruirTaulell(estatTauler);
-
+		
+		this.movTornAct = Moviments.getInstance();
+		
 		int xIni = Integer.parseInt(pos.split(";")[0]);
 		int yIni = Integer.parseInt(pos.split(";")[1]);
-
-		Casella cas = tauler.seleccionarCasella(xIni, yIni);
-		/*if (tauler.bufar(cas))
-			return crearJSON("true", "", "");
+		
+		boolean bufa = this.movTornAct.ferBufa(xIni, yIni);
+		String res;
+		if (bufa)
+			res = "true";
 		else
-			return crearJSON("false", "", "");*/
-		return crearJSON("res","","");
+			res = "false";
+		
+		return crearJSON(res, "", "");
 	}
 
 	public String acceptaTaules(String idSessio, String idPartida) {
@@ -461,6 +443,27 @@ public class JocAPI {
 		json.put("err", err);
 		json.put("sErr", sErr);
 		return json.toString();
+	}
+	
+	private void instanciarMoviments(String idSessio, String idPartida) {
+		
+		String movsAnt = this.partSQL.getMovimentsAnt(idPartida);  
+		if (movsAnt == null) 
+			movsAnt = ""; 
+
+		String taulerAnt = this.partSQL.getTaulerAnt(idPartida);  
+		if (taulerAnt == null)  
+			taulerAnt = ""; 
+ 
+		String taulerAct = this.partSQL.continuarPartida(idPartida);  
+		if (taulerAct == null) 
+			taulerAct = "";
+		
+		boolean tornJugador = this.partSQL.getTorn(idPartida).equals(idSessio);
+		System.out.println(idPartida);
+		System.out.println(this.partSQL.getTorn(idPartida));
+ 
+		this.movTornAct = new Moviments(movsAnt, taulerAct, taulerAnt, tornJugador); 
 	}
 
 	// Converteix un string d'un taulell de la capa domini o aplicacio,
