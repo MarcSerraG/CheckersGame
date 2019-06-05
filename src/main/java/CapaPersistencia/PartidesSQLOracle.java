@@ -397,8 +397,10 @@ public class PartidesSQLOracle {
 
 		try {
 			rs = conn.ferSelect(sqlcompro);
-			if (rs.next())
+			if (rs.next()) {
+				rs.close();
 				return rs.getString("id");
+			}
 			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error sql getPartida: " + e);
@@ -407,8 +409,10 @@ public class PartidesSQLOracle {
 
 		try {
 			rs = conn.ferSelect(sqlcompro);
-			if (rs.next())
+			if (rs.next()) {
+				rs.close();
 				return rs.getString("id");
+			}
 			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error sql getPartida: " + e);
@@ -434,19 +438,28 @@ public class PartidesSQLOracle {
 			rs = conn.ferSelect(sql);
 
 			if (rs.next())
-				if (rs.getString("jugador").equals(idSessio))
+				if (rs.getString("jugador").equals(idSessio)) {
+					rs.close();
 					return "Red";
-				else if (rs.getString("contrincant").equals(idSessio))
+				}
+				else if (rs.getString("contrincant").equals(idSessio)) {
+					rs.close();
 					return "Black";
+				}
 			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error SQL getColor: " + e);
-			return null;
 
 		} catch (Exception e) {
 			System.out.println("Error getColor: " + e);
-			return null;
-
+		}
+		finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
@@ -689,7 +702,7 @@ public class PartidesSQLOracle {
 
 	public boolean acabarPartida(String guanyador, String idPartida) {
 		String sql = "";
-		sql = ConnectionSQLOracle.SQLUPDATE + " partides SET (nom_guanyador = '" + guanyador + "', estat = 3)";
+		sql = ConnectionSQLOracle.SQLUPDATE + " partides SET nom_guanyador = '" + guanyador + "', estat = 3";
 		sql += " WHERE id = " + idPartida + "";
 
 		try {
