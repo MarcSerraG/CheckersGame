@@ -281,7 +281,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 				} else {
 					if (e.getSource() == bFinishedMatches) {
 						this.bPlayGame.setVisible(false);
-						bRefresh.setPreferredSize(new Dimension(500, 40));
+						bRefresh.setPreferredSize(new Dimension(250, 40));
 						FineshedMaches();
 						presButton = 2;
 					} else {
