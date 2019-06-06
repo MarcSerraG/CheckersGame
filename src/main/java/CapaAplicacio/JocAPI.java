@@ -15,7 +15,7 @@ import CapaPersistencia.EstadistiquesSQLOracle;
 import CapaPersistencia.PartidesSQLOracle;
 import CapaPersistencia.UsuariSQLOracle;
 
-public class JocAPI {
+public class JocAPI implements JocDamesRMIInterface {
 
 	private ConnectionSQLOracle connSQL;
 	private UsuariSQLOracle userSQL;

@@ -19,13 +19,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import CapaAplicacio.JocAPI;
+import CapaAplicacio.JocDamesRMIInterface;
 
 public class BaseInterficie extends JFrame implements ActionListener {
 
 	public JButton bLogin, bNewGame, bContinue_Game, bStatistics, bLogOut, bRequests, bRefresh;
 	public JPanel centerPanel;
 	private JLabel versio;
-	private JocAPI api;
+	private JocDamesRMIInterface api;
 	private Login log;
 	private static NewGame newGame;
 	private ContinueGame ContinueGame;
@@ -64,7 +65,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		return log.user;
 	}
 
-	public JocAPI getAPI() {
+	public JocDamesRMIInterface getAPI() {
 		return api;
 	}
 

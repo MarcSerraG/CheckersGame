@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 
 import org.json.JSONObject;
 
-import CapaAplicacio.JocAPI;
+import CapaAplicacio.JocDamesRMIInterface;
 
 public class Login extends JPanel implements ActionListener {
 
@@ -22,11 +22,11 @@ public class Login extends JPanel implements ActionListener {
 	JButton bEntrar, bRegistrar;
 	JTextField tfUsuari;
 	JPasswordField fPassword, fRepeatPassword;
-	JocAPI api;
+	JocDamesRMIInterface api;
 	BaseInterficie interficieBase;
 	String user;
 
-	public Login(JocAPI api, BaseInterficie base) {
+	public Login(JocDamesRMIInterface api, BaseInterficie base) {
 		this.api = api;
 		interficieBase = base;
 	}

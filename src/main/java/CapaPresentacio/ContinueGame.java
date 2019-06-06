@@ -26,14 +26,14 @@ import javax.swing.event.ListSelectionListener;
 
 import org.json.JSONObject;
 
-import CapaAplicacio.JocAPI;
+import CapaAplicacio.JocDamesRMIInterface;
 
 public class ContinueGame extends JPanel implements ActionListener, ListSelectionListener {
 
 	static BaseInterficie interficieBase;
 	JPanel panelContinueGame, panelCentral, panelNord, panelSud, panelEst, panelOest;
 	JLabel labelErrorMessage;
-	JocAPI api;
+	JocDamesRMIInterface api;
 	JButton bPlayGame, bRefresh, bYourTurn, bRivalTurn, bFinishedMatches;
 	String contrincant;
 	JList<String> listPartides;
@@ -41,7 +41,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 	JLabel icon;
 	Boolean torn;
 
-	public ContinueGame(BaseInterficie base, JocAPI API) {
+	public ContinueGame(BaseInterficie base, JocDamesRMIInterface API) {
 		interficieBase = base;
 		api = API;
 		Dimension size = new Dimension(150, 25);

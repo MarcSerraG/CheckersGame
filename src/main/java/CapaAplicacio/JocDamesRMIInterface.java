@@ -3,62 +3,63 @@ package CapaAplicacio;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface JocDamesRMIInterface {
+import CapaPersistencia.ConnectionSQLOracle;
 
-	String login(String user, String password);
+public interface JocDamesRMIInterface extends Remote {
 
-	String registra(String user, String password);
+	String login(String user, String password) throws RemoteException;
 
-	String logout(String idSessio);
+	String registra(String user, String password) throws RemoteException;
 
-	String reconnecta(String idSessio, String password);
+	String logout(String idSessio) throws RemoteException;
 
-	String getEstadistics(String idSessio);
+	String reconnecta(String idSessio, String password) throws RemoteException;
 
-	String getCandidatsSol(String idSessio);
+	String getEstadistics(String idSessio) throws RemoteException;
 
-	void enviaSol(String idSessio, String usuari);
+	String getCandidatsSol(String idSessio) throws RemoteException;
 
-	String solicituds(String idSessio);
+	void enviaSol(String idSessio, String usuari) throws RemoteException;
 
-	void acceptaSol(String idSessio, String usuari);
+	String solicituds(String idSessio) throws RemoteException;
 
-	void rebutjaSol(String idSessio, String usuari);
+	void acceptaSol(String idSessio, String usuari) throws RemoteException;
 
-	String getPartidesTorn(String idSessio);
+	void rebutjaSol(String idSessio, String usuari) throws RemoteException;
 
-	String getPartidesNoTorn(String idSessio);
+	String getPartidesTorn(String idSessio) throws RemoteException;
 
-	String getPartidesAcabades(String idSessio);
+	String getPartidesNoTorn(String idSessio) throws RemoteException;
 
-	String triaPartida(String idSessio, String usuari);
+	String getPartidesAcabades(String idSessio) throws RemoteException;
 
-	String obtenirColor(String idSessio, String idPartida);
+	String triaPartida(String idSessio, String usuari) throws RemoteException;
 
-	String obtenirTaulerAnt(String idSessio, String idPartida);
+	String obtenirColor(String idSessio, String idPartida) throws RemoteException;
 
-	String obtenirTaulerAct(String idSessio, String idPartida);
+	String obtenirTaulerAnt(String idSessio, String idPartida) throws RemoteException;
 
-	String obtenirTaulerRes(String idSessio, String idPartida);
+	String obtenirTaulerAct(String idSessio, String idPartida) throws RemoteException;
 
-	String obtenirMovsAnt(String idSessio, String idPartida);
+	String obtenirTaulerRes(String idSessio, String idPartida) throws RemoteException;
 
-	String grabarTirada(String idSessio, String idPartida);
+	String obtenirMovsAnt(String idSessio, String idPartida) throws RemoteException;
 
-	String obtenirMovimentsPossibles(String idSessio, String idPartida);
+	String grabarTirada(String idSessio, String idPartida) throws RemoteException;
 
-	String ferMoviment(String idSessio, String idPartida, String posIni, String posFi);
+	String obtenirMovimentsPossibles(String idSessio, String idPartida) throws RemoteException;
 
-	String ferDama(String idSessio, String idPartida, String pos);
+	String ferMoviment(String idSessio, String idPartida, String posIni, String posFi) throws RemoteException;
 
-	String ferBufa(String idSessio, String idPartida, String pos);
+	String ferDama(String idSessio, String idPartida, String pos) throws RemoteException;
 
-	String acceptaTaules(String idSessio, String idPartida);
+	String ferBufa(String idSessio, String idPartida, String pos) throws RemoteException;
 
-	String proposaTaules(String idSessio, String idPartida);
+	String acceptaTaules(String idSessio, String idPartida) throws RemoteException;
 
-	String movsPessa(String idSessio, String idPartida, String Pos);
+	String proposaTaules(String idSessio, String idPartida) throws RemoteException;
 
-	ConnectionSQLOracle getConnectionSQL();
-
+	String movsPessa(String idSessio, String idPartida, String Pos) throws RemoteException;
+	
+	ConnectionSQLOracle getConnectionSQL() throws RemoteException;
 }
