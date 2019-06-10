@@ -9,6 +9,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import javax.swing.JPanel;
 import org.json.JSONObject;
 
 public class Partida extends JPanel implements ActionListener {
+	private static final long serialVersionUID = 1L;
 
 	BaseInterficie interficieBase;
 	JPanel panelTaulell, panelNord, panelSud, panelEst, panelOest, panelCentral;
@@ -45,7 +47,7 @@ public class Partida extends JPanel implements ActionListener {
 
 	}
 
-	public JPanel partidaCreate() {
+	public JPanel partidaCreate() throws RemoteException {
 		panelTaulell = new JPanel();
 
 		panelCentral = new JPanel();
@@ -60,7 +62,7 @@ public class Partida extends JPanel implements ActionListener {
 		return panelTaulell;
 	}
 
-	public JPanel partidaCreate(String idPartida) {
+	public JPanel partidaCreate(String idPartida) throws RemoteException {
 		panelTaulell = new JPanel();
 		this.idPartida = idPartida;
 
@@ -216,7 +218,7 @@ public class Partida extends JPanel implements ActionListener {
 		return button;
 	}
 
-	private void AjustaPantalla(JPanel panelNord, JPanel panelSud, JPanel panelEst, JPanel panelOest) {
+	private void AjustaPantalla(JPanel panelNord, JPanel panelSud, JPanel panelEst, JPanel panelOest) throws RemoteException {
 
 		panelTaulell.add(panelNord, BorderLayout.NORTH);
 		panelTaulell.add(panelSud, BorderLayout.SOUTH);
@@ -237,7 +239,7 @@ public class Partida extends JPanel implements ActionListener {
 
 	}
 
-	private void PanellEst() {
+	private void PanellEst() throws RemoteException {
 		JPanel ColorJugadorsPanel = new JPanel();
 
 		ColorJugadorsPanel.setLayout(new BoxLayout(ColorJugadorsPanel, BoxLayout.Y_AXIS));
@@ -311,13 +313,17 @@ public class Partida extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		try {
+			if (e.getSource() != bTaules && e.getSource() != bBufar)
+				MourePessa((JButton) e.getSource(), taulell2.get(e.getSource()));
 
-		if (e.getSource() != bTaules && e.getSource() != bBufar)
-			MourePessa((JButton) e.getSource(), taulell2.get(e.getSource()));
-
+		}
+		catch(Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
-	private void MourePessa(JButton boto, String posicioBoto) {
+	private void MourePessa(JButton boto, String posicioBoto) throws RemoteException {
 
 		if (posInicial.equals("")) {
 			posInicial = posicioBoto;
@@ -391,7 +397,7 @@ public class Partida extends JPanel implements ActionListener {
 		}
 	}
 
-	private void VeurePossiblesMoviments(String pos) {
+	private void VeurePossiblesMoviments(String pos) throws RemoteException {
 
 		String moviments = interficieBase.getAPI().movsPessa(interficieBase.getName(), idPartida, pos);
 		JSONObject json = new JSONObject(moviments);

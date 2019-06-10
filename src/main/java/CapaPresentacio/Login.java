@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -11,11 +12,13 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import CapaAplicacio.JocDamesRMIInterface;
 
 public class Login extends JPanel implements ActionListener {
+	private static final long serialVersionUID = 1L;
 
 	JLabel labelMain, labelUsername, labelPassword, labelRepeatPassword, labelMessage;
 
@@ -103,16 +106,19 @@ public class Login extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-
-		if (e.getSource() == this.bEntrar) {
-			APIentrar();
-		} else {
-			APIregister();
+		try {
+			if (e.getSource() == this.bEntrar) {
+				APIentrar();
+			} else {
+				APIregister();
+			}
 		}
-
+		catch(Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
-	private void APIregister() {
+	private void APIregister() throws JSONException, RemoteException {
 		String pass = fPassword.getText();
 		String repeatPass = fRepeatPassword.getText();
 
@@ -134,7 +140,7 @@ public class Login extends JPanel implements ActionListener {
 		}
 	}
 
-	private void APIentrar() {
+	private void APIentrar() throws RemoteException {
 
 		if (tfUsuari.getText().equals("")) {
 			labelMessage.setText("UserName is required");
@@ -193,7 +199,7 @@ public class Login extends JPanel implements ActionListener {
 		interficieBase.bRequests.setEnabled(true);
 	}
 
-	private void canviPantalla() {
+	private void canviPantalla() throws RemoteException {
 		interficieBase.centerPanel.setVisible(false);
 		interficieBase.actionNewGame();
 		interficieBase.bLogin.setBackground(Color.GRAY);

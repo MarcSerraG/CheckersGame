@@ -7,6 +7,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.rmi.RemoteException;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -22,6 +23,7 @@ import CapaAplicacio.JocAPI;
 import CapaAplicacio.JocDamesRMIInterface;
 
 public class BaseInterficie extends JFrame implements ActionListener {
+	private static final long serialVersionUID = 1L;
 
 	public JButton bLogin, bNewGame, bContinue_Game, bStatistics, bLogOut, bRequests, bRefresh;
 	public JPanel centerPanel;
@@ -219,7 +221,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		// metode del boto corresponent
 
 		// Per futures versions es pot millorar la crida
-
+		try {
 		if (e.getSource() == this.bLogin) {
 			actionLogin();
 		} else {
@@ -238,7 +240,12 @@ public class BaseInterficie extends JFrame implements ActionListener {
 							actionRequest();
 						else {
 							if (e.getSource() == this.bLogOut)
-								actionLogOut();
+								try {
+									actionLogOut();
+								} catch (RemoteException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
 							else
 								refresh();
 						}
@@ -246,9 +253,13 @@ public class BaseInterficie extends JFrame implements ActionListener {
 				}
 			}
 		}
+		}
+		catch(Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
-	private void refresh() {
+	private void refresh() throws RemoteException {
 
 		if (ContinueGame.TornPartidaEnCurs().equals(this.getPlayerID()))
 			ContinueGame.ComenssarJoc(true);
@@ -276,7 +287,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		this.bRequests.setForeground(Color.WHITE);
 	}
 
-	public void actionNewGame() {
+	public void actionNewGame() throws RemoteException {
 		centerPanel.setVisible(false);
 		this.bNewGame.setBackground(new Color(237, 215, 178));
 		this.bNewGame.setForeground(Color.BLACK);
@@ -305,7 +316,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		validate();
 	}
 
-	private void actionContinue() {
+	private void actionContinue() throws RemoteException {
 
 		centerPanel.setVisible(false);
 
@@ -337,7 +348,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 
 	}
 
-	private void actionRequest() {
+	private void actionRequest() throws RemoteException {
 
 		centerPanel.setVisible(false);
 
@@ -368,7 +379,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		validate();
 	}
 
-	private void actionStatics() {
+	private void actionStatics() throws RemoteException {
 
 		centerPanel.setVisible(false);
 
@@ -399,7 +410,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		validate();
 	}
 
-	private void actionLogOut() {
+	private void actionLogOut() throws RemoteException {
 
 		api.logout(log.user);
 		log = null;

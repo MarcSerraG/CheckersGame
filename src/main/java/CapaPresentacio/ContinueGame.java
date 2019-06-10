@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.rmi.RemoteException;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -29,7 +30,8 @@ import org.json.JSONObject;
 import CapaAplicacio.JocDamesRMIInterface;
 
 public class ContinueGame extends JPanel implements ActionListener, ListSelectionListener {
-
+	private static final long serialVersionUID = 1L;
+	
 	static BaseInterficie interficieBase;
 	JPanel panelContinueGame, panelCentral, panelNord, panelSud, panelEst, panelOest;
 	JLabel labelErrorMessage;
@@ -59,7 +61,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 		scrollPanel = new JScrollPane(listPartides);
 	}
 
-	public JPanel ContinueGameCreate() {
+	public JPanel ContinueGameCreate() throws RemoteException {
 		panelContinueGame = new JPanel();
 
 		panelContinueGame.setLayout(new BorderLayout());
@@ -253,37 +255,41 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 	public void actionPerformed(ActionEvent e) {
 		int presButton = 0;
-
-		if (e.getSource() == bRefresh) {
-			switch (presButton) {
-			case 0:
-				YourTurn();
-				break;
-			case 1:
-				RivalTurn();
-				break;
-			case 2:
-				FineshedMaches();
-				break;
-			}
-		} else {
-			if (e.getSource() == bYourTurn) {
-				YourTurn();
-				presButton = 0;
-			} else {
-				if (e.getSource() == bRivalTurn) {
+		try {
+			if (e.getSource() == bRefresh) {
+				switch (presButton) {
+				case 0:
+					YourTurn();
+					break;
+				case 1:
 					RivalTurn();
-					presButton = 1;
+					break;
+				case 2:
+					FineshedMaches();
+					break;
+				}
+			} else {
+				if (e.getSource() == bYourTurn) {
+					YourTurn();
+					presButton = 0;
 				} else {
-					if (e.getSource() == bFinishedMatches) {
-						FineshedMaches();
-						bPlayGame.setEnabled(false);
-						presButton = 2;
+					if (e.getSource() == bRivalTurn) {
+						RivalTurn();
+						presButton = 1;
 					} else {
-						ComenssarJoc(torn);
+						if (e.getSource() == bFinishedMatches) {
+							FineshedMaches();
+							bPlayGame.setEnabled(false);
+							presButton = 2;
+						} else {
+							ComenssarJoc(torn);
+						}
 					}
 				}
 			}
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 
@@ -295,7 +301,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 	}
 
-	public void ComenssarJoc(boolean torn) {
+	public void ComenssarJoc(boolean torn) throws RemoteException {
 
 		String triaPartida = api.triaPartida(interficieBase.getPlayerID(), contrincant);
 
@@ -336,7 +342,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 		interficieBase.bRequests.setForeground(Color.WHITE);
 	}
 
-	public void YourTurn() {
+	public void YourTurn() throws RemoteException {
 		String APIplayers = api.getPartidesTorn(interficieBase.getPlayerID());
 		addPlayers(APIplayers);
 		torn = true;
@@ -354,7 +360,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 	}
 
-	public void RivalTurn() {
+	public void RivalTurn() throws RemoteException {
 		String APIplayers = api.getPartidesNoTorn(interficieBase.getPlayerID());
 		addPlayers(APIplayers);
 		torn = false;
@@ -371,7 +377,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 	}
 
-	public void FineshedMaches() {
+	public void FineshedMaches() throws RemoteException {
 		String APIplayers = api.getPartidesAcabades(interficieBase.getPlayerID());
 		addPlayers(APIplayers);
 
@@ -387,8 +393,9 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 	}
 
-	public String TornPartidaEnCurs() {
-		String APIplayers = api.getPartidesTorn(interficieBase.getPlayerID());
+	public String TornPartidaEnCurs() throws RemoteException {
+		String APIplayers;
+		APIplayers = api.getPartidesTorn(interficieBase.getPlayerID());
 		JSONObject json = new JSONObject(APIplayers);
 
 		APIplayers = json.getString("res");

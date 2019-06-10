@@ -2,6 +2,7 @@ package CapaPresentacio;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.rmi.RemoteException;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 import CapaAplicacio.JocDamesRMIInterface;
 
 public class Estadistica extends JPanel {
+	private static final long serialVersionUID = 1L;
 
 	JLabel labelMain, labelUsername, labelWins, labelLost, labelMatchesTotal, labelRatio, labelTaules;
 	JLabel labelRank;
@@ -28,7 +30,7 @@ public class Estadistica extends JPanel {
 
 	private String matches, win, lost, taules, ratio;
 
-	public Estadistica(BaseInterficie base, JocDamesRMIInterface API) {
+	public Estadistica(BaseInterficie base, JocDamesRMIInterface API) throws RemoteException {
 		interficieBase = base;
 		listRank = new JList<String>();
 		DefaultListCellRenderer renderer = (DefaultListCellRenderer) listRank.getCellRenderer();
@@ -110,7 +112,7 @@ public class Estadistica extends JPanel {
 		return panStatics;
 	}
 
-	private void ApiGetStats() {
+	private void ApiGetStats() throws RemoteException {
 
 		String res = api.getEstadistics(interficieBase.getPlayerID());
 		JSONObject json = new JSONObject(res);

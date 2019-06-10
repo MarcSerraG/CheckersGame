@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.rmi.RemoteException;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 import CapaAplicacio.JocDamesRMIInterface;
 
 public class Requests extends JPanel implements ActionListener, ListSelectionListener {
+	private static final long serialVersionUID = 1L;
 
 	static BaseInterficie interficieBase;
 	JPanel panelRequests, panelCentral, panelNord, panelSud, panelEst, panelOest;
@@ -53,7 +55,7 @@ public class Requests extends JPanel implements ActionListener, ListSelectionLis
 		scrollPanel = new JScrollPane(listPartides);
 	}
 
-	public JPanel RequestsGameCreate() {
+	public JPanel RequestsGameCreate() throws RemoteException {
 		panelRequests = new JPanel();
 
 		panelRequests.setLayout(new BorderLayout());
@@ -140,7 +142,7 @@ public class Requests extends JPanel implements ActionListener, ListSelectionLis
 
 	}
 
-	private void addPlayers() {
+	private void addPlayers() throws RemoteException {
 		String APIplayers = api.solicituds(interficieBase.getPlayerID());
 
 		JSONObject json = new JSONObject(APIplayers);
@@ -210,27 +212,30 @@ public class Requests extends JPanel implements ActionListener, ListSelectionLis
 	}
 
 	public void actionPerformed(ActionEvent e) {
-
-		if (e.getSource() == bRefresh) {
-			addPlayers();
-			bAcceptGame.setText("Accept");
-			bRefuseGame.setText("Refuse");
-		} else {
-			if (e.getSource() == bAcceptGame) {
-				Acceptar();
+		try {
+			if (e.getSource() == bRefresh) {
+				addPlayers();
+				bAcceptGame.setText("Accept");
+				bRefuseGame.setText("Refuse");
 			} else {
-				Rebutjar();
+				if (e.getSource() == bAcceptGame) {
+					Acceptar();
+				} else {
+					Rebutjar();
+				}
 			}
 		}
-
+		catch(Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
-	private void Rebutjar() {
+	private void Rebutjar() throws RemoteException {
 		api.rebutjaSol(interficieBase.getPlayerID(), contrincant);
 		addPlayers();
 	}
 
-	private void Acceptar() {
+	private void Acceptar() throws RemoteException {
 		api.acceptaSol(interficieBase.getPlayerID(), contrincant);
 		addPlayers();
 	}

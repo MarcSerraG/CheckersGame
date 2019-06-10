@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.rmi.RemoteException;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -29,6 +30,7 @@ import org.json.JSONObject;
 import CapaAplicacio.JocDamesRMIInterface;
 
 public class NewGame extends JPanel implements ActionListener, ListSelectionListener {
+	private static final long serialVersionUID = 1L;
 
 	static BaseInterficie interficieBase;
 	JPanel panelNewGame, panelCentral, panelNord, panelSud, panelEst, panelOest;
@@ -56,7 +58,7 @@ public class NewGame extends JPanel implements ActionListener, ListSelectionList
 		scrollPanel = new JScrollPane(listUsuaris);
 	}
 
-	public JPanel NewGameCreate() {
+	public JPanel NewGameCreate() throws RemoteException {
 		panelNewGame = new JPanel();
 
 		panelNewGame.setLayout(new BorderLayout());
@@ -133,7 +135,7 @@ public class NewGame extends JPanel implements ActionListener, ListSelectionList
 
 	}
 
-	private void addPlayers() {
+	private void addPlayers() throws RemoteException {
 		String APIplayers = api.getCandidatsSol(interficieBase.getPlayerID());
 
 		JSONObject json = new JSONObject(APIplayers);
@@ -202,15 +204,19 @@ public class NewGame extends JPanel implements ActionListener, ListSelectionList
 	}
 
 	public void actionPerformed(ActionEvent e) {
-
-		if (e.getSource() == bRefresh) {
-			addPlayers();
-		} else {
-			SendRequest();
+		try {
+			if (e.getSource() == bRefresh) {
+				addPlayers();
+			} else {
+				SendRequest();
+			}
+		}
+		catch(Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 
-	private void SendRequest() {
+	private void SendRequest() throws RemoteException {
 		api.enviaSol(interficieBase.getPlayerID(), Contrincant);
 		JOptionPane.showMessageDialog(null, "Request send to: " + Contrincant);
 		addPlayers();
