@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -18,8 +20,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import CapaAplicacio.JocAPI;
 import CapaAplicacio.JocDamesRMIInterface;
 
 public class BaseInterficie extends JFrame implements ActionListener {
@@ -49,7 +49,8 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		MenuBar();
 
 		try {
-			api = new JocAPI();// usuari i contrasenya del server
+			Registry registry = LocateRegistry.getRegistry("localhost", 1199);
+			api = (JocDamesRMIInterface) registry.lookup("dama_server");// usuari i contrasenya del server
 			// carrega la pagina de login la qual es situa en el centre
 			log = CenterLogin();
 			log.labelMessage.setText("Server Connection: Correct");
