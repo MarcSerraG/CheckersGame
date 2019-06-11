@@ -247,7 +247,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		}
 	}
 
-	private void refresh() {
+	public void refresh() {
 
 		if (ContinueGame.TornPartidaEnCurs().equals(this.getPlayerID()))
 			ContinueGame.ComenssarJoc(true);
