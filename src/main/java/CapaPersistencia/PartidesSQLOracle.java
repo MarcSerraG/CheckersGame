@@ -372,9 +372,18 @@ public class PartidesSQLOracle {
 			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error SQL getPartidesAcabada: " + e);
-			return null;
+			return res;
 		} catch (Exception e) {
 			System.out.println("Error getPartidesAcabada: " + e);
+			return res;
+		}
+		finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				System.out.println("Error getPartida: " + e);
+				return res;
+			}
 		}
 		return res;
 	}
@@ -406,23 +415,20 @@ public class PartidesSQLOracle {
 			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error sql getPartida: " + e);
-			return null;
+			return res;
+		} catch (Exception e) {
+			System.out.println("Error getPartida: " + e);
+			return res;
 		}
-
-		try {
-			rs = conn.ferSelect(sqlcompro);
-			if (rs.next()) {
-				res = rs.getString("id");
+		finally {
+			try {
 				rs.close();
+			} catch (SQLException e) {
+				System.out.println("Error getPartida: " + e);
 				return res;
 			}
-			rs.close();
-		} catch (SQLException e) {
-			System.out.println("Error sql getPartida: " + e);
-			return null;
 		}
-
-		return "";
+		return res;
 	}
 
 	/**
@@ -440,7 +446,7 @@ public class PartidesSQLOracle {
 		try {
 			rs = conn.ferSelect(sql);
 
-			if (rs.next())
+			if (rs.next()) {
 				if (rs.getString("jugador").equals(idSessio)) {
 					rs.close();
 					return "Red";
@@ -449,6 +455,7 @@ public class PartidesSQLOracle {
 					rs.close();
 					return "Black";
 				}
+			}
 			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error SQL getColor: " + e);
@@ -459,12 +466,11 @@ public class PartidesSQLOracle {
 		finally {
 			try {
 				rs.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (Exception e) {
+				System.out.println("");
 			}
 		}
-		return null;
+		return "";
 	}
 
 	/**
@@ -481,8 +487,9 @@ public class PartidesSQLOracle {
 		sql2 = "SELECT santerio FROM partides WHERE id =" + idPartida;
 		try {
 			rs = conn.ferSelect(sql2);
-			if (rs.next())
+			if (rs.next()) {
 				res = rs.getString("santerio");
+			}
 			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Error SQL getTaulerAnt: " + e);
@@ -491,6 +498,13 @@ public class PartidesSQLOracle {
 		} catch (Exception e) {
 			System.out.println("Error getTaulerAnt: " + e);
 			return null;
+		}
+		finally {
+			try {
+				rs.close();
+			} catch (Exception e) {
+				System.out.println("");
+			}
 		}
 		return res;
 	}
