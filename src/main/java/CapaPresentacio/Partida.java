@@ -33,6 +33,7 @@ public class Partida extends JPanel implements ActionListener {
 	Map<JButton, String> taulell2;
 	String posInicial = "", posFinal = "", idPartida, NomContrincant, ContrincantColor, JugadorColor;
 	Boolean torn;
+	private int blanques, negres;
 
 	public Partida(BaseInterficie base, String contrincant, Boolean torn) {
 		interficieBase = base;
@@ -102,6 +103,8 @@ public class Partida extends JPanel implements ActionListener {
 
 		int color = -1;
 		int contador = 0;
+		blanques = 0;
+		negres = 0;
 
 		taulell2 = new LinkedHashMap<JButton, String>();
 		Dimension size = new Dimension(50, 50);
@@ -141,15 +144,19 @@ public class Partida extends JPanel implements ActionListener {
 					switch (divisioTaulell[contador]) {
 					case "1":
 						taulell2.put(createButton(size, color, peoNegre, ContrincantPesses("Black")), x + ";" + y);
+						negres++;
 						break;
 					case "0":
 						taulell2.put(createButton(size, color, peoBlanca, ContrincantPesses("Red")), x + ";" + y);
+						blanques++;
 						break;
 					case "d":
 						taulell2.put(createButton(size, color, DamaNegra, ContrincantPesses("Black")), x + ";" + y);
+						negres++;
 						break;
 					case "D":
 						taulell2.put(createButton(size, color, DamaBlanca, ContrincantPesses("Red")), x + ";" + y);
+						blanques++;
 						break;
 					default:
 						taulell2.put(createButton(size, color, null, true), x + ";" + y);
@@ -337,7 +344,6 @@ public class Partida extends JPanel implements ActionListener {
 
 				String err = json.getString("err");
 				String mss = json.getString("res");
-				String sErr = json.getString("sErr");
 
 				if (Boolean.parseBoolean(mss)) {
 
@@ -347,8 +353,17 @@ public class Partida extends JPanel implements ActionListener {
 					mss = json.getString("res");
 
 					if (err.equals("")) {
+						int neg = negres;
+						int blan = blanques;
 						setAnticTaulell(mss);
-						lMessage.setText("Graba la Tirada!");
+
+						if (blanques < blan || negres < neg) {
+							// interficieBase.refresh();
+							lMessage.setText("Well done! It's Your Turn Again");
+						} else {
+							lMessage.setText("Graba la Tirada!");
+						}
+
 					} else {
 						lMessage.setText(err);
 					}

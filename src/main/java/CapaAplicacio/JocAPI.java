@@ -23,6 +23,7 @@ public class JocAPI {
 	private EstadistiquesSQLOracle statSQL;
 	private Moviments movTornAct;
 	private JSONObject json;
+	private String contrincant;
 
 	public JocAPI() throws Exception {
 		connSQL = new ConnectionSQLOracle();
@@ -31,6 +32,7 @@ public class JocAPI {
 		statSQL = new EstadistiquesSQLOracle(connSQL);
 		json = new JSONObject();
 		movTornAct = null;
+		contrincant = "";
 	}
 
 	/**
@@ -233,6 +235,8 @@ public class JocAPI {
 		if (idPartida == null)
 			return crearJSON("", "No hi ha partida disponible.", "");
 
+		contrincant = usuari;
+
 		this.instanciarMoviments(idSessio, idPartida);
 		return crearJSON(idPartida, "", "");
 	}
@@ -306,7 +310,7 @@ public class JocAPI {
 		String taulellRes = this.movTornAct.getTaulellActual().toString();
 		this.partSQL.guardarEstatTauler(idPartida, taulellRes);
 
-		System.out.println("Canvi de torn! " + this.partSQL.canviarTorn(idPartida, idSessio));
+		System.out.println("Canvi de torn! " + this.partSQL.canviarTorn(idPartida, contrincant));
 
 		String resultat = this.movTornAct.partidaAcabada();
 		String idColor = this.partSQL.getColor(idSessio, idPartida);

@@ -138,6 +138,7 @@ public class PartidesSQLOracle {
 			e.printStackTrace();
 			return false;
 		}
+
 	}
 
 	/**
@@ -444,8 +445,7 @@ public class PartidesSQLOracle {
 				if (rs.getString("jugador").equals(idSessio)) {
 					rs.close();
 					return "Red";
-				}
-				else if (rs.getString("contrincant").equals(idSessio)) {
+				} else if (rs.getString("contrincant").equals(idSessio)) {
 					rs.close();
 					return "Black";
 				}
@@ -455,8 +455,7 @@ public class PartidesSQLOracle {
 
 		} catch (Exception e) {
 			System.out.println("Error getColor: " + e);
-		}
-		finally {
+		} finally {
 			try {
 				rs.close();
 			} catch (SQLException e) {
@@ -616,9 +615,10 @@ public class PartidesSQLOracle {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Retorna el nom de l'usuari que té el torn
+	 * 
 	 * @param idPartida
 	 * @return
 	 */
@@ -627,7 +627,7 @@ public class PartidesSQLOracle {
 		String res = "";
 
 		ResultSet rs = null;
-		
+
 		String sqlcompro = ConnectionSQLOracle.SQLSELECT;
 
 		sqlcompro += "torn FROM partides WHERE (id = " + idPartida + " and estat between 1 AND 2)";
@@ -646,7 +646,6 @@ public class PartidesSQLOracle {
 		}
 		return res;
 	}
-	
 
 	/**
 	 * PRIVATES
