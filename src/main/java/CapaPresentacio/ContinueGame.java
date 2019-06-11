@@ -268,16 +268,21 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 			}
 		} else {
 			if (e.getSource() == bYourTurn) {
+				this.bPlayGame.setVisible(true);
+				bRefresh.setPreferredSize(new Dimension(100, 40));
 				YourTurn();
 				presButton = 0;
 			} else {
 				if (e.getSource() == bRivalTurn) {
+					this.bPlayGame.setVisible(true);
+					bRefresh.setPreferredSize(new Dimension(100, 40));
 					RivalTurn();
 					presButton = 1;
 				} else {
 					if (e.getSource() == bFinishedMatches) {
+						this.bPlayGame.setVisible(false);
+						bRefresh.setPreferredSize(new Dimension(250, 40));
 						FineshedMaches();
-						bPlayGame.setEnabled(false);
 						presButton = 2;
 					} else {
 						ComenssarJoc(torn);

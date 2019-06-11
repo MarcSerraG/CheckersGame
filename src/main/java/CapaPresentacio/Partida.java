@@ -88,6 +88,7 @@ public class Partida extends JPanel implements ActionListener {
 	private void setAnticTaulell(String taulellSQL) {
 
 		// grabarTirada(String idSessio, String idPartida)
+		// master
 
 		if (panelCentral != null) {
 			panelCentral.setVisible(false);
