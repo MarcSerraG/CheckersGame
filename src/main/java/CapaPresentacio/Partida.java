@@ -47,40 +47,31 @@ public class Partida extends JPanel implements ActionListener {
 
 	}
 
-	public JPanel partidaCreate() {
-		panelTaulell = new JPanel();
-
-		panelCentral = new JPanel();
-		panelCentral.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 5));
-		panelCentral.setBackground(Color.ORANGE);
-
-		panelTaulell.setLayout(new BorderLayout());
-
-		panelTaulell.add(panelCentral, BorderLayout.CENTER);
-		AjustaPantalla(panelNord, panelSud, panelEst, panelOest);
-
-		return panelTaulell;
-	}
-
-	public JPanel partidaCreate(String idPartida) {
+	public JPanel partidaCreate(String idPartida, boolean res, String taulellAntic) {
 		panelTaulell = new JPanel();
 		this.idPartida = idPartida;
 
 		panelTaulell.setLayout(new BorderLayout());
 
 		AjustaPantalla(panelNord, panelSud, panelEst, panelOest);
+		String nouTaulell;
 
-		String nouTaulell = interficieBase.getAPI().obtenirTaulerAct(interficieBase.getPlayerID(), idPartida);
-		JSONObject json = new JSONObject(nouTaulell);
+		if (!res) {
+			nouTaulell = interficieBase.getAPI().obtenirTaulerAct(interficieBase.getPlayerID(), idPartida);
 
-		String err = json.getString("err");
-		String mss = json.getString("res");
+			JSONObject json = new JSONObject(nouTaulell);
 
-		if (!err.equals("")) {
-			lMessage.setText(err);
+			String err = json.getString("err");
+			String mss = json.getString("res");
 
+			if (!err.equals("")) {
+				lMessage.setText(err);
+
+			} else {
+				setAnticTaulell(mss);
+			}
 		} else {
-			setAnticTaulell(mss);
+			setAnticTaulell(taulellAntic);
 		}
 		panelTaulell.add(panelCentral, BorderLayout.CENTER);
 
@@ -358,10 +349,14 @@ public class Partida extends JPanel implements ActionListener {
 						setAnticTaulell(mss);
 
 						if (blanques < blan || negres < neg) {
-							// interficieBase.refresh();
+							posInicial = "";
+							posFinal = "";
+							interficieBase.refresh(true, mss);
+							torn = true;
 							lMessage.setText("Well done! It's Your Turn Again");
 						} else {
 							lMessage.setText("Graba la Tirada!");
+							torn = false;
 						}
 
 					} else {
@@ -372,6 +367,9 @@ public class Partida extends JPanel implements ActionListener {
 
 				for (JButton b : taulell2.keySet())
 					b.setBorder(BorderFactory.createEmptyBorder());
+
+				posInicial = "";
+				posFinal = "";
 
 			}
 		}
@@ -384,7 +382,6 @@ public class Partida extends JPanel implements ActionListener {
 
 		String err = json.getString("err");
 		String mss = json.getString("res");
-		// String sErr = json.getString("sErr");
 
 		if (!err.equals(""))
 			lMessage.setText(err);
