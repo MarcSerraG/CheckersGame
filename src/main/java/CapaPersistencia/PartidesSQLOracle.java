@@ -47,10 +47,21 @@ public class PartidesSQLOracle {
 		try {
 			rsc = conn.ferSelect(sqlcompro);
 			if (rsc.next()) {
+				try {
+					rsc.close();
+				} catch (Exception es) {
+				}
 				return null;
 			}
-			rsc.close();
+			try {
+				rsc.close();
+			} catch (Exception es) {
+			}
 		} catch (SQLException e) {
+			try {
+				rsc.close();
+			} catch (Exception es) {
+			}
 			System.out.println("Error de SQL partidaNova: " + e);
 			return null;
 		}
@@ -71,14 +82,25 @@ public class PartidesSQLOracle {
 			while (rs.next()) {
 				id += "" + rs.getInt("currval");
 			}
-			rs.close();
+			try {
+				rs.close();
+			} catch (Exception es) {
+			}
 			conn.ferCommit();
 			conn.setAutocommit(true);
 
 		} catch (SQLException e) {
+			try {
+				rs.close();
+			} catch (Exception es) {
+			}
 			System.out.println("Error de SQL crearPartidaNova dual: " + e);
 			return null;
 		} catch (Exception e) {
+			try {
+				rs.close();
+			} catch (Exception es) {
+			}
 			System.out.println("Error de getValue dual:  " + e);
 			return null;
 		}
@@ -110,13 +132,28 @@ public class PartidesSQLOracle {
 				contrincant = rs.getString("contrincant");
 			} else {
 				System.out.println("Error sql no hi ha dades");
+				try {
+					rs.close();
+				} catch (Exception es) {
+				}
 				return false;
 			}
-			rs.close();
+			try {
+				rs.close();
+			} catch (Exception es) {
+			}
 		} catch (SQLException e) {
+			try {
+				rs.close();
+			} catch (Exception es) {
+			}
 			System.out.println("Error sql canviarTorn: " + e);
 			return false;
 		} catch (Exception e) {
+			try {
+				rs.close();
+			} catch (Exception es) {
+			}
 			System.out.println("Error canviarTorn: " + e);
 			return false;
 		}
@@ -162,11 +199,19 @@ public class PartidesSQLOracle {
 			rsc = conn.ferSelect(sqlcompro);
 			if (rsc.next())
 				res = rsc.getString("salvat");
-			rsc.close();
+			try {
+				rsc.close();
+			} catch (Exception es) {
+			}
 		} catch (SQLException e) {
+			try {
+				rsc.close();
+			} catch (Exception es) {
+			}
 			System.out.println("Error SQL continaurPartida: " + e);
 			return null;
 		} catch (Exception e) {
+			try {rsc.close();} catch (Exception es) {}
 			System.out.println("Error continaurPartida: " + e);
 			return null;
 		}
@@ -193,11 +238,13 @@ public class PartidesSQLOracle {
 			while (rs.next()) {
 				res.add(rs.getString("JUGADOR"));
 			}
-			rs.close();
+			try {rs.close();} catch (Exception es) {}
 		} catch (SQLException e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error SQL getSolicitudsPendents: " + e);
 			return res;
 		} catch (Exception e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error getSolicitudsPendents: " + e);
 		}
 		return res;
@@ -228,7 +275,7 @@ public class PartidesSQLOracle {
 	public boolean rebutjaSolicitud(String jugador, String contrincant) {
 
 		String sql;
-		ResultSet rs;
+		ResultSet rs = null;
 		String id = "";
 		sql = "SELECT id FROM partides WHERE estat = 0 and (jugador = '" + contrincant + "'" + " and contrincant = '"
 				+ jugador + "' or jugador = '" + jugador + "' and contrincant = '" + contrincant + "')";
@@ -239,11 +286,12 @@ public class PartidesSQLOracle {
 
 			if (id.isEmpty()) {
 				System.out.println("Error no hay partidas con ese id.");
-				rs.close();
+				try {rs.close();} catch (Exception es) {}
 				return false;
 			}
-			rs.close();
+			try {rs.close();} catch (Exception es) {}
 		} catch (SQLException e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error SQL rebutja: " + e);
 			return false;
 		}
@@ -256,13 +304,14 @@ public class PartidesSQLOracle {
 
 			if (id.isEmpty()) {
 				System.out.println("Error no hay partidas con ese id.");
-				rs.close();
+				try {rs.close();} catch (Exception es) {}
 				return false;
 			}
-			rs.close();
+			try {rs.close();} catch (Exception es) {}
 			conn.ferDelete(sql2);
 
 		} catch (SQLException e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error SQL rebutja: " + e);
 			return false;
 		}
@@ -297,11 +346,13 @@ public class PartidesSQLOracle {
 				} else
 					res.add(contrincant);
 			}
-			rs.close();
+			try {rs.close();} catch (Exception es) {}
 		} catch (SQLException e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error SQL getPartidesTorn: " + e);
 			return res;
 		} catch (Exception e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error getPartidesTorn: " + e);
 		}
 		return res;
@@ -334,11 +385,13 @@ public class PartidesSQLOracle {
 				} else
 					res.add(contrincant);
 			}
-			rs.close();
+			try {rs.close();} catch (Exception es) {}
 		} catch (SQLException e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error SQL getPartidesTorn: " + e);
 			return res;
 		} catch (Exception e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error getPartidesTorn: " + e);
 		}
 		return res;
@@ -369,21 +422,15 @@ public class PartidesSQLOracle {
 				else
 					res.add(nomguanyador + ",perdut");
 			}
-			rs.close();
+			try {rs.close();} catch (Exception es) {}
 		} catch (SQLException e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error SQL getPartidesAcabada: " + e);
 			return res;
 		} catch (Exception e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error getPartidesAcabada: " + e);
 			return res;
-		}
-		finally {
-			try {
-				rs.close();
-			} catch (SQLException e) {
-				System.out.println("Error getPartida: " + e);
-				return res;
-			}
 		}
 		return res;
 	}
@@ -409,24 +456,18 @@ public class PartidesSQLOracle {
 			rs = conn.ferSelect(sqlcompro);
 			if (rs.next()) {
 				res = rs.getString("id");
-				rs.close();
+				try {rs.close();} catch (Exception es) {}
 				return res;
 			}
-			rs.close();
+			try {rs.close();} catch (Exception es) {}
 		} catch (SQLException e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error sql getPartida: " + e);
 			return res;
 		} catch (Exception e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error getPartida: " + e);
 			return res;
-		}
-		finally {
-			try {
-				rs.close();
-			} catch (SQLException e) {
-				System.out.println("Error getPartida: " + e);
-				return res;
-			}
 		}
 		return res;
 	}
@@ -448,27 +489,22 @@ public class PartidesSQLOracle {
 
 			if (rs.next()) {
 				if (rs.getString("jugador").equals(idSessio)) {
-					rs.close();
+					try {rs.close();} catch (Exception es) {}
 					return "Red";
 				}
 				else if (rs.getString("contrincant").equals(idSessio)) {
-					rs.close();
+					try {rs.close();} catch (Exception es) {}
 					return "Black";
 				}
 			}
-			rs.close();
+			try {rs.close();} catch (Exception es) {}
 		} catch (SQLException e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error SQL getColor: " + e);
 
 		} catch (Exception e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error getColor: " + e);
-		}
-		finally {
-			try {
-				rs.close();
-			} catch (Exception e) {
-				System.out.println("");
-			}
 		}
 		return "";
 	}
@@ -490,21 +526,16 @@ public class PartidesSQLOracle {
 			if (rs.next()) {
 				res = rs.getString("santerio");
 			}
-			rs.close();
+			try {rs.close();} catch (Exception es) {}
 		} catch (SQLException e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error SQL getTaulerAnt: " + e);
 			return null;
 
 		} catch (Exception e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error getTaulerAnt: " + e);
 			return null;
-		}
-		finally {
-			try {
-				rs.close();
-			} catch (Exception e) {
-				System.out.println("");
-			}
 		}
 		return res;
 	}
@@ -521,12 +552,14 @@ public class PartidesSQLOracle {
 			if (rs.next())
 				res = rs.getString("salva");
 
-			rs.close();
+			try {rs.close();} catch (Exception es) {}
 		} catch (SQLException e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error SQL getTaulerRes: " + e);
 			return null;
 
 		} catch (Exception e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error getTaulerRes: " + e);
 			return null;
 
@@ -605,7 +638,7 @@ public class PartidesSQLOracle {
 		String sql = "SELECT filaorigen,columnaorigen,filadesti,columnadesti,tipus "
 				+ "FROM MOVIMENTS WHERE partides_id = " + idPartida + "";
 
-		ResultSet rs;
+		ResultSet rs=null;
 		String res;
 		try {
 			rs = this.conn.ferSelect(sql);
@@ -618,14 +651,15 @@ public class PartidesSQLOracle {
 				res += rs.getString("columnadesti") + ";";
 				res += "/";
 			}
-			rs.close();
+			try {rs.close();} catch (Exception es) {}
 			return res;
 
 		} catch (SQLException e) {
-
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error SQL getMovimentsAnt: " + e);
 			return null;
 		} catch (Exception e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error getMovimentsAnt: " + e);
 			return null;
 		}
@@ -650,12 +684,14 @@ public class PartidesSQLOracle {
 			if (rs.next()) {
 				res = rs.getString("torn");
 			}
-			rs.close();
+			try {rs.close();} catch (Exception es) {}
 			return res;
 		} catch (SQLException e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error SQL getPartidesTorn: " + e);
 			return res;
 		} catch (Exception e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error getPartidesTorn: " + e);
 		}
 		return res;
@@ -688,15 +724,17 @@ public class PartidesSQLOracle {
 				salvat = rs.getString("salvat");
 			else {
 				System.out.println("Error actualitzarTaulell no hi ha dades compatibles");
-				rs.close();
+				try {rs.close();} catch (Exception es) {}
 				return false;
 			}
-			rs.close();
+			try {rs.close();} catch (Exception es) {}
 		} catch (SQLException e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error SQL actualitzarTaulell: " + e);
 			return false;
 
 		} catch (Exception e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error actualitzarTaulell: " + e);
 			return false;
 

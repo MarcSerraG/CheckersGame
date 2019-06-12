@@ -66,6 +66,7 @@ public class ConnectionSQLOracle {
 			rs = st.executeQuery(sql);
 			return rs;
 		} catch (SQLException e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error en Select de " + sql + " tipus de error " + e);
 			return null;
 		}
