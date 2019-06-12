@@ -32,10 +32,15 @@
          <version>1.4.0</version>
      </dependency>
      <dependency>
- <groupId>org.apache.tomcat</groupId>
- <artifactId>tomcat-jdbc</artifactId>
- <version>9.0.19</version>
-</dependency>
-  </dependencies>
+ 		<groupId>org.apache.tomcat</groupId>
+ 		<artifactId>tomcat-jdbc</artifactId>
+ 		<version>9.0.19</version>
+	</dependency>
+	<dependency>
+         <groupId>javax.ws.rs</groupId>
+         <artifactId>javax.ws.rs-api</artifactId>
+         <version>2.1.1</version>
+	</dependency>
+  	</dependencies>
   
 </project>
