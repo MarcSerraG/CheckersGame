@@ -49,7 +49,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		MenuBar();
 
 		try {
-			Registry registry = LocateRegistry.getRegistry("localhost", 1199);
+			Registry registry = LocateRegistry.getRegistry("192.168.42.27");
 			api = (JocDamesRMIInterface) registry.lookup("dama_server");// usuari i contrasenya del server
 			// carrega la pagina de login la qual es situa en el centre
 			log = CenterLogin();

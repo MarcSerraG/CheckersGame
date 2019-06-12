@@ -491,10 +491,10 @@ public class ServerJocDamesRMI implements JocDamesRMIInterface {
 	
 	public static void main (String[] args) {
 		try {
-			System.setProperty("java.rmi.server.hostname", "192.168.1.1");
+			System.setProperty("java.rmi.server.hostname", "192.168.42.27");
 			ServerJocDamesRMI jD = new ServerJocDamesRMI();
 			JocDamesRMIInterface stub = 
-					(JocDamesRMIInterface) UnicastRemoteObject.exportObject(jD, 1199);
+					(JocDamesRMIInterface) UnicastRemoteObject.exportObject(jD, 1299);
 			Registry registry = LocateRegistry.getRegistry();
 			registry.bind("dama_server", stub);
 			System.err.println("Server ready");
