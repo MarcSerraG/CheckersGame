@@ -285,7 +285,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 						FineshedMaches();
 						presButton = 2;
 					} else {
-						ComenssarJoc(torn);
+						ComenssarJoc(torn, false, null);
 					}
 				}
 			}
@@ -300,7 +300,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 	}
 
-	public void ComenssarJoc(boolean torn) {
+	public void ComenssarJoc(boolean torn, boolean res, String mss) {
 
 		String triaPartida = api.triaPartida(interficieBase.getPlayerID(), contrincant);
 
@@ -318,7 +318,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 			AdaptarBaseInterfaceNewJoc();
 			interficieBase.centerPanel.setVisible(false);
 			Partida partida = new Partida(interficieBase, contrincant, torn);
-			interficieBase.centerPanel = partida.partidaCreate(Mss);
+			interficieBase.centerPanel = partida.partidaCreate(Mss, res, mss);
 			partida.setVisible(true);
 			interficieBase.getContentPane().add(interficieBase.centerPanel, BorderLayout.CENTER);
 			interficieBase.getContentPane().repaint();
