@@ -205,6 +205,7 @@ public class NewGame extends JPanel implements ActionListener, ListSelectionList
 
 		if (e.getSource() == bRefresh) {
 			addPlayers();
+			bPlayGame.setText("Play");
 		} else {
 			SendRequest();
 		}

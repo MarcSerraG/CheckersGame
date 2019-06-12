@@ -239,7 +239,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 							if (e.getSource() == this.bLogOut)
 								actionLogOut();
 							else
-								refresh();
+								refresh(false, null);
 						}
 					}
 				}
@@ -247,12 +247,12 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		}
 	}
 
-	private void refresh() {
+	public void refresh(boolean res, String mss) {
 
 		if (ContinueGame.TornPartidaEnCurs().equals(this.getPlayerID()))
-			ContinueGame.ComenssarJoc(true);
+			ContinueGame.ComenssarJoc(true, res, mss);
 		else
-			ContinueGame.ComenssarJoc(false);
+			ContinueGame.ComenssarJoc(false, res, mss);
 	}
 
 	private void actionLogin() {
