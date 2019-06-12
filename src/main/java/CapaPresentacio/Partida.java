@@ -351,11 +351,13 @@ public class Partida extends JPanel implements ActionListener {
 						if (blanques < blan || negres < neg) {
 							posInicial = "";
 							posFinal = "";
-							interficieBase.refresh(true, mss);
 							torn = true;
 							lMessage.setText("Well done! It's Your Turn Again");
 						} else {
 							lMessage.setText("Graba la Tirada!");
+							for (JButton n : taulell2.keySet())
+								n.removeActionListener(this);
+
 							torn = false;
 						}
 

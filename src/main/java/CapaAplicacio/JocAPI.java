@@ -411,7 +411,8 @@ public class JocAPI {
 
 	public String movsPessa(String idSessio, String idPartida, String Pos) {
 
-		String estatTauler = this.partSQL.continuarPartida(idPartida);
+		// String estatTauler = this.partSQL.continuarPartida(idPartida);
+		String estatTauler = this.movTornAct.getTaulellActual().toString();
 		if (estatTauler == null)
 			return crearJSON("", "No s'ha pogut carregar la partida", "");
 
