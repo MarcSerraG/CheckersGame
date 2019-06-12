@@ -19,18 +19,27 @@ public class UsuariSQLOracle {
 	 */
 	public String getPasword(String nomUsu) {
 
+		ResultSet rs = null;
 		String psw = null;
 		String sql = ConnectionSQLOracle.SQLSELECT;
 		sql += "(CONTRASENYA) FROM USUARIS WHERE ";
 		sql += "nom = '" + nomUsu + "'";
 		try {
-			ResultSet rs = conn.ferSelect(sql);
+			rs = conn.ferSelect(sql);
 			while (rs.next()) {
 				psw = rs.getString("CONTRASENYA");
 			}
-			rs.close();
+			try {
+				rs.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return psw;
 		} catch (SQLException e) {
+			try {
+				rs.close();
+			} catch (Exception es) {
+			}
 			e.printStackTrace();
 			return psw;
 		}
@@ -53,7 +62,11 @@ public class UsuariSQLOracle {
 			rs = conn.ferSelect(sql);
 			while (rs.next())
 				sortida += rs.getString("nom")+";";
-			rs.close();
+			try {
+				rs.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} catch (SQLException e) {
 			System.out.println("Error sql usuarisCandidats: "+e);
 		} catch (Exception e) {
@@ -78,7 +91,11 @@ public class UsuariSQLOracle {
 				sortida += rs.getString("nom");
 				sortida += ";";
 			}
-			rs.close();
+			try {
+				rs.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} catch (SQLException e) {
 			System.out.print("Error SQL retorna Usuaris: "+e.getMessage());
 			return null;
@@ -90,25 +107,38 @@ public class UsuariSQLOracle {
 
 	public boolean getConnectat(String nomUsu) {
 		int con = 0;
+		ResultSet rs = null;
 		String sql = ConnectionSQLOracle.SQLSELECT;
 		sql += "(CONNECTAT) FROM USUARIS WHERE ";
 		sql += "nom = '" + nomUsu + "'";
 		try {
-			ResultSet rs = conn.ferSelect(sql);
+			rs = conn.ferSelect(sql);
 			while (rs.next()) {
 				con = rs.getInt("CONNECTAT");
 			}
 			if (con == 1) {
-				rs.close();
+				try {
+					rs.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				return true;
 			}
 			else {
-				rs.close();
+				try {
+					rs.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				return false;
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			try {
+				rs.close();
+			} catch (Exception es) {
+			}
 			return false;
 		}
 	}

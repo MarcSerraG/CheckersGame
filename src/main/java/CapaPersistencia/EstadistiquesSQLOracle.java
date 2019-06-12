@@ -37,9 +37,10 @@ public class EstadistiquesSQLOracle {
 				numPar = rs.getInt("COUNT(*)");
 			else
 				numPar = 0;
-			rs.close();
+			try {rs.close();} catch (Exception es) {}
 			
 		} catch (SQLException e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error SQL getEstadistiquesUsuari: "+e);
 		}
 		
@@ -57,9 +58,10 @@ public class EstadistiquesSQLOracle {
 						numLose++;
 				}
 			}
-			rs.close();
+			try {rs.close();} catch (Exception es) {}
 			
 		} catch (SQLException e) {
+			try {rs.close();} catch (Exception es) {}
 			System.out.println("Error SQL getEstadistiquesUsuari: "+e);
 		}
 		
@@ -75,7 +77,7 @@ public class EstadistiquesSQLOracle {
 					rank.add(nom);
 				}
 			}
-			rs.close();
+			try {rs.close();} catch (Exception es) {}
 		} catch (SQLException e) {
 			System.out.println("Error SQL getEstadistiquesUsuari: "+e);
 		}
