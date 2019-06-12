@@ -292,6 +292,7 @@ public class Partida extends JPanel implements ActionListener {
 		bTaules = createButton(size, Color.GRAY, "Fer Taules");
 		bBufar = createButton(size, Color.GRAY, "Bufar");
 		bGrabarTirada = createButton(size, Color.GRAY, "Grabar Tirada");
+		bGrabarTirada.setEnabled(false);
 
 		panelCSud.add(bTaules);
 		panelCSud.add(Box.createRigidArea(new Dimension(25, 0)), BorderLayout.WEST);
@@ -372,6 +373,7 @@ public class Partida extends JPanel implements ActionListener {
 
 				posInicial = "";
 				posFinal = "";
+				bGrabarTirada.setEnabled(true);
 
 			}
 		}
