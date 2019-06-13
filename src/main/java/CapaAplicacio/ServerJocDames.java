@@ -7,13 +7,11 @@ import com.lambdaworks.crypto.SCryptUtil;
 import CapaDomini.*;
 import CapaPersistencia.*;
 
-@ApplicationPath("/ServerJocDames/")
+@ApplicationPath("/ServerJocDames")
+//http://localhost:8080/Api/ServerJocDames/login?user=Ricard&password=1234
 
 public class ServerJocDames implements JocDamesInterficie {
 	
-
-
-
 	private ConnectionSQLOracle connSQL;
 	private UsuariSQLOracle userSQL;
 	private PartidesSQLOracle partSQL;
@@ -515,7 +513,7 @@ public class ServerJocDames implements JocDamesInterficie {
 		return crearJSON(cadena, "", "");
 	}
 
-	private String crearJSON(@QueryParam("res")String res,@QueryParam("err") String err,@QueryParam("sErr") String sErr) {
+	private String crearJSON(String res, String err, String sErr) {
 		if (this.json == null)
 			this.json = new JSONObject();
 		json.put("res", res);

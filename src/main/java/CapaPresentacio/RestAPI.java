@@ -8,27 +8,45 @@ import java.net.URLEncoder;
 import org.json.JSONObject;
 import CapaAplicacio.JocDamesInterficie;
  
-//http://127.0.0.1/JocDames/ServerJocDames/metode?param&param...
-
 public class RestAPI implements JocDamesInterficie{
+	
+	private String address = "http://127.0.0.1:8080/Api/ServerJocDames/";
+	private JSONObject json;
 
 	@Override
 	public String login(String nom, String passwd) {
 
-		//http://127.0.0.1/JocDames/ServerJocDames/metode?param&param...
-		return null;
+		try {
+			return getData("login?user="+URLEncoder.encode(nom,"UTF-8")+"&password="+URLEncoder.encode(passwd,"UTF-8"));
+			}
+		catch (UnsupportedEncodingException e) {
+
+			String s = this.crearJSON(e.getMessage());
+			return s;			}
 	}
 
 	@Override
 	public String registra(String nom, String passwd) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		try {
+			return getData("registra?user="+URLEncoder.encode(nom,"UTF-8")+"&password="+URLEncoder.encode(passwd,"UTF-8"));
+			}
+		catch (UnsupportedEncodingException e) {
+
+			String s = this.crearJSON(e.getMessage());
+			return s;			}
 	}
 
 	@Override
 	public String logout(String idSessio) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		try {
+			return getData("logout?idSessio="+URLEncoder.encode(idSessio,"UTF-8"));
+			}
+		catch (UnsupportedEncodingException e) {
+
+			String s = this.crearJSON(e.getMessage());
+			return s;			}
 	}
 
 	@Override
@@ -38,8 +56,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("reconecta?idSessio="+URLEncoder.encode(idSessio,"UTF-8")+"&password="+URLEncoder.encode(passwd,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
-			}
+
+			String s = this.crearJSON(e.getMessage());
+			return s;			}
 	}
 
 	@Override
@@ -49,8 +68,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("getEstadistics?idSessio="+URLEncoder.encode(idSessio,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
-			}
+
+			String s = this.crearJSON(e.getMessage());
+			return s;			}
 	}
 
 	@Override
@@ -60,8 +80,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("getCandidatsSol?idSessio="+URLEncoder.encode(idSessio,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
-			}
+
+			String s = this.crearJSON(e.getMessage());
+			return s;			}
 	}
 
 	@Override
@@ -71,8 +92,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("enviaSol?idSessio="+URLEncoder.encode(idSessio,"UTF-8")+"&usuari="+URLEncoder.encode(usuari,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
-			}
+
+			String s = this.crearJSON(e.getMessage());
+			return s;			}
 	}
 
 	@Override
@@ -82,30 +104,33 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("solicituds?idSessio="+URLEncoder.encode(idSessio,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
-			}
+
+			String s = this.crearJSON(e.getMessage());
+			return s;			}
 	}
 
 	@Override
 	public String acceptaSol(String idSessio, String usuari) {
 		
 		try {
-			return getData("acceptaSol?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&user="+URLEncoder.encode(usuari,"UTF-8"));
+			return getData("acceptaSol?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&usuari="+URLEncoder.encode(usuari,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
-			}
+
+			String s = this.crearJSON(e.getMessage());
+			return s;			}
 	}
 
 	@Override
 	public String rebutjaSol(String idSessio, String usuari) {
 		
 		try {
-			return getData("rebutjaSol?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&user="+URLEncoder.encode(usuari,"UTF-8"));
+			return getData("rebutjaSol?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&usuari="+URLEncoder.encode(usuari,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
-			}
+
+			String s = this.crearJSON(e.getMessage());
+			return s;			}
 	}
 
 	@Override
@@ -115,8 +140,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("getPartidesTorn?idSessio="+URLEncoder.encode(idSessio,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
-			}
+
+			String s = this.crearJSON(e.getMessage());
+			return s;			}
 	}
 
 	@Override
@@ -126,8 +152,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("getPartidesNoTorn?idSessio="+URLEncoder.encode(idSessio,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
-			}
+
+			String s = this.crearJSON(e.getMessage());
+			return s;			}
 	}
 
 	@Override
@@ -137,19 +164,21 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("getPartidesAcabades?idSessio="+URLEncoder.encode(idSessio,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
-			}
+
+			String s = this.crearJSON(e.getMessage());
+			return s;			}
 	}
 
 	@Override
 	public String triaPartida(String idSessio, String usuari) {
 		
 		try {
-			return getData("triaPartida?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&user="+URLEncoder.encode(usuari,"UTF-8"));
+			return getData("triaPartida?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&usuari="+URLEncoder.encode(usuari,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
-			}
+
+			String s = this.crearJSON(e.getMessage());
+			return s;			}
 	}
 
 	@Override
@@ -159,8 +188,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("obtenirColor?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&idPartida="+URLEncoder.encode(idPartida,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
-			}
+
+			String s = this.crearJSON(e.getMessage());
+			return s;			}
 	}
 
 	@Override
@@ -170,7 +200,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("obtenirTaulerAnt?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&idPartida="+URLEncoder.encode(idPartida,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
+
+			String s = this.crearJSON(e.getMessage());
+			return s;
 			}
 	}
 
@@ -181,7 +213,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("obtenirTaulerAct?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&idPartida="+URLEncoder.encode(idPartida,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
+			
+			String s = this.crearJSON(e.getMessage());
+			return s;
 			}
 	}
 
@@ -192,7 +226,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("obtenirTaulerRes?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&idPartida="+URLEncoder.encode(idPartida,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
+
+			String s = this.crearJSON(e.getMessage());
+			return s;
 			}
 	}
 
@@ -203,7 +239,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("obtenirMovsAnt?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&idPartida="+URLEncoder.encode(idPartida,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
+			
+			String s = this.crearJSON(e.getMessage());
+			return s;
 			}
 	}
 
@@ -214,7 +252,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("grabarTirada?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&idPartida="+URLEncoder.encode(idPartida,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
+			
+			String s = this.crearJSON(e.getMessage());
+			return s;
 			}
 	}
 
@@ -225,7 +265,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("obtenirMovimentsPossibles?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&idPartida="+URLEncoder.encode(idPartida,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
+			
+			String s = this.crearJSON(e.getMessage());
+			return s;
 			}
 	}
 
@@ -236,7 +278,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("ferMoviment?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&idPartida="+URLEncoder.encode(idPartida,"UTF-8")+"&posIni="+URLEncoder.encode(posIni,"UTF-8")+"&posFi="+URLEncoder.encode(posFi,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
+			
+			String s = this.crearJSON(e.getMessage());
+			return s;
 			}
 	}
 
@@ -247,7 +291,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("ferDama?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&idPartida="+URLEncoder.encode(idPartida,"UTF-8")+"&pos="+URLEncoder.encode(pos,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
+			
+			String s = this.crearJSON(e.getMessage());
+			return s;
 			}
 	}
 
@@ -258,7 +304,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("ferBufa?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&idPartida="+URLEncoder.encode(idPartida,"UTF-8")+"&pos="+URLEncoder.encode(pos,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
+			
+			String s = this.crearJSON(e.getMessage());
+			return s;
 			}
 	}
 
@@ -269,7 +317,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("acceptaTaules?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&idPartida="+URLEncoder.encode(idPartida,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
+			
+			String s = this.crearJSON(e.getMessage());
+			return s;
 			}
 	}
 
@@ -280,7 +330,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("proposaTaules?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&idPartida="+URLEncoder.encode(idPartida,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
+			
+			String s = this.crearJSON(e.getMessage());
+			return s;
 			}
 	}
 
@@ -291,7 +343,9 @@ public class RestAPI implements JocDamesInterficie{
 			return getData("movsPessa?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&idPartida="+URLEncoder.encode(idPartida,"UTF-8")+"&pos="+URLEncoder.encode(pos,"UTF-8"));
 			}
 		catch (UnsupportedEncodingException e) {
-			return new JsonResult().setErr(e.getMessage()).toString();
+				
+			String s = this.crearJSON(e.getMessage());
+			return s;
 			}
 	}
 	
@@ -305,8 +359,8 @@ public class RestAPI implements JocDamesInterficie{
 		
 		if (conn.getResponseCode() != 200) {
 			
-			JsonResult res = new JsonResult(); res.setErr("Failed : HTTP error code : "+ conn.getResponseCode()+"on call "+ address+method); 
-			return res.toString();
+			String s = this.crearJSON("Failed : HTTP error code : "+ conn.getResponseCode()+"on call "+ address+method); 
+			return s;
 		}
 		BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 		String line="";
@@ -319,8 +373,16 @@ public class RestAPI implements JocDamesInterficie{
 		}
 		
 		catch (Exception e) {
-		JsonResult res = new JsonResult(); res.setErr(e.getMessage());
-		return res.toString();
-		} }
+		String s = this.crearJSON(e.getMessage());
+		return s;
+		} 
+	}
+	
+	private String crearJSON(String err) {
+		if (this.json == null)
+			this.json = new JSONObject();
+		json.put("err", err);
+		return json.toString();
+	}
 }
  
