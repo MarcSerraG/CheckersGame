@@ -25,21 +25,19 @@ import javax.swing.event.ListSelectionListener;
 
 import org.json.JSONObject;
 
-import CapaAplicacio.JocAPI;
-
 public class Requests extends JPanel implements ActionListener, ListSelectionListener {
 
 	static BaseInterficie interficieBase;
 	JPanel panelRequests, panelCentral, panelNord, panelSud, panelEst, panelOest;
 	JLabel labelErrorMessage;
-	JocAPI api;
+	RestAPI api;
 	JButton bAcceptGame, bRefresh, bRefuseGame;
 	JList<String> listPartides;
 	JScrollPane scrollPanel;
 	JLabel icon;
 	String contrincant;
 
-	public Requests(BaseInterficie base, JocAPI API) {
+	public Requests(BaseInterficie base, RestAPI API) {
 		interficieBase = base;
 		api = API;
 

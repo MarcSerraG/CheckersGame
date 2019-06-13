@@ -12,8 +12,6 @@ import javax.swing.SwingConstants;
 
 import org.json.JSONObject;
 
-import CapaAplicacio.JocAPI;
-
 public class Estadistica extends JPanel {
 
 	JLabel labelMain, labelUsername, labelWins, labelLost, labelMatchesTotal, labelRatio, labelTaules;
@@ -24,11 +22,11 @@ public class Estadistica extends JPanel {
 	String[] rank;
 
 	static BaseInterficie interficieBase;
-	JocAPI api;
+	RestAPI api;
 
 	private String matches, win, lost, taules, ratio;
 
-	public Estadistica(BaseInterficie base, JocAPI API) {
+	public Estadistica(BaseInterficie base, RestAPI API) {
 		interficieBase = base;
 		listRank = new JList<String>();
 		DefaultListCellRenderer renderer = (DefaultListCellRenderer) listRank.getCellRenderer();

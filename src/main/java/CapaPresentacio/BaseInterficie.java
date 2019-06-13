@@ -18,14 +18,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import CapaAplicacio.JocAPI;
-
 public class BaseInterficie extends JFrame implements ActionListener {
 
 	public JButton bLogin, bNewGame, bContinue_Game, bStatistics, bLogOut, bRequests, bRefresh;
 	public JPanel centerPanel;
 	private JLabel versio;
-	private JocAPI api;
+	private RestAPI api;
 	private Login log;
 	private static NewGame newGame;
 	private ContinueGame ContinueGame;
@@ -46,7 +44,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		MenuBar();
 
 		try {
-			api = new JocAPI();// usuari i contrasenya del server
+			api = new RestAPI();// usuari i contrasenya del server
 			// carrega la pagina de login la qual es situa en el centre
 			log = CenterLogin();
 			log.labelMessage.setText("Server Connection: Correct");
@@ -64,7 +62,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		return log.user;
 	}
 
-	public JocAPI getAPI() {
+	public RestAPI getAPI() {
 		return api;
 	}
 
@@ -440,7 +438,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 			if (log.user != null)
 				api.logout(log.user);
 			else {
-				api.getConnectionSQL().tancaConeccio();
+				//api.getConnectionSQL().tancaConeccio();
 				JOptionPane.showMessageDialog(null, "Server Connection Closed");
 			}
 			System.exit(0);

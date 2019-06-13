@@ -1,4 +1,6 @@
 package CapaPresentacio;
+import java.io.UnsupportedEncodingException;
+import org.json.JSONObject;
 import CapaAplicacio.JocDamesInterficie;
  
 //http://127.0.0.1/JocDames/ServerJocDames/metode?param&param...
@@ -62,8 +64,12 @@ public class RestAPI implements JocDamesInterficie{
 
 	@Override
 	public String rebutjaSol(String idSessio, String usuari) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		try {
+			return getData("rebutjaSol?idSessio="+URLEncoder.encode(idSessio,"UTF-8") +"&user="+URLEncoder.encode(user,"UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+			return new JsonResult().setErr(e.getMessage()).toString();
+			}
 	}
 
 	@Override
