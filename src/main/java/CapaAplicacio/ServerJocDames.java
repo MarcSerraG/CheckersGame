@@ -7,7 +7,6 @@ import com.lambdaworks.crypto.SCryptUtil;
 import CapaDomini.*;
 import CapaPersistencia.*;
 
-//http://127.0.0.1/JocDames/ServerJocDames/metode?param&param...
 @ApplicationPath("/ServerJocDames/")
 
 public class ServerJocDames implements JocDamesInterficie {

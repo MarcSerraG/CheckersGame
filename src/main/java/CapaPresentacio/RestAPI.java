@@ -1,12 +1,14 @@
 package CapaPresentacio;
 import CapaAplicacio.JocDamesInterficie;
  
+//http://127.0.0.1/JocDames/ServerJocDames/metode?param&param...
 
 public class RestAPI implements JocDamesInterficie{
 
 	@Override
 	public String login(String nom, String passwd) {
-		// TODO Auto-generated method stub
+
+		//http://127.0.0.1/JocDames/ServerJocDames/metode?param&param...
 		return null;
 	}
 
