@@ -248,7 +248,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 									e1.printStackTrace();
 								}
 							else
-								refresh();
+								refresh(false, null);
 						}
 					}
 				}
@@ -263,9 +263,9 @@ public class BaseInterficie extends JFrame implements ActionListener {
 	private void refresh() throws RemoteException {
 
 		if (ContinueGame.TornPartidaEnCurs().equals(this.getPlayerID()))
-			ContinueGame.ComenssarJoc(true);
+			ContinueGame.ComenssarJoc(true, res, mss);
 		else
-			ContinueGame.ComenssarJoc(false);
+			ContinueGame.ComenssarJoc(false, res, mss);
 	}
 
 	private void actionLogin() {

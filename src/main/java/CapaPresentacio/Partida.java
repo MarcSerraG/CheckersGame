@@ -20,6 +20,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.json.JSONObject;
@@ -29,11 +30,12 @@ public class Partida extends JPanel implements ActionListener {
 
 	BaseInterficie interficieBase;
 	JPanel panelTaulell, panelNord, panelSud, panelEst, panelOest, panelCentral;
-	JButton bTaules, bSeleccioInicial, bBufar;
+	JButton bTaules, bSeleccioInicial, bBufar, bGrabarTirada;
 	JLabel lMessage, lPlayerBlancas, lPlayerNegras; // (Blancas=0, Negras = 1)
 	Map<JButton, String> taulell2;
 	String posInicial = "", posFinal = "", idPartida, NomContrincant, ContrincantColor, JugadorColor;
 	Boolean torn;
+	private int blanques, negres;
 
 	public Partida(BaseInterficie base, String contrincant, Boolean torn) {
 		interficieBase = base;
@@ -47,40 +49,31 @@ public class Partida extends JPanel implements ActionListener {
 
 	}
 
-	public JPanel partidaCreate() throws RemoteException {
-		panelTaulell = new JPanel();
-
-		panelCentral = new JPanel();
-		panelCentral.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 5));
-		panelCentral.setBackground(Color.ORANGE);
-
-		panelTaulell.setLayout(new BorderLayout());
-
-		panelTaulell.add(panelCentral, BorderLayout.CENTER);
-		AjustaPantalla(panelNord, panelSud, panelEst, panelOest);
-
-		return panelTaulell;
-	}
-
-	public JPanel partidaCreate(String idPartida) throws RemoteException {
+	public JPanel partidaCreate(String idPartida, boolean res, String taulellAntic) {
 		panelTaulell = new JPanel();
 		this.idPartida = idPartida;
 
 		panelTaulell.setLayout(new BorderLayout());
 
 		AjustaPantalla(panelNord, panelSud, panelEst, panelOest);
+		String nouTaulell;
 
-		String nouTaulell = interficieBase.getAPI().obtenirTaulerAct(interficieBase.getPlayerID(), idPartida);
-		JSONObject json = new JSONObject(nouTaulell);
+		if (!res) {
+			nouTaulell = interficieBase.getAPI().obtenirTaulerAct(interficieBase.getPlayerID(), idPartida);
 
-		String err = json.getString("err");
-		String mss = json.getString("res");
+			JSONObject json = new JSONObject(nouTaulell);
 
-		if (!err.equals("")) {
-			lMessage.setText(err);
+			String err = json.getString("err");
+			String mss = json.getString("res");
 
+			if (!err.equals("")) {
+				lMessage.setText(err);
+
+			} else {
+				setAnticTaulell(mss);
+			}
 		} else {
-			setAnticTaulell(mss);
+			setAnticTaulell(taulellAntic);
 		}
 		panelTaulell.add(panelCentral, BorderLayout.CENTER);
 
@@ -88,8 +81,6 @@ public class Partida extends JPanel implements ActionListener {
 	}
 
 	private void setAnticTaulell(String taulellSQL) {
-
-		// grabarTirada(String idSessio, String idPartida)
 
 		if (panelCentral != null) {
 			panelCentral.setVisible(false);
@@ -105,6 +96,8 @@ public class Partida extends JPanel implements ActionListener {
 
 		int color = -1;
 		int contador = 0;
+		blanques = 0;
+		negres = 0;
 
 		taulell2 = new LinkedHashMap<JButton, String>();
 		Dimension size = new Dimension(50, 50);
@@ -144,15 +137,19 @@ public class Partida extends JPanel implements ActionListener {
 					switch (divisioTaulell[contador]) {
 					case "1":
 						taulell2.put(createButton(size, color, peoNegre, ContrincantPesses("Black")), x + ";" + y);
+						negres++;
 						break;
 					case "0":
 						taulell2.put(createButton(size, color, peoBlanca, ContrincantPesses("Red")), x + ";" + y);
+						blanques++;
 						break;
 					case "d":
 						taulell2.put(createButton(size, color, DamaNegra, ContrincantPesses("Black")), x + ";" + y);
+						negres++;
 						break;
 					case "D":
 						taulell2.put(createButton(size, color, DamaBlanca, ContrincantPesses("Red")), x + ";" + y);
+						blanques++;
 						break;
 					default:
 						taulell2.put(createButton(size, color, null, true), x + ";" + y);
@@ -296,12 +293,16 @@ public class Partida extends JPanel implements ActionListener {
 
 		bTaules = createButton(size, Color.GRAY, "Fer Taules");
 		bBufar = createButton(size, Color.GRAY, "Bufar");
+		bGrabarTirada = createButton(size, Color.GRAY, "Grabar Tirada");
+		bGrabarTirada.setEnabled(false);
 
 		panelCSud.add(bTaules);
-		panelCSud.add(Box.createRigidArea(new Dimension(130, 0)), BorderLayout.WEST);
+		panelCSud.add(Box.createRigidArea(new Dimension(25, 0)), BorderLayout.WEST);
+		panelCSud.add(bGrabarTirada);
+		panelCSud.add(Box.createRigidArea(new Dimension(25, 0)), BorderLayout.WEST);
 		panelCSud.add(bBufar);
 
-		panelSud.add(Box.createRigidArea(new Dimension(280, 100)), BorderLayout.WEST);
+		panelSud.add(Box.createRigidArea(new Dimension(243, 110)), BorderLayout.WEST);
 		panelSud.add(panelCSud, BorderLayout.CENTER);
 		panelSud.add(lMessage, BorderLayout.EAST);
 
@@ -313,14 +314,11 @@ public class Partida extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		try {
-			if (e.getSource() != bTaules && e.getSource() != bBufar)
-				MourePessa((JButton) e.getSource(), taulell2.get(e.getSource()));
+		if (e.getSource() == bGrabarTirada)
+			GrabaTirada();
+		else if (e.getSource() != bTaules && e.getSource() != bBufar)
+			MourePessa((JButton) e.getSource(), taulell2.get(e.getSource()));
 
-		}
-		catch(Exception ex) {
-			ex.printStackTrace();
-		}
 	}
 
 	private void MourePessa(JButton boto, String posicioBoto) throws RemoteException {
@@ -340,58 +338,44 @@ public class Partida extends JPanel implements ActionListener {
 
 				String err = json.getString("err");
 				String mss = json.getString("res");
-				String sErr = json.getString("sErr");
 
-				if (sErr.equals("")) {
+				if (Boolean.parseBoolean(mss)) {
+
+					json = new JSONObject(
+							interficieBase.getAPI().obtenirTaulerRes(interficieBase.getPlayerID(), idPartida));
+					err = json.getString("err");
+					mss = json.getString("res");
+
 					if (err.equals("")) {
+						int neg = negres;
+						int blan = blanques;
+						setAnticTaulell(mss);
 
-						if (Boolean.parseBoolean(mss)) {
-							lMessage.setText("It's your turn again");
-
+						if (blanques < blan || negres < neg) {
+							posInicial = "";
+							posFinal = "";
 							torn = true;
-
+							lMessage.setText("Well done! It's Your Turn Again");
 						} else {
-							lMessage.setText("It's rival turn");
+							lMessage.setText("Graba la Tirada!");
+							for (JButton n : taulell2.keySet())
+								n.removeActionListener(this);
+
 							torn = false;
 						}
 
-						String nouTaulell = interficieBase.getAPI().obtenirTaulerRes(interficieBase.getPlayerID(),
-								idPartida);
-						json = new JSONObject(nouTaulell);
-
-						err = json.getString("err");
-						mss = json.getString("res");
-
-						if (!err.equals("")) {
-							lMessage.setText(err);
-						} else {
-							setAnticTaulell(mss);
-						}
-
-						json = new JSONObject(
-								interficieBase.getAPI().grabarTirada(interficieBase.getPlayerID(), idPartida));
-
-						err = json.getString("err");
-						mss = json.getString("res");
-						sErr = json.getString("sErr");
-
-						if (err.equals(""))
-							lMessage.setText(mss);
-						else
-							lMessage.setText(err);
-
-						System.out.println(mss);
-
 					} else {
-						lMessage.setText(err.split(":")[1]);
-						posInicial = "";
-						posFinal = "";
+						lMessage.setText(err);
 					}
-				} else
-					lMessage.setText(sErr);
+
+				}
 
 				for (JButton b : taulell2.keySet())
 					b.setBorder(BorderFactory.createEmptyBorder());
+
+				posInicial = "";
+				posFinal = "";
+				bGrabarTirada.setEnabled(true);
 
 			}
 		}
@@ -399,12 +383,11 @@ public class Partida extends JPanel implements ActionListener {
 
 	private void VeurePossiblesMoviments(String pos) throws RemoteException {
 
-		String moviments = interficieBase.getAPI().movsPessa(interficieBase.getName(), idPartida, pos);
+		String moviments = interficieBase.getAPI().movsPessa(interficieBase.getPlayerID(), idPartida, pos);
 		JSONObject json = new JSONObject(moviments);
 
 		String err = json.getString("err");
 		String mss = json.getString("res");
-		// String sErr = json.getString("sErr");
 
 		if (!err.equals(""))
 			lMessage.setText(err);
@@ -419,6 +402,37 @@ public class Partida extends JPanel implements ActionListener {
 					}
 				}
 			}
+		}
+	}
+
+	private void GrabaTirada() {
+		String grabar = interficieBase.getAPI().grabarTirada(interficieBase.getPlayerID(), idPartida);
+		JSONObject json = new JSONObject(grabar);
+
+		String err = json.getString("err");
+		String mss = json.getString("res");
+
+		if (err.equals("")) {
+			switch (mss) {
+			case "guanya":
+				JOptionPane.showMessageDialog(null, "YOU WIN!");
+				break;
+			case "perd":
+				JOptionPane.showMessageDialog(null, "LOOOOOOSEEERR!!!");
+				break;
+			// case "continua":
+			// lMessage.setText("It's your turn Again!");
+			// interficieBase.refresh();
+			// break;
+			case "taules":
+				JOptionPane.showMessageDialog(null, "Perdre per Taules? LOOOSSEEERRR!");
+				break;
+			default:
+				lMessage.setText("It's " + NomContrincant + " turn");
+
+			}
+		} else {
+			lMessage.setText(err);
 		}
 	}
 

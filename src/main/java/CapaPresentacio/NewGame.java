@@ -204,12 +204,12 @@ public class NewGame extends JPanel implements ActionListener, ListSelectionList
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		try {
-			if (e.getSource() == bRefresh) {
-				addPlayers();
-			} else {
-				SendRequest();
-			}
+
+		if (e.getSource() == bRefresh) {
+			addPlayers();
+			bPlayGame.setText("Play");
+		} else {
+			SendRequest();
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();

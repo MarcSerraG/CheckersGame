@@ -255,35 +255,39 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 	public void actionPerformed(ActionEvent e) {
 		int presButton = 0;
-		try {
-			if (e.getSource() == bRefresh) {
-				switch (presButton) {
-				case 0:
-					YourTurn();
-					break;
-				case 1:
-					RivalTurn();
-					break;
-				case 2:
-					FineshedMaches();
-					break;
-				}
+
+		if (e.getSource() == bRefresh) {
+			switch (presButton) {
+			case 0:
+				YourTurn();
+				break;
+			case 1:
+				RivalTurn();
+				break;
+			case 2:
+				FineshedMaches();
+				break;
+			}
+		} else {
+			if (e.getSource() == bYourTurn) {
+				this.bPlayGame.setVisible(true);
+				bRefresh.setPreferredSize(new Dimension(100, 40));
+				YourTurn();
+				presButton = 0;
 			} else {
-				if (e.getSource() == bYourTurn) {
-					YourTurn();
-					presButton = 0;
+				if (e.getSource() == bRivalTurn) {
+					this.bPlayGame.setVisible(true);
+					bRefresh.setPreferredSize(new Dimension(100, 40));
+					RivalTurn();
+					presButton = 1;
 				} else {
-					if (e.getSource() == bRivalTurn) {
-						RivalTurn();
-						presButton = 1;
+					if (e.getSource() == bFinishedMatches) {
+						this.bPlayGame.setVisible(false);
+						bRefresh.setPreferredSize(new Dimension(250, 40));
+						FineshedMaches();
+						presButton = 2;
 					} else {
-						if (e.getSource() == bFinishedMatches) {
-							FineshedMaches();
-							bPlayGame.setEnabled(false);
-							presButton = 2;
-						} else {
-							ComenssarJoc(torn);
-						}
+						ComenssarJoc(torn, false, null);
 					}
 				}
 			}
@@ -301,7 +305,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 	}
 
-	public void ComenssarJoc(boolean torn) throws RemoteException {
+	public void ComenssarJoc(boolean torn, boolean res, String mss) {
 
 		String triaPartida = api.triaPartida(interficieBase.getPlayerID(), contrincant);
 
@@ -319,8 +323,9 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 			AdaptarBaseInterfaceNewJoc();
 			interficieBase.centerPanel.setVisible(false);
 			Partida partida = new Partida(interficieBase, contrincant, torn);
-			interficieBase.centerPanel = partida.partidaCreate(Mss);
+			interficieBase.centerPanel = partida.partidaCreate(Mss, res, mss);
 			partida.setVisible(true);
+			partida.bGrabarTirada.setEnabled(false);
 			interficieBase.getContentPane().add(interficieBase.centerPanel, BorderLayout.CENTER);
 			interficieBase.getContentPane().repaint();
 			validate();
