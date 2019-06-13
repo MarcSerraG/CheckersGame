@@ -25,12 +25,13 @@ import org.json.JSONObject;
 
 public class Partida extends JPanel implements ActionListener {
 
-	BaseInterficie interficieBase;
-	JPanel panelTaulell, panelNord, panelSud, panelEst, panelOest, panelCentral;
-	JButton bTaules, bSeleccioInicial, bBufar, bGrabarTirada;
-	JLabel lMessage, lPlayerBlancas, lPlayerNegras; // (Blancas=0, Negras = 1)
-	Map<JButton, String> taulell2;
-	String posInicial = "", posFinal = "", idPartida, NomContrincant, ContrincantColor, JugadorColor;
+	private BaseInterficie interficieBase;
+	private JPanel panelTaulell, panelNord, panelSud, panelEst, panelOest, panelCentral;
+	private JButton bTaules, bSeleccioInicial, bBufar;
+	JButton bGrabarTirada;
+	private JLabel lMessage; // (Blancas=0, Negras = 1)
+	private Map<JButton, String> taulell2;
+	private String posInicial = "", posFinal = "", idPartida, NomContrincant, ContrincantColor;
 	Boolean torn;
 	private int blanques, negres;
 	private ImageIcon peoNegre, peoBlanca, DamaBlanca, DamaNegra;
@@ -246,7 +247,6 @@ public class Partida extends JPanel implements ActionListener {
 		String sErr = json.getString("sErr");
 
 		if (err.equals("")) {
-			JugadorColor = ClJugador;
 			if (ClJugador.equals("Red")) {
 				ContrincantColor = "Black";
 				LabelNegres.setText(NomContrincant + " Black");
