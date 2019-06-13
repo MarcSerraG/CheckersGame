@@ -8,7 +8,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -26,14 +25,17 @@ import org.json.JSONObject;
 
 public class Partida extends JPanel implements ActionListener {
 
-	BaseInterficie interficieBase;
-	JPanel panelTaulell, panelNord, panelSud, panelEst, panelOest, panelCentral;
-	JButton bTaules, bSeleccioInicial, bBufar, bGrabarTirada;
-	JLabel lMessage, lPlayerBlancas, lPlayerNegras; // (Blancas=0, Negras = 1)
-	Map<JButton, String> taulell2;
-	String posInicial = "", posFinal = "", idPartida, NomContrincant, ContrincantColor, JugadorColor;
+	private BaseInterficie interficieBase;
+	private JPanel panelTaulell, panelNord, panelSud, panelEst, panelOest, panelCentral;
+	private JButton bTaules, bSeleccioInicial, bBufar;
+	JButton bGrabarTirada;
+	private JLabel lMessage; // (Blancas=0, Negras = 1)
+	private Map<JButton, String> taulell2;
+	private String posInicial = "", posFinal = "", idPartida, NomContrincant, ContrincantColor;
 	Boolean torn;
+	private Boolean bufar;
 	private int blanques, negres;
+	private ImageIcon peoNegre, peoBlanca, DamaBlanca, DamaNegra;
 
 	public Partida(BaseInterficie base, String contrincant, Boolean torn) {
 		interficieBase = base;
@@ -50,6 +52,11 @@ public class Partida extends JPanel implements ActionListener {
 	public JPanel partidaCreate(String idPartida, boolean res, String taulellAntic) {
 		panelTaulell = new JPanel();
 		this.idPartida = idPartida;
+
+		peoNegre = new ImageIcon(cargaImatge("/PeoNegre.png"));
+		peoBlanca = new ImageIcon(cargaImatge("/PeoBlanca.png"));
+		DamaBlanca = new ImageIcon(cargaImatge("/DamaBlanca.png"));
+		DamaNegra = new ImageIcon(cargaImatge("/DamaNegra.png"));
 
 		panelTaulell.setLayout(new BorderLayout());
 
@@ -75,7 +82,20 @@ public class Partida extends JPanel implements ActionListener {
 		}
 		panelTaulell.add(panelCentral, BorderLayout.CENTER);
 
+		bufar = false;
+
 		return panelTaulell;
+	}
+
+	private Image cargaImatge(String path) {
+		try {
+			Image myImage = ImageIO.read(getClass().getResource(path));
+			myImage = myImage.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
+			return myImage;
+		} catch (Exception e) {
+			System.out.print("Error en cargar la imagen " + e);
+		}
+		return null;
 	}
 
 	private void setAnticTaulell(String taulellSQL) {
@@ -102,77 +122,55 @@ public class Partida extends JPanel implements ActionListener {
 
 		String[] divisioTaulell = taulellSQL.split("[,\n]");
 
-		try {
-
-			Image myImage = ImageIO.read(getClass().getResource("/PeoNegre.png"));
-			myImage = myImage.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
-			ImageIcon peoNegre = new ImageIcon(myImage);
-
-			Image myImage2 = ImageIO.read(getClass().getResource("/PeoBlanca.png"));
-			myImage2 = myImage2.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
-			ImageIcon peoBlanca = new ImageIcon(myImage2);
-
-			Image myImage3 = ImageIO.read(getClass().getResource("/DamaBlanca.png"));
-			myImage3 = myImage3.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
-			ImageIcon DamaBlanca = new ImageIcon(myImage3);
-
-			Image myImage4 = ImageIO.read(getClass().getResource("/DamaNegra.png"));
-			myImage4 = myImage4.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
-			ImageIcon DamaNegra = new ImageIcon(myImage4);
-
-			for (int x = 0; x < 8; x++) {
-				switch (color) {
-				case -1:
-				case 0:
-					color++;
-					break;
-				case 1:
-					color--;
-					break;
-				}
-
-				for (int y = 0; y < 8; y++) {
-					switch (divisioTaulell[contador]) {
-					case "1":
-						taulell2.put(createButton(size, color, peoNegre, ContrincantPesses("Black")), x + ";" + y);
-						negres++;
-						break;
-					case "0":
-						taulell2.put(createButton(size, color, peoBlanca, ContrincantPesses("Red")), x + ";" + y);
-						blanques++;
-						break;
-					case "d":
-						taulell2.put(createButton(size, color, DamaNegra, ContrincantPesses("Black")), x + ";" + y);
-						negres++;
-						break;
-					case "D":
-						taulell2.put(createButton(size, color, DamaBlanca, ContrincantPesses("Red")), x + ";" + y);
-						blanques++;
-						break;
-					default:
-						taulell2.put(createButton(size, color, null, true), x + ";" + y);
-						break;
-					}
-
-					contador++;
-
-					if (color == 0)
-						color++;
-					else
-						color--;
-				}
+		for (int x = 0; x < 8; x++) {
+			switch (color) {
+			case -1:
+			case 0:
+				color++;
+				break;
+			case 1:
+				color--;
+				break;
 			}
 
-			for (JButton b : taulell2.keySet())
-				panelCentral.add(b);
+			for (int y = 0; y < 8; y++) {
+				switch (divisioTaulell[contador]) {
+				case "1":
+					taulell2.put(createButton(size, color, peoNegre, ContrincantPesses("Black")), x + ";" + y);
+					negres++;
+					break;
+				case "0":
+					taulell2.put(createButton(size, color, peoBlanca, ContrincantPesses("Red")), x + ";" + y);
+					blanques++;
+					break;
+				case "d":
+					taulell2.put(createButton(size, color, DamaNegra, ContrincantPesses("Black")), x + ";" + y);
+					negres++;
+					break;
+				case "D":
+					taulell2.put(createButton(size, color, DamaBlanca, ContrincantPesses("Red")), x + ";" + y);
+					blanques++;
+					break;
+				default:
+					taulell2.put(createButton(size, color, null, true), x + ";" + y);
+					break;
+				}
 
-			panelTaulell.add(panelCentral, BorderLayout.CENTER);
-			panelCentral.setVisible(true);
-			validate();
+				contador++;
 
-		} catch (IOException e) {
-			System.out.println("setAnticTaulell Error: " + e);
+				if (color == 0)
+					color++;
+				else
+					color--;
+			}
 		}
+
+		for (JButton b : taulell2.keySet())
+			panelCentral.add(b);
+
+		panelTaulell.add(panelCentral, BorderLayout.CENTER);
+		panelCentral.setVisible(true);
+		validate();
 
 	}
 
@@ -252,7 +250,6 @@ public class Partida extends JPanel implements ActionListener {
 		String sErr = json.getString("sErr");
 
 		if (err.equals("")) {
-			JugadorColor = ClJugador;
 			if (ClJugador.equals("Red")) {
 				ContrincantColor = "Black";
 				LabelNegres.setText(NomContrincant + " Black");
@@ -292,6 +289,7 @@ public class Partida extends JPanel implements ActionListener {
 		bTaules = createButton(size, Color.GRAY, "Fer Taules");
 		bBufar = createButton(size, Color.GRAY, "Bufar");
 		bGrabarTirada = createButton(size, Color.GRAY, "Grabar Tirada");
+		bGrabarTirada.setEnabled(false);
 
 		panelCSud.add(bTaules);
 		panelCSud.add(Box.createRigidArea(new Dimension(25, 0)), BorderLayout.WEST);
@@ -311,10 +309,20 @@ public class Partida extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+
+		if (e.getSource() == bTaules)
+			return;
+
 		if (e.getSource() == bGrabarTirada)
 			GrabaTirada();
-		else if (e.getSource() != bTaules && e.getSource() != bBufar)
-			MourePessa((JButton) e.getSource(), taulell2.get(e.getSource()));
+		else if (e.getSource() == bBufar)
+			BufarDesbloquejarPeces();
+		else {
+			if (!bufar)
+				MourePessa((JButton) e.getSource(), taulell2.get(e.getSource()));
+			else
+				Bufar((JButton) e.getSource(), taulell2.get(e.getSource()));
+		}
 
 	}
 
@@ -372,6 +380,7 @@ public class Partida extends JPanel implements ActionListener {
 
 				posInicial = "";
 				posFinal = "";
+				bGrabarTirada.setEnabled(true);
 
 			}
 		}
@@ -430,6 +439,42 @@ public class Partida extends JPanel implements ActionListener {
 		} else {
 			lMessage.setText(err);
 		}
+	}
+
+	private void BufarDesbloquejarPeces() {
+
+		for (JButton b : taulell2.keySet()) {
+			if (b.getActionListeners().length == 0) {
+				b.addActionListener(this);
+			} else {
+				b.removeActionListener(this);
+			}
+		}
+
+		bufar = true;
+
+		lMessage.setText("Select token");
+
+	}
+
+	private void Bufar(JButton boto, String posicioBoto) {
+
+		String buf = interficieBase.getAPI().ferBufa(interficieBase.getPlayerID(), idPartida, posicioBoto);
+		JSONObject json = new JSONObject(buf);
+
+		String mss = json.getString("res");
+
+		if (Boolean.parseBoolean(mss)) {
+			lMessage.setText("Token eliminated! It's your turn again!");
+		} else {
+			lMessage.setText("You can't blow!");
+		}
+
+		json = new JSONObject(interficieBase.getAPI().obtenirTaulerRes(interficieBase.getPlayerID(), idPartida));
+		mss = json.getString("res");
+		setAnticTaulell(mss);
+		bufar = false;
+
 	}
 
 }

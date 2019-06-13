@@ -320,6 +320,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 			Partida partida = new Partida(interficieBase, contrincant, torn);
 			interficieBase.centerPanel = partida.partidaCreate(Mss, res, mss);
 			partida.setVisible(true);
+			partida.bGrabarTirada.setEnabled(false);
 			interficieBase.getContentPane().add(interficieBase.centerPanel, BorderLayout.CENTER);
 			interficieBase.getContentPane().repaint();
 			validate();
