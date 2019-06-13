@@ -33,6 +33,7 @@ public class Partida extends JPanel implements ActionListener {
 	private Map<JButton, String> taulell2;
 	private String posInicial = "", posFinal = "", idPartida, NomContrincant, ContrincantColor;
 	Boolean torn;
+	private Boolean bufar;
 	private int blanques, negres;
 	private ImageIcon peoNegre, peoBlanca, DamaBlanca, DamaNegra;
 
@@ -80,6 +81,8 @@ public class Partida extends JPanel implements ActionListener {
 			setAnticTaulell(taulellAntic);
 		}
 		panelTaulell.add(panelCentral, BorderLayout.CENTER);
+
+		bufar = false;
 
 		return panelTaulell;
 	}
@@ -306,10 +309,20 @@ public class Partida extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+
+		if (e.getSource() == bTaules)
+			return;
+
 		if (e.getSource() == bGrabarTirada)
 			GrabaTirada();
-		else if (e.getSource() != bTaules && e.getSource() != bBufar)
-			MourePessa((JButton) e.getSource(), taulell2.get(e.getSource()));
+		else if (e.getSource() == bBufar)
+			BufarDesbloquejarPeces();
+		else {
+			if (!bufar)
+				MourePessa((JButton) e.getSource(), taulell2.get(e.getSource()));
+			else
+				Bufar((JButton) e.getSource(), taulell2.get(e.getSource()));
+		}
 
 	}
 
@@ -428,7 +441,39 @@ public class Partida extends JPanel implements ActionListener {
 		}
 	}
 
-	private void Bufar() {
+	private void BufarDesbloquejarPeces() {
+
+		for (JButton b : taulell2.keySet()) {
+			if (b.getActionListeners().length == 0) {
+				b.addActionListener(this);
+			} else {
+				b.removeActionListener(this);
+			}
+		}
+
+		bufar = true;
+
+		lMessage.setText("Select token");
+
+	}
+
+	private void Bufar(JButton boto, String posicioBoto) {
+
+		String buf = interficieBase.getAPI().ferBufa(interficieBase.getPlayerID(), idPartida, posicioBoto);
+		JSONObject json = new JSONObject(buf);
+
+		String mss = json.getString("res");
+
+		if (Boolean.parseBoolean(mss)) {
+			lMessage.setText("Token eliminated! It's your turn again!");
+		} else {
+			lMessage.setText("You can't blow!");
+		}
+
+		json = new JSONObject(interficieBase.getAPI().obtenirTaulerRes(interficieBase.getPlayerID(), idPartida));
+		mss = json.getString("res");
+		setAnticTaulell(mss);
+		bufar = false;
 
 	}
 

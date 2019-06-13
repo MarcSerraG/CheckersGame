@@ -446,6 +446,8 @@ public class BaseInterficie extends JFrame implements ActionListener {
 			System.exit(0);
 		} catch (Exception e) {
 			this.setTitle(e.toString());
+		} finally {
+			System.exit(0);
 		}
 
 	}
