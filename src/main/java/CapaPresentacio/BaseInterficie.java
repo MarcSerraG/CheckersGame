@@ -20,7 +20,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import CapaAplicacio.JocDamesRMIInterface;
 
 public class BaseInterficie extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -260,7 +259,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		}
 	}
 
-	private void refresh() throws RemoteException {
+	private void refresh(boolean res, String mss) throws RemoteException {
 
 		if (ContinueGame.TornPartidaEnCurs().equals(this.getPlayerID()))
 			ContinueGame.ComenssarJoc(true, res, mss);

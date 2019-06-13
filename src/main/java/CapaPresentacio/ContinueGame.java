@@ -255,39 +255,40 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 	public void actionPerformed(ActionEvent e) {
 		int presButton = 0;
-
-		if (e.getSource() == bRefresh) {
-			switch (presButton) {
-			case 0:
-				YourTurn();
-				break;
-			case 1:
-				RivalTurn();
-				break;
-			case 2:
-				FineshedMaches();
-				break;
-			}
-		} else {
-			if (e.getSource() == bYourTurn) {
-				this.bPlayGame.setVisible(true);
-				bRefresh.setPreferredSize(new Dimension(100, 40));
-				YourTurn();
-				presButton = 0;
+		try {
+			if (e.getSource() == bRefresh) {
+				switch (presButton) {
+				case 0:
+					YourTurn();
+					break;
+				case 1:
+					RivalTurn();
+					break;
+				case 2:
+					FineshedMaches();
+					break;
+				}
 			} else {
-				if (e.getSource() == bRivalTurn) {
+				if (e.getSource() == bYourTurn) {
 					this.bPlayGame.setVisible(true);
 					bRefresh.setPreferredSize(new Dimension(100, 40));
-					RivalTurn();
-					presButton = 1;
+					YourTurn();
+					presButton = 0;
 				} else {
-					if (e.getSource() == bFinishedMatches) {
-						this.bPlayGame.setVisible(false);
-						bRefresh.setPreferredSize(new Dimension(250, 40));
-						FineshedMaches();
-						presButton = 2;
+					if (e.getSource() == bRivalTurn) {
+						this.bPlayGame.setVisible(true);
+						bRefresh.setPreferredSize(new Dimension(100, 40));
+						RivalTurn();
+						presButton = 1;
 					} else {
-						ComenssarJoc(torn, false, null);
+						if (e.getSource() == bFinishedMatches) {
+							this.bPlayGame.setVisible(false);
+							bRefresh.setPreferredSize(new Dimension(250, 40));
+							FineshedMaches();
+							presButton = 2;
+						} else {
+							ComenssarJoc(torn, false, null);
+						}
 					}
 				}
 			}
@@ -305,7 +306,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 	}
 
-	public void ComenssarJoc(boolean torn, boolean res, String mss) {
+	public void ComenssarJoc(boolean torn, boolean res, String mss) throws RemoteException {
 
 		String triaPartida = api.triaPartida(interficieBase.getPlayerID(), contrincant);
 

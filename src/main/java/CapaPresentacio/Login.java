@@ -15,8 +15,6 @@ import javax.swing.JTextField;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import CapaAplicacio.JocDamesRMIInterface;
-
 public class Login extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 

@@ -49,7 +49,7 @@ public class Partida extends JPanel implements ActionListener {
 
 	}
 
-	public JPanel partidaCreate(String idPartida, boolean res, String taulellAntic) {
+	public JPanel partidaCreate(String idPartida, boolean res, String taulellAntic) throws RemoteException {
 		panelTaulell = new JPanel();
 		this.idPartida = idPartida;
 
@@ -314,10 +314,15 @@ public class Partida extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		try {
 		if (e.getSource() == bGrabarTirada)
 			GrabaTirada();
 		else if (e.getSource() != bTaules && e.getSource() != bBufar)
 			MourePessa((JButton) e.getSource(), taulell2.get(e.getSource()));
+		}
+		catch(Exception ex) {
+			ex.getStackTrace();
+		}
 
 	}
 
@@ -405,7 +410,7 @@ public class Partida extends JPanel implements ActionListener {
 		}
 	}
 
-	private void GrabaTirada() {
+	private void GrabaTirada() throws RemoteException {
 		String grabar = interficieBase.getAPI().grabarTirada(interficieBase.getPlayerID(), idPartida);
 		JSONObject json = new JSONObject(grabar);
 
