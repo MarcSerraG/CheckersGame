@@ -460,7 +460,8 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		} catch (Exception e) {
 			this.setTitle(e.toString());
 		}
-
+		finally {
+			System.exit(0);
+		}
 	}
-
 }
