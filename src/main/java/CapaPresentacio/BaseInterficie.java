@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import CapaAplicacio.JocDamesRMIInterface;
 
 public class BaseInterficie extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -48,7 +49,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 		MenuBar();
 
 		try {
-			Registry registry = LocateRegistry.getRegistry("192.168.42.27");
+			Registry registry = LocateRegistry.getRegistry("192.168.38.189");
 			api = (JocDamesRMIInterface) registry.lookup("dama_server");// usuari i contrasenya del server
 			// carrega la pagina de login la qual es situa en el centre
 			log = CenterLogin();

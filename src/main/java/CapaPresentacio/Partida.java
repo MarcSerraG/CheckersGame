@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.json.JSONObject;
+import CapaAplicacio.JocDamesRMIInterface;
 
 public class Partida extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;

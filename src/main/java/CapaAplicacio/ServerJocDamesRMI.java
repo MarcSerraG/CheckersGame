@@ -29,6 +29,7 @@ public class ServerJocDamesRMI implements JocDamesRMIInterface {
 	private EstadistiquesSQLOracle statSQL;
 	private Moviments movTornAct;
 	private JSONObject json;
+	private String contrincant;
 
 	public ServerJocDamesRMI() throws Exception {
 		connSQL = new ConnectionSQLOracle();
@@ -36,6 +37,7 @@ public class ServerJocDamesRMI implements JocDamesRMIInterface {
 		partSQL = new PartidesSQLOracle(connSQL);
 		statSQL = new EstadistiquesSQLOracle(connSQL);
 		json = new JSONObject();
+		contrincant = "";
 		movTornAct = null;
 	}
 
@@ -239,6 +241,8 @@ public class ServerJocDamesRMI implements JocDamesRMIInterface {
 
 		if (idPartida == null)
 			return crearJSON("", "No hi ha partida disponible.", "");
+		
+		contrincant = usuari;
 
 		this.instanciarMoviments(idSessio, idPartida);
 		return crearJSON(idPartida, "", ""); 
@@ -297,11 +301,9 @@ public class ServerJocDamesRMI implements JocDamesRMIInterface {
 	}
 
 	public String grabarTirada(String idSessio, String idPartida) throws RemoteException {
-		// NO FUNCIONA EN AQUESTA VERSIÓ
-		// TODO: Comprovar / implementar taules...
 		
 		this.movTornAct = Moviments.getInstance();
-		
+
 		String movs = this.movTornAct.movsToString();
 		if (movs == null || movs.isEmpty())
 			return crearJSON("", "No hi han moviments en aquest torn", "");
@@ -312,7 +314,8 @@ public class ServerJocDamesRMI implements JocDamesRMIInterface {
 
 		String taulellRes = this.movTornAct.getTaulellActual().toString();
 		this.partSQL.guardarEstatTauler(idPartida, taulellRes);
-		this.partSQL.canviarTorn(idPartida, idSessio);
+
+		System.out.println("Canvi de torn! " + this.partSQL.canviarTorn(idPartida, contrincant));
 
 		String resultat = this.movTornAct.partidaAcabada();
 		String idColor = this.partSQL.getColor(idSessio, idPartida);
@@ -320,10 +323,10 @@ public class ServerJocDamesRMI implements JocDamesRMIInterface {
 		if (resultat.equalsIgnoreCase(idColor)) {
 			this.partSQL.acabarPartida(idSessio, idPartida);
 			return crearJSON("guanya", "", "");
-		}
-		else if (resultat.equalsIgnoreCase("taules"))
+		} else if (resultat.equalsIgnoreCase("taules")) {
+			this.partSQL.acabarPartida(idSessio, idPartida);
 			return crearJSON("taules", "", "");
-		else if (resultat.equalsIgnoreCase("continua"))
+		} else if (resultat.equalsIgnoreCase("continua"))
 			return crearJSON("continua", "", "");
 		else
 			return crearJSON("perd", "", "");
@@ -415,7 +418,7 @@ public class ServerJocDamesRMI implements JocDamesRMIInterface {
 
 	public String movsPessa(String idSessio, String idPartida, String Pos) throws RemoteException {
 
-		String estatTauler = this.partSQL.continuarPartida(idPartida);
+		String estatTauler = this.movTornAct.getTaulellActual().toString(); 
 		if (estatTauler == null)
 			return crearJSON("", "No s'ha pogut carregar la partida", "");
 
@@ -491,7 +494,7 @@ public class ServerJocDamesRMI implements JocDamesRMIInterface {
 	
 	public static void main (String[] args) {
 		try {
-			System.setProperty("java.rmi.server.hostname", "192.168.42.27");
+			System.setProperty("java.rmi.server.hostname", "192.168.38.189");
 			ServerJocDamesRMI jD = new ServerJocDamesRMI();
 			JocDamesRMIInterface stub = 
 					(JocDamesRMIInterface) UnicastRemoteObject.exportObject(jD, 1299);
