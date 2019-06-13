@@ -1,138 +1,169 @@
 package CapaPresentacio;
+import CapaAplicacio.JocDamesInterficie;
+ 
 
-import CapaPersistencia.ConnectionSQLOracle;
+public class RestAPI implements JocDamesInterficie{
 
-public class RestAPI implements APIInterface{
-
-	String login(String user, String password) {
-		
-		return "";
+	@Override
+	public String login(String nom, String passwd) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String registra(String user, String password) {
-		
-		return "";
+	@Override
+	public String registra(String nom, String passwd) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String logout(String idSessio) {
-		
-		return "";
+	@Override
+	public String logout(String idSessio) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String reconnecta(String idSessio, String password) {
-		
-		return "";
+	@Override
+	public String reconecta(String idSessio, String passwd) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String getEstadistics(String idSessio) {
-		
-		return "";
+	@Override
+	public String getEstadistics(String idSessio) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String getCandidatsSol(String idSessio) {
-		
-		return "";
+	@Override
+	public String getCandidatsSol(String idSessio) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	void enviaSol(String idSessio, String usuari) {}
-
-	String solicituds(String idSessio) {
-		
-		return "";
+	@Override
+	public String enviaSol(String idSessio, String usuari) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	void acceptaSol(String idSessio, String usuari) {}
-
-	void rebutjaSol(String idSessio, String usuari) {}
-
-	String getPartidesTorn(String idSessio) {
-		
-		return "";
+	@Override
+	public String solicituds(String idSessio) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String getPartidesNoTorn(String idSessio) {
-		
-		return "";
+	@Override
+	public String acceptaSol(String idSessio, String usuari) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String getPartidesAcabades(String idSessio) {
-		
-		return "";
+	@Override
+	public String rebutjaSol(String idSessio, String usuari) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String triaPartida(String idSessio, String usuari) {
-		
-		return "";
+	@Override
+	public String getPartidesTorn(String idSessio) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String obtenirColor(String idSessio, String idPartida) {
-		
-		return "";
+	@Override
+	public String getPartidesNoTorn(String idSessio) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String obtenirTaulerAnt(String idSessio, String idPartida) {
-		
-		return "";
+	@Override
+	public String getPartidesAcabades(String idSessio) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String obtenirTaulerAct(String idSessio, String idPartida) {
-		
-		return "";
+	@Override
+	public String triaPartida(String idSessio, String usuari) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String obtenirTaulerRes(String idSessio, String idPartida) {
-		
-		return "";
+	@Override
+	public String obtenirColor(String idSessio, String idPartida) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String obtenirMovsAnt(String idSessio, String idPartida) {
-		
-		return "";
+	@Override
+	public String obtenirTaulerAnt(String idSessio, String idPartida) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String grabarTirada(String idSessio, String idPartida) {
-		
-		return "";
+	@Override
+	public String obtenirTaulerAct(String idSessio, String idPartida) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String obtenirMovimentsPossibles(String idSessio, String idPartida) {
-		
-		return "";
+	@Override
+	public String obtenirTaulerRes(String idSessio, String idPartida) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String ferMoviment(String idSessio, String idPartida, String posIni, String posFi) {
-		
-		return "";
+	@Override
+	public String obtenirMovsAnt(String idSessio, String idPartida) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String ferDama(String idSessio, String idPartida, String pos) {
-		
-		return "";
+	@Override
+	public String grabarTirada(String idSessio, String idPartida) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String ferBufa(String idSessio, String idPartida, String pos) {
-		
-		return "";
+	@Override
+	public String obtenirMovimentsPossibles(String idSessio, String idPartida) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String acceptaTaules(String idSessio, String idPartida) {
-		
-		return "";
+	@Override
+	public String ferMoviment(String idSessio, String idPartida, String posIni, String posFi) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String proposaTaules(String idSessio, String idPartida) {
-		
-		return "";
+	@Override
+	public String ferDama(String idSessio, String idPartida, String pos) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	String movsPessa(String idSessio, String idPartida, String Pos) {
-		
-		return "";
-	}
-	
-	ConnectionSQLOracle getConnectionSQL() throws Exception {
-		
-		return new ConnectionSQLOracle();
+	@Override
+	public String ferBufa(String idSessio, String idPartida, String pos) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
+	@Override
+	public String acceptaTaules(String idSessio, String idPartida) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String proposaTaules(String idSessio, String idPartida) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String movsPessa(String idSessio, String idPartida, String pos) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
+ 

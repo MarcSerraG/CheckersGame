@@ -1,21 +1,19 @@
 package CapaAplicacio;
 
+import javax.ws.rs.*;
 import java.util.List;
-
 import org.json.JSONObject;
-
 import com.lambdaworks.crypto.SCryptUtil;
+import CapaDomini.*;
+import CapaPersistencia.*;
 
-import CapaDomini.Casella;
-import CapaDomini.Moviments;
-import CapaDomini.Peo;
-import CapaDomini.Taulell;
-import CapaPersistencia.ConnectionSQLOracle;
-import CapaPersistencia.EstadistiquesSQLOracle;
-import CapaPersistencia.PartidesSQLOracle;
-import CapaPersistencia.UsuariSQLOracle;
+//http://127.0.0.1/JocDames/ServerJocDames/metode?param&param...
+@ApplicationPath("/ServerJocDames/")
 
-public class JocAPI {
+public class ServerJocDames implements JocDamesInterficie {
+	
+
+
 
 	private ConnectionSQLOracle connSQL;
 	private UsuariSQLOracle userSQL;
@@ -25,7 +23,7 @@ public class JocAPI {
 	private JSONObject json;
 	private String contrincant;
 
-	public JocAPI() throws Exception {
+	public ServerJocDames() throws Exception {
 		connSQL = new ConnectionSQLOracle();
 		userSQL = new UsuariSQLOracle(connSQL);
 		partSQL = new PartidesSQLOracle(connSQL);
@@ -44,7 +42,10 @@ public class JocAPI {
 	 * @return "res": "IdSessio", "err": "usuari o contrasenya incorrecte", "sErr":
 	 *         "";
 	 */
-	public String login(String user, String password) {
+	@GET
+	@Path("login")
+	@Produces("application/json")
+	public String login(@QueryParam("user") String user, @QueryParam("password") String password)  {
 
 		boolean jaConnectat = this.userSQL.getConnectat(user);
 		if (jaConnectat)
@@ -66,7 +67,10 @@ public class JocAPI {
 		return crearJSON(user, "", "");
 	}
 
-	public String registra(String user, String password) {
+	@GET
+	@Path("registra")
+	@Produces("application/json")
+	public String registra(@QueryParam("user")String user,@QueryParam("password") String password) {
 
 		if (user.contains(";") || user.contains("\""))
 			return crearJSON("", "El nom no pot contenir \" ni ;", "");
@@ -83,8 +87,11 @@ public class JocAPI {
 
 		return crearJSON(user, "", "");
 	}
-
-	public String logout(String idSessio) {
+	
+	@GET
+	@Path("logout")
+	@Produces("application/json")
+	public String logout(@QueryParam("idSessio")String idSessio) {
 
 		boolean errorSessio = !userSQL.canviarSessio(idSessio, false);
 		if (errorSessio) {
@@ -93,8 +100,11 @@ public class JocAPI {
 
 		return crearJSON("", "", "");
 	}
-
-	public String reconnecta(String idSessio, String password) {
+	
+	@GET
+	@Path("reconecta")
+	@Produces("application/json")
+	public String reconecta(@QueryParam("idSessio")String idSessio,@QueryParam("password") String password) {
 
 		boolean sessioCaducada = !this.userSQL.getConnectat(idSessio); // Canviar pel necessari?
 		if (sessioCaducada)
@@ -103,7 +113,10 @@ public class JocAPI {
 			return crearJSON("", "La sessió encara està connectada", "");
 	}
 
-	public String getEstadistics(String idSessio) {
+	@GET
+	@Path("getEstadistics")
+	@Produces("application/json")
+	public String getEstadistics(@QueryParam("idSessio")String idSessio) {
 		String res = this.statSQL.getEstadistiquesUsuari(idSessio);
 		if (res == null)
 			return crearJSON("", "SQL error no hi han dades suficients", "");
@@ -119,7 +132,10 @@ public class JocAPI {
 	 * @param idSessio
 	 * @return
 	 */
-	public String getCandidatsSol(String idSessio) {
+	@GET
+	@Path("getCandidatsSol")
+	@Produces("application/json")
+	public String getCandidatsSol(@QueryParam("idSessio")String idSessio) {
 
 		String res = this.userSQL.getCandidats(idSessio);
 		if (res == null)
@@ -132,7 +148,10 @@ public class JocAPI {
 	}
 
 	// CreaPartida esta comprovat que funciona a la part de SQL
-	public void enviaSol(String idSessio, String usuari) {
+	@GET
+	@Path("enviaSol")
+	@Produces("application/json")
+	public String enviaSol(@QueryParam("idSessio")String idSessio,@QueryParam("usuari") String usuari) {
 
 		String res = "";
 		res = this.partSQL.crearPartidaNova(idSessio, usuari);
@@ -146,7 +165,10 @@ public class JocAPI {
 		}
 	}
 
-	public String solicituds(String idSessio) {
+	@GET
+	@Path("solicituds")
+	@Produces("application/json")
+	public String solicituds(@QueryParam("idSessio")String idSessio) {
 
 		List<String> solicituds = this.partSQL.getSolicitudsPendents(idSessio);
 		if (solicituds == null) {
@@ -165,15 +187,24 @@ public class JocAPI {
 		return crearJSON(nomsUsuaris, "", "");
 	}
 
-	public void acceptaSol(String idSessio, String usuari) {
+	@GET
+	@Path("acceptaSol")
+	@Produces("application/json")
+	public String acceptaSol(@QueryParam("idSessio")String idSessio,@QueryParam("usuari") String usuari) {
 		this.partSQL.acceptarSolicitud(idSessio, usuari);
 	}
 
-	public void rebutjaSol(String idSessio, String usuari) {
+	@GET
+	@Path("rebutjaSol")
+	@Produces("application/json")
+	public String rebutjaSol(@QueryParam("idSessio")String idSessio,@QueryParam("usuari") String usuari) {
 		this.partSQL.rebutjaSolicitud(idSessio, usuari);
 	}
 
-	public String getPartidesTorn(String idSessio) {
+	@GET
+	@Path("getPartidesTorn")
+	@Produces("application/json")
+	public String getPartidesTorn(@QueryParam("idSessio")String idSessio) {
 
 		String nomsUsuaris = "";
 		List<String> partides = this.partSQL.getPartidesTorn(idSessio);
@@ -192,7 +223,10 @@ public class JocAPI {
 		return crearJSON(nomsUsuaris, "", "");
 	}
 
-	public String getPartidesNoTorn(String idSessio) {
+	@GET
+	@Path("getPartidesNoTorn")
+	@Produces("application/json")
+	public String getPartidesNoTorn(@QueryParam("idSessio")String idSessio) {
 
 		String nomsUsuaris = "";
 		List<String> partides = this.partSQL.getPartidesNoTorn(idSessio);
@@ -210,7 +244,10 @@ public class JocAPI {
 		return crearJSON(nomsUsuaris, "", "");
 	}
 
-	public String getPartidesAcabades(String idSessio) {
+	@GET
+	@Path("getPartidesAcabades")
+	@Produces("application/json")
+	public String getPartidesAcabades(@QueryParam("idSessio")String idSessio) {
 
 		String llistaAcabades = "";
 
@@ -228,7 +265,10 @@ public class JocAPI {
 		return crearJSON(llistaAcabades, "", "");
 	}
 
-	public String triaPartida(String idSessio, String usuari) {
+	@GET
+	@Path("triaPartida")
+	@Produces("application/json")
+	public String triaPartida(@QueryParam("idSessio")String idSessio,@QueryParam("usuari") String usuari) {
 
 		String idPartida = this.partSQL.getPartida(idSessio, usuari);
 
@@ -241,7 +281,10 @@ public class JocAPI {
 		return crearJSON(idPartida, "", "");
 	}
 
-	public String obtenirColor(String idSessio, String idPartida) {
+	@GET
+	@Path("obtenirColor")
+	@Produces("application/json")
+	public String obtenirColor(@QueryParam("idSessio")String idSessio,@QueryParam("idPartida") String idPartida) {
 
 		String color = this.partSQL.getColor(idSessio, idPartida);
 
@@ -251,7 +294,10 @@ public class JocAPI {
 		return crearJSON(color, "", "");
 	}
 
-	public String obtenirTaulerAnt(String idSessio, String idPartida) {
+	@GET
+	@Path("obtenirTaulerAnt")
+	@Produces("application/json")
+	public String obtenirTaulerAnt(@QueryParam("idSessio")String idSessio,@QueryParam("idPartida") String idPartida) {
 
 		String tauler = this.partSQL.getTaulerAnt(idPartida);
 
@@ -261,7 +307,10 @@ public class JocAPI {
 		return crearJSON(tauler, "", "");
 	}
 
-	public String obtenirTaulerAct(String idSessio, String idPartida) {
+	@GET
+	@Path("obtenirTaulerAct")
+	@Produces("application/json")
+	public String obtenirTaulerAct(@QueryParam("idSessio")String idSessio,@QueryParam("idPartida") String idPartida) {
 
 		String tauler = this.partSQL.continuarPartida(idPartida);
 
@@ -271,7 +320,10 @@ public class JocAPI {
 		return crearJSON(tauler, "", "");
 	}
 
-	public String obtenirTaulerRes(String idSessio, String idPartida) {
+	@GET
+	@Path("obtenirTaulerRes")
+	@Produces("application/json")
+	public String obtenirTaulerRes(@QueryParam("idSessio")String idSessio,@QueryParam("idPartida") String idPartida) {
 
 		if (this.movTornAct == null)
 			return crearJSON("", "ERROR no hi ha taulerRes", "");
@@ -284,7 +336,10 @@ public class JocAPI {
 		return crearJSON(tauler, "", "");
 	}
 
-	public String obtenirMovsAnt(String idSessio, String idPartida) {
+	@GET
+	@Path("obtenirMovsAnt")
+	@Produces("application/json")
+	public String obtenirMovsAnt(@QueryParam("idSessio")String idSessio,@QueryParam("idPartida") String idPartida) {
 
 		String movsAnt = this.partSQL.getMovimentsAnt(idPartida);
 		if (movsAnt == null)
@@ -293,9 +348,10 @@ public class JocAPI {
 		return crearJSON(movsAnt, "", "");
 	}
 
-	public String grabarTirada(String idSessio, String idPartida) {
-		// NO FUNCIONA EN AQUESTA VERSIÓ
-		// TODO: Comprovar / implementar taules...
+	@GET
+	@Path("grabarTirada")
+	@Produces("application/json")
+	public String grabarTirada(@QueryParam("idSessio")String idSessio,@QueryParam("idPartida") String idPartida) {
 
 		this.movTornAct = Moviments.getInstance();
 
@@ -327,15 +383,21 @@ public class JocAPI {
 			return crearJSON("perd", "", "");
 	}
 
+	@GET
+	@Path("obtenirMovimentsPossibles")
+	@Produces("application/json")
 	// Implementació mínima... no comprova peça per peça ni diu si es pot matar
-	public String obtenirMovimentsPossibles(String idSessio, String idPartida) {
+	public String obtenirMovimentsPossibles(@QueryParam("idSessio")String idSessio,@QueryParam("idPartida") String idPartida) {
 		if (this.movTornAct == null)
 			return crearJSON("", "Error, no s'ha fet triaPartida abans...", "");
 		String possibles = this.movTornAct.movimentsPossibles();
 		return crearJSON(possibles, "", "");
 	}
 
-	public String ferMoviment(String idSessio, String idPartida, String posIni, String posFi) {
+	@GET
+	@Path("ferMoviment")
+	@Produces("application/json")
+	public String ferMoviment(@QueryParam("idSessio")String idSessio,@QueryParam("idPartida") String idPartida,@QueryParam("posIni") String posIni,@QueryParam("posFi") String posFi) {
 
 		this.movTornAct = Moviments.getInstance();
 
@@ -359,7 +421,10 @@ public class JocAPI {
 
 	}
 
-	public String ferDama(String idSessio, String idPartida, String pos) {
+	@GET
+	@Path("ferDama")
+	@Produces("application/json")
+	public String ferDama(@QueryParam("idSessio")String idSessio,@QueryParam("idPartida") String idPartida,@QueryParam("pos") String pos) {
 
 		String estatTauler = this.partSQL.continuarPartida(idPartida);
 		if (estatTauler == null)
@@ -384,7 +449,10 @@ public class JocAPI {
 			return crearJSON("false", "", "");
 	}
 
-	public String ferBufa(String idSessio, String idPartida, String pos) {
+	@GET
+	@Path("ferBufa")
+	@Produces("application/json")
+	public String ferBufa(@QueryParam("idSessio")String idSessio,@QueryParam("idPartida") String idPartida,@QueryParam("pos") String pos) {
 
 		this.movTornAct = Moviments.getInstance();
 
@@ -401,15 +469,24 @@ public class JocAPI {
 		return crearJSON(res, "", "");
 	}
 
-	public String acceptaTaules(String idSessio, String idPartida) {
+	@GET
+	@Path("acceptaTaules")
+	@Produces("application/json")
+	public String acceptaTaules(@QueryParam("idSessio")String idSessio,@QueryParam("idPartida") String idPartida) {
 		return null;
 	}
 
-	public String proposaTaules(String idSessio, String idPartida) {
+	@GET
+	@Path("proposaTaules")
+	@Produces("application/json")
+	public String proposaTaules(@QueryParam("idSessio")String idSessio,@QueryParam("idPartida") String idPartida) {
 		return null;
 	}
 
-	public String movsPessa(String idSessio, String idPartida, String Pos) {
+	@GET
+	@Path("movsPessa")
+	@Produces("application/json")
+	public String movsPessa(@QueryParam("idSessio")String idSessio,@QueryParam("idPartida") String idPartida,@QueryParam("pos") String Pos) {
 
 		// String estatTauler = this.partSQL.continuarPartida(idPartida);
 		String estatTauler = this.movTornAct.getTaulellActual().toString();
@@ -439,7 +516,7 @@ public class JocAPI {
 		return crearJSON(cadena, "", "");
 	}
 
-	private String crearJSON(String res, String err, String sErr) {
+	private String crearJSON(@QueryParam("res")String res,@QueryParam("err") String err,@QueryParam("sErr") String sErr) {
 		if (this.json == null)
 			this.json = new JSONObject();
 		json.put("res", res);
@@ -448,7 +525,7 @@ public class JocAPI {
 		return json.toString();
 	}
 
-	private void instanciarMoviments(String idSessio, String idPartida) {
+	private void instanciarMoviments(@QueryParam("idSessio")String idSessio,@QueryParam("idPartida") String idPartida) {
 
 		String movsAnt = this.partSQL.getMovimentsAnt(idPartida);
 		if (movsAnt == null)
@@ -467,19 +544,6 @@ public class JocAPI {
 		System.out.println(this.partSQL.getTorn(idPartida));
 
 		this.movTornAct = new Moviments(movsAnt, taulerAct, taulerAnt, tornJugador);
-	}
-
-	// Converteix un string d'un taulell de la capa domini o aplicacio,
-	// Retornant un string de taulell com especifica l'API
-	private String taulellConversor(String taulell) {
-		taulell = taulell.replace('x', ' ');
-		taulell = taulell.replaceAll(",", "");
-		taulell = taulell.replace("\n", ";");
-		taulell = taulell.replace('0', '♗');
-		taulell = taulell.replace('1', '♝');
-		taulell = taulell.replace('D', '♕');
-		taulell = taulell.replace('d', '♛');
-		return taulell;
 	}
 
 	public ConnectionSQLOracle getConnectionSQL() {
