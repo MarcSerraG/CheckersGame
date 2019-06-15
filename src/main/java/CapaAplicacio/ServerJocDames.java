@@ -1,5 +1,6 @@
 package CapaAplicacio;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.ApplicationPath;
@@ -31,6 +32,7 @@ public class ServerJocDames implements JocDamesInterficie {
 	private UsuariSQLOracle userSQL;
 	private PartidesSQLOracle partSQL;
 	private EstadistiquesSQLOracle statSQL;
+	private static HashMap<String, Moviments> mapMovs = new HashMap<String, Moviments>();;
 	private Moviments movTornAct;
 	private JSONObject json;
 	private String contrincant;
@@ -338,6 +340,7 @@ public class ServerJocDames implements JocDamesInterficie {
 	@Produces("application/json")
 	public String obtenirTaulerRes(@QueryParam("idSessio") String idSessio, @QueryParam("idPartida") String idPartida) {
 
+		this.movTornAct = this.mapMovs.get(idSessio);
 		if (this.movTornAct == null)
 			return crearJSON("", "ERROR no hi ha taulerRes", "");
 
@@ -366,7 +369,7 @@ public class ServerJocDames implements JocDamesInterficie {
 	@Produces("application/json")
 	public String grabarTirada(@QueryParam("idSessio") String idSessio, @QueryParam("idPartida") String idPartida) {
 
-		this.movTornAct = Moviments.getInstance();
+		this.movTornAct = this.mapMovs.get(idSessio);
 
 		String movs = this.movTornAct.movsToString();
 		if (movs == null || movs.isEmpty())
@@ -402,6 +405,8 @@ public class ServerJocDames implements JocDamesInterficie {
 	// Implementació mínima... no comprova peça per peça ni diu si es pot matar
 	public String obtenirMovimentsPossibles(@QueryParam("idSessio") String idSessio,
 			@QueryParam("idPartida") String idPartida) {
+		
+		this.movTornAct = this.mapMovs.get(idSessio);
 		if (this.movTornAct == null)
 			return crearJSON("", "Error, no s'ha fet triaPartida abans...", "");
 		String possibles = this.movTornAct.movimentsPossibles();
@@ -414,7 +419,7 @@ public class ServerJocDames implements JocDamesInterficie {
 	public String ferMoviment(@QueryParam("idSessio") String idSessio, @QueryParam("idPartida") String idPartida,
 			@QueryParam("posIni") String posIni, @QueryParam("posFi") String posFi) {
 
-		this.movTornAct = Moviments.getInstance();
+		this.movTornAct = this.mapMovs.get(idSessio);
 
 		String estatTauler = this.partSQL.continuarPartida(idPartida);
 		if (estatTauler == null)
@@ -471,7 +476,7 @@ public class ServerJocDames implements JocDamesInterficie {
 	public String ferBufa(@QueryParam("idSessio") String idSessio, @QueryParam("idPartida") String idPartida,
 			@QueryParam("pos") String pos) {
 
-		this.movTornAct = Moviments.getInstance();
+		this.movTornAct = this.mapMovs.get(idSessio);
 
 		int xIni = Integer.parseInt(pos.split(";")[0]);
 		int yIni = Integer.parseInt(pos.split(";")[1]);
@@ -506,6 +511,7 @@ public class ServerJocDames implements JocDamesInterficie {
 	public String movsPessa(@QueryParam("idSessio") String idSessio, @QueryParam("idPartida") String idPartida,
 			@QueryParam("pos") String Pos) {
 
+		this.movTornAct = this.mapMovs.get(idSessio);
 		// String estatTauler = this.partSQL.continuarPartida(idPartida);
 		String estatTauler = this.movTornAct.getTaulellActual().toString();
 		if (estatTauler == null)
@@ -568,7 +574,8 @@ public class ServerJocDames implements JocDamesInterficie {
 		System.out.println(idPartida);
 		System.out.println(this.partSQL.getTorn(idPartida));
 
-		this.movTornAct = new Moviments(movsAnt, taulerAct, taulerAnt, tornJugador);
+		this.mapMovs.put(idSessio, 
+				new Moviments(movsAnt, taulerAct, taulerAnt, tornJugador));
 	}
 
 	public ConnectionSQLOracle getConnectionSQL() {
