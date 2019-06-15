@@ -478,5 +478,6 @@ public class Partida extends JPanel implements ActionListener {
 		JOptionPane.showMessageDialog(null,
 				"Aquesta funció estarà disponible en la pròxima versió. Disculpa les molesties.");
 	}
+	//
 
 }
