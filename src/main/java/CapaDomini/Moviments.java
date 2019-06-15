@@ -121,7 +121,7 @@ public class Moviments {
 			boolean potMatar = this.taulAnt.potMatar(casSelec, casDesti) != null;
 
 			if (potMatar) {
-				this.listMovs.add("bufar;" + copyX + ";" + copyY);
+				this.listMovs.add("bufar;" + copyX + ";" + copyY + ";0;0");
 				this.taulActual.seleccionarCasella(copyX, copyY).eliminarFitxa();
 				this.potBufar = false;
 				return true;
