@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Login extends JPanel implements ActionListener {
@@ -111,59 +112,74 @@ public class Login extends JPanel implements ActionListener {
 	}
 
 	private void APIregister() {
-		String pass = fPassword.getText();
-		String repeatPass = fRepeatPassword.getText();
+		try {
 
-		if (!pass.equals(repeatPass)) {
-			this.labelMessage.setText("Passwords are not the same");
-		} else {
-			JSONObject json = new JSONObject(api.registra(tfUsuari.getText(), fPassword.getText()));
-			String Err = json.getString("err");
-			String Mss = json.getString("res");
+			String pass = fPassword.getText();
+			String repeatPass = fRepeatPassword.getText();
 
-			if (!Err.equals("")) {
-				labelMessage.setText(Err);
+			if (!pass.equals(repeatPass)) {
+				this.labelMessage.setText("Passwords are not the same");
 			} else {
-				this.user = Mss;
-				interficieBase.setTitle("Joc de Dames          Jugador: " + Mss);
-				desbloquejarBotons();
-				canviPantalla();
+				JSONObject json;
+
+				json = new JSONObject(api.registra(tfUsuari.getText(), fPassword.getText()));
+
+				String Err = json.getString("err");
+				String Mss = json.getString("res");
+
+				if (!Err.equals("")) {
+					labelMessage.setText(Err);
+				} else {
+					this.user = Mss;
+					interficieBase.setTitle("Joc de Dames          Jugador: " + Mss);
+					desbloquejarBotons();
+					canviPantalla();
+				}
 			}
+
+		} catch (JSONException e) {
+
+			e.printStackTrace();
 		}
 	}
 
 	private void APIentrar() {
-
-		if (tfUsuari.getText().equals("")) {
-			labelMessage.setText("UserName is required");
-		} else {
-
-			String apiReturn = api.login(tfUsuari.getText(), fPassword.getText());
-
-			JSONObject json = new JSONObject(apiReturn);
-
-			String sErr = json.getString("sErr");
-			String Err = json.getString("err");
-			String Mss = json.getString("res");
-
-			if (Err.contentEquals("No User")) {
-				register();
+		try {
+			if (tfUsuari.getText().equals("")) {
+				labelMessage.setText("UserName is required");
 			} else {
-				if (!sErr.equals("")) {
-					this.labelMessage.setText(sErr);
+
+				String apiReturn = api.login(tfUsuari.getText(), fPassword.getText());
+
+				JSONObject json = new JSONObject(apiReturn);
+
+				String sErr = json.getString("sErr");
+				String Err = json.getString("err");
+				String Mss = json.getString("res");
+				System.out.println(Err + "<--Error");
+
+				if (Err.contentEquals("No User")) {
+					register();
 				} else {
-					if (!Err.equals("")) {
-						this.labelMessage.setText(Err);
+					if (!sErr.equals("")) {
+						this.labelMessage.setText(sErr);
 					} else {
-						this.labelMessage.setText("Welcome: " + Mss);
-						this.user = Mss;
-						interficieBase.setTitle("Joc de Dames          Jugador: " + Mss);
-						desbloquejarBotons();
-						canviPantalla();
+						if (!Err.equals("")) {
+							this.labelMessage.setText(Err);
+						} else {
+							this.labelMessage.setText("Welcome: " + Mss);
+							this.user = Mss;
+							interficieBase.setTitle("Joc de Dames          Jugador: " + Mss);
+							desbloquejarBotons();
+							canviPantalla();
+						}
 					}
 				}
-			}
 
+			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
 		}
 	}
 

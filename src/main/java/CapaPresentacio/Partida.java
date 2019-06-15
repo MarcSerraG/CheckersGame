@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Partida extends JPanel implements ActionListener {
@@ -48,34 +49,39 @@ public class Partida extends JPanel implements ActionListener {
 	}
 
 	public JPanel partidaCreate(String idPartida, boolean res, String taulellAntic) {
-		panelTaulell = new JPanel();
-		this.idPartida = idPartida;
+		try {
+			panelTaulell = new JPanel();
+			this.idPartida = idPartida;
 
-		panelTaulell.setLayout(new BorderLayout());
+			panelTaulell.setLayout(new BorderLayout());
 
-		AjustaPantalla(panelNord, panelSud, panelEst, panelOest);
-		String nouTaulell;
+			AjustaPantalla(panelNord, panelSud, panelEst, panelOest);
+			String nouTaulell;
 
-		if (!res) {
-			nouTaulell = interficieBase.getAPI().obtenirTaulerAct(interficieBase.getPlayerID(), idPartida);
+			if (!res) {
+				nouTaulell = interficieBase.getAPI().obtenirTaulerAct(interficieBase.getPlayerID(), idPartida);
 
-			JSONObject json = new JSONObject(nouTaulell);
+				JSONObject json = new JSONObject(nouTaulell);
 
-			String err = json.getString("err");
-			String mss = json.getString("res");
+				String err = json.getString("err");
+				String mss = json.getString("res");
 
-			if (!err.equals("")) {
-				lMessage.setText(err);
+				if (!err.equals("")) {
+					lMessage.setText(err);
 
+				} else {
+					setAnticTaulell(mss);
+				}
 			} else {
-				setAnticTaulell(mss);
+				setAnticTaulell(taulellAntic);
 			}
-		} else {
-			setAnticTaulell(taulellAntic);
-		}
-		panelTaulell.add(panelCentral, BorderLayout.CENTER);
+			panelTaulell.add(panelCentral, BorderLayout.CENTER);
 
-		return panelTaulell;
+			return panelTaulell;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	private void setAnticTaulell(String taulellSQL) {
@@ -235,48 +241,53 @@ public class Partida extends JPanel implements ActionListener {
 	}
 
 	private void PanellEst() {
-		JPanel ColorJugadorsPanel = new JPanel();
 
-		ColorJugadorsPanel.setLayout(new BoxLayout(ColorJugadorsPanel, BoxLayout.Y_AXIS));
-		ColorJugadorsPanel.setBackground(Color.DARK_GRAY);
+		try {
+			JPanel ColorJugadorsPanel = new JPanel();
 
-		JLabel LabelNegres = new JLabel();
-		JLabel LabelVermelles = new JLabel();
+			ColorJugadorsPanel.setLayout(new BoxLayout(ColorJugadorsPanel, BoxLayout.Y_AXIS));
+			ColorJugadorsPanel.setBackground(Color.DARK_GRAY);
 
-		String ClJugador = interficieBase.getAPI().obtenirColor(interficieBase.getPlayerID(), idPartida);
+			JLabel LabelNegres = new JLabel();
+			JLabel LabelVermelles = new JLabel();
 
-		JSONObject json = new JSONObject(ClJugador);
+			String ClJugador = interficieBase.getAPI().obtenirColor(interficieBase.getPlayerID(), idPartida);
 
-		String err = json.getString("err");
-		ClJugador = json.getString("res");
-		String sErr = json.getString("sErr");
+			JSONObject json = new JSONObject(ClJugador);
 
-		if (err.equals("")) {
-			JugadorColor = ClJugador;
-			if (ClJugador.equals("Red")) {
-				ContrincantColor = "Black";
-				LabelNegres.setText(NomContrincant + " Black");
-				LabelVermelles.setText(interficieBase.getPlayerID() + " Red");
-			} else {
-				ContrincantColor = "Red";
-				LabelNegres.setText(interficieBase.getPlayerID() + " Black");
-				LabelVermelles.setText(NomContrincant + " Red");
-			}
-		} else
-			lMessage.setText("Error: " + err + " " + sErr);
+			String err = json.getString("err");
+			ClJugador = json.getString("res");
+			String sErr = json.getString("sErr");
 
-		LabelNegres.setFont(new Font("SansSerif", Font.BOLD, 20));
-		LabelNegres.setForeground(new Color(237, 215, 178));
+			if (err.equals("")) {
+				JugadorColor = ClJugador;
+				if (ClJugador.equals("Red")) {
+					ContrincantColor = "Black";
+					LabelNegres.setText(NomContrincant + " Black");
+					LabelVermelles.setText(interficieBase.getPlayerID() + " Red");
+				} else {
+					ContrincantColor = "Red";
+					LabelNegres.setText(interficieBase.getPlayerID() + " Black");
+					LabelVermelles.setText(NomContrincant + " Red");
+				}
+			} else
+				lMessage.setText("Error: " + err + " " + sErr);
 
-		LabelVermelles.setFont(new Font("SansSerif", Font.BOLD, 20));
-		LabelVermelles.setForeground(new Color(237, 215, 178));
+			LabelNegres.setFont(new Font("SansSerif", Font.BOLD, 20));
+			LabelNegres.setForeground(new Color(237, 215, 178));
 
-		ColorJugadorsPanel.add(LabelNegres);
-		ColorJugadorsPanel.add(Box.createRigidArea(new Dimension(0, 370)));
-		ColorJugadorsPanel.add(LabelVermelles);
-		panelEst.add(Box.createRigidArea(new Dimension(150, 0)));
+			LabelVermelles.setFont(new Font("SansSerif", Font.BOLD, 20));
+			LabelVermelles.setForeground(new Color(237, 215, 178));
 
-		panelEst.add(ColorJugadorsPanel);
+			ColorJugadorsPanel.add(LabelNegres);
+			ColorJugadorsPanel.add(Box.createRigidArea(new Dimension(0, 370)));
+			ColorJugadorsPanel.add(LabelVermelles);
+			panelEst.add(Box.createRigidArea(new Dimension(150, 0)));
+
+			panelEst.add(ColorJugadorsPanel);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -319,116 +330,131 @@ public class Partida extends JPanel implements ActionListener {
 	}
 
 	private void MourePessa(JButton boto, String posicioBoto) {
+		try {
 
-		if (posInicial.equals("")) {
-			posInicial = posicioBoto;
-			bSeleccioInicial = boto;
-			bSeleccioInicial.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-			VeurePossiblesMoviments(posicioBoto);
-		} else {
-			if (posFinal.equals("")) {
-				posFinal = posicioBoto;
-				String moviment = interficieBase.getAPI().ferMoviment(interficieBase.getPlayerID(), idPartida,
-						posInicial, posFinal);
+			if (posInicial.equals("")) {
+				posInicial = posicioBoto;
+				bSeleccioInicial = boto;
+				bSeleccioInicial.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+				VeurePossiblesMoviments(posicioBoto);
+			} else {
+				if (posFinal.equals("")) {
+					posFinal = posicioBoto;
+					String moviment = interficieBase.getAPI().ferMoviment(interficieBase.getPlayerID(), idPartida,
+							posInicial, posFinal);
 
-				JSONObject json = new JSONObject(moviment);
+					JSONObject json = new JSONObject(moviment);
 
-				String err = json.getString("err");
-				String mss = json.getString("res");
+					String err = json.getString("err");
+					String mss = json.getString("res");
 
-				if (Boolean.parseBoolean(mss)) {
+					if (Boolean.parseBoolean(mss)) {
 
-					json = new JSONObject(
-							interficieBase.getAPI().obtenirTaulerRes(interficieBase.getPlayerID(), idPartida));
-					err = json.getString("err");
-					mss = json.getString("res");
+						json = new JSONObject(
+								interficieBase.getAPI().obtenirTaulerRes(interficieBase.getPlayerID(), idPartida));
+						err = json.getString("err");
+						mss = json.getString("res");
 
-					if (err.equals("")) {
-						int neg = negres;
-						int blan = blanques;
-						setAnticTaulell(mss);
+						if (err.equals("")) {
+							int neg = negres;
+							int blan = blanques;
+							setAnticTaulell(mss);
 
-						if (blanques < blan || negres < neg) {
-							posInicial = "";
-							posFinal = "";
-							torn = true;
-							lMessage.setText("Well done! It's Your Turn Again");
+							if (blanques < blan || negres < neg) {
+								posInicial = "";
+								posFinal = "";
+								torn = true;
+								lMessage.setText("Well done! It's Your Turn Again");
+							} else {
+								lMessage.setText("Graba la Tirada!");
+								for (JButton n : taulell2.keySet())
+									n.removeActionListener(this);
+
+								torn = false;
+							}
+
 						} else {
-							lMessage.setText("Graba la Tirada!");
-							for (JButton n : taulell2.keySet())
-								n.removeActionListener(this);
-
-							torn = false;
+							lMessage.setText(err);
 						}
 
-					} else {
-						lMessage.setText(err);
 					}
 
+					for (JButton b : taulell2.keySet())
+						b.setBorder(BorderFactory.createEmptyBorder());
+
+					posInicial = "";
+					posFinal = "";
+
 				}
-
-				for (JButton b : taulell2.keySet())
-					b.setBorder(BorderFactory.createEmptyBorder());
-
-				posInicial = "";
-				posFinal = "";
-
 			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
 		}
 	}
 
 	private void VeurePossiblesMoviments(String pos) {
+		try {
 
-		String moviments = interficieBase.getAPI().movsPessa(interficieBase.getPlayerID(), idPartida, pos);
-		JSONObject json = new JSONObject(moviments);
+			String moviments = interficieBase.getAPI().movsPessa(interficieBase.getPlayerID(), idPartida, pos);
+			JSONObject json = new JSONObject(moviments);
 
-		String err = json.getString("err");
-		String mss = json.getString("res");
+			String err = json.getString("err");
+			String mss = json.getString("res");
 
-		if (!err.equals(""))
-			lMessage.setText(err);
-		else {
+			if (!err.equals(""))
+				lMessage.setText(err);
+			else {
 
-			String[] posicions = mss.split("-");
+				String[] posicions = mss.split("-");
 
-			for (String posicio : posicions) {
-				for (Map.Entry<JButton, String> entry : taulell2.entrySet()) {
-					if (entry.getValue().equals(posicio)) {
-						entry.getKey().setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+				for (String posicio : posicions) {
+					for (Map.Entry<JButton, String> entry : taulell2.entrySet()) {
+						if (entry.getValue().equals(posicio)) {
+							entry.getKey().setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+						}
 					}
 				}
 			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
 		}
 	}
 
 	private void GrabaTirada() {
-		String grabar = interficieBase.getAPI().grabarTirada(interficieBase.getPlayerID(), idPartida);
-		JSONObject json = new JSONObject(grabar);
+		try {
+			String grabar = interficieBase.getAPI().grabarTirada(interficieBase.getPlayerID(), idPartida);
+			JSONObject json = new JSONObject(grabar);
 
-		String err = json.getString("err");
-		String mss = json.getString("res");
+			String err = json.getString("err");
+			String mss = json.getString("res");
 
-		if (err.equals("")) {
-			switch (mss) {
-			case "guanya":
-				JOptionPane.showMessageDialog(null, "YOU WIN!");
-				break;
-			case "perd":
-				JOptionPane.showMessageDialog(null, "LOOOOOOSEEERR!!!");
-				break;
-			// case "continua":
-			// lMessage.setText("It's your turn Again!");
-			// interficieBase.refresh();
-			// break;
-			case "taules":
-				JOptionPane.showMessageDialog(null, "Perdre per Taules? LOOOSSEEERRR!");
-				break;
-			default:
-				lMessage.setText("It's " + NomContrincant + " turn");
+			if (err.equals("")) {
+				switch (mss) {
+				case "guanya":
+					JOptionPane.showMessageDialog(null, "YOU WIN!");
+					break;
+				case "perd":
+					JOptionPane.showMessageDialog(null, "LOOOOOOSEEERR!!!");
+					break;
+				// case "continua":
+				// lMessage.setText("It's your turn Again!");
+				// interficieBase.refresh();
+				// break;
+				case "taules":
+					JOptionPane.showMessageDialog(null, "Perdre per Taules? LOOOSSEEERRR!");
+					break;
+				default:
+					lMessage.setText("It's " + NomContrincant + " turn");
 
+				}
+			} else {
+				lMessage.setText(err);
 			}
-		} else {
-			lMessage.setText(err);
+		} catch (JSONException e) {
+
+			e.printStackTrace();
 		}
 	}
 

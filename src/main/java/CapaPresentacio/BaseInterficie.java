@@ -18,6 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.json.JSONException;
+
 public class BaseInterficie extends JFrame implements ActionListener {
 
 	public JButton bLogin, bNewGame, bContinue_Game, bStatistics, bLogOut, bRequests, bRefresh;
@@ -247,10 +249,15 @@ public class BaseInterficie extends JFrame implements ActionListener {
 
 	public void refresh(boolean res, String mss) {
 
-		if (ContinueGame.TornPartidaEnCurs().equals(this.getPlayerID()))
-			ContinueGame.ComenssarJoc(true, res, mss);
-		else
-			ContinueGame.ComenssarJoc(false, res, mss);
+		try {
+			if (ContinueGame.TornPartidaEnCurs().equals(this.getPlayerID()))
+				ContinueGame.ComenssarJoc(true, res, mss);
+			else
+				ContinueGame.ComenssarJoc(false, res, mss);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void actionLogin() {
@@ -438,7 +445,7 @@ public class BaseInterficie extends JFrame implements ActionListener {
 			if (log.user != null)
 				api.logout(log.user);
 			else {
-				//api.getConnectionSQL().tancaConeccio();
+				// api.getConnectionSQL().tancaConeccio();
 				JOptionPane.showMessageDialog(null, "Server Connection Closed");
 			}
 			System.exit(0);

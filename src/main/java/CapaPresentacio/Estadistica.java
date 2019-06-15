@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Estadistica extends JPanel {
@@ -109,37 +110,42 @@ public class Estadistica extends JPanel {
 	}
 
 	private void ApiGetStats() {
+		try {
+			String res = api.getEstadistics(interficieBase.getPlayerID());
+			JSONObject json;
 
-		String res = api.getEstadistics(interficieBase.getPlayerID());
-		JSONObject json = new JSONObject(res);
+			json = new JSONObject(res);
 
-		String stat = json.getString("res");
+			String stat = json.getString("res");
 
-		String[] st = stat.split(";");
+			String[] st = stat.split(";");
 
-		if (st.length == 0)
-			JOptionPane.showMessageDialog(null, "Error no hi ha estadistiques.");
-		else {
-			int rk = 0;
+			if (st.length == 0)
+				JOptionPane.showMessageDialog(null, "Error no hi ha estadistiques.");
+			else {
+				int rk = 0;
 
-			for (int i = 0; i < st.length; i++) {
-				if (i == 0)
-					matches = st[i];
-				else if (i == 1)
-					win = st[i];
-				else if (i == 2)
-					lost = st[i];
-				else if (i == 3)
-					taules = st[i];
-				else if (i == 4)
-					ratio = st[i];
-				else if (i == 5) {
-					rank = new String[Integer.parseInt(st[i])];
-				} else {
-					rank[rk] = (rk + 1) + "       " + st[i];
-					rk++;
+				for (int i = 0; i < st.length; i++) {
+					if (i == 0)
+						matches = st[i];
+					else if (i == 1)
+						win = st[i];
+					else if (i == 2)
+						lost = st[i];
+					else if (i == 3)
+						taules = st[i];
+					else if (i == 4)
+						ratio = st[i];
+					else if (i == 5) {
+						rank = new String[Integer.parseInt(st[i])];
+					} else {
+						rank[rk] = (rk + 1) + "       " + st[i];
+						rk++;
+					}
 				}
 			}
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
 
 	}

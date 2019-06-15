@@ -23,6 +23,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Requests extends JPanel implements ActionListener, ListSelectionListener {
@@ -139,40 +140,45 @@ public class Requests extends JPanel implements ActionListener, ListSelectionLis
 	}
 
 	private void addPlayers() {
-		String APIplayers = api.solicituds(interficieBase.getPlayerID());
+		try {
+			String APIplayers = api.solicituds(interficieBase.getPlayerID());
 
-		JSONObject json = new JSONObject(APIplayers);
+			JSONObject json = new JSONObject(APIplayers);
 
-		String err = json.getString("err");
-		String Mss = json.getString("res");
+			String err = json.getString("err");
+			String Mss = json.getString("res");
 
-		if (!Mss.equals("")) {
-			String player[] = Mss.split(";");
-			panelCentral.setVisible(false);
-			listPartides.setVisible(true);
-			scrollPanel.setVisible(true);
-			panelRequests.add(scrollPanel, BorderLayout.CENTER);
-			panelRequests.repaint();
-			validate();
+			if (!Mss.equals("")) {
+				String player[] = Mss.split(";");
+				panelCentral.setVisible(false);
+				listPartides.setVisible(true);
+				scrollPanel.setVisible(true);
+				panelRequests.add(scrollPanel, BorderLayout.CENTER);
+				panelRequests.repaint();
+				validate();
 
-			DefaultListCellRenderer renderer = (DefaultListCellRenderer) listPartides.getCellRenderer();
-			renderer.setHorizontalAlignment(SwingConstants.CENTER);
+				DefaultListCellRenderer renderer = (DefaultListCellRenderer) listPartides.getCellRenderer();
+				renderer.setHorizontalAlignment(SwingConstants.CENTER);
 
-			listPartides.setFont(new Font("SansSerif", Font.BOLD, 18));
-			listPartides.setForeground(Color.white);
-			listPartides.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			listPartides.addListSelectionListener(this);
+				listPartides.setFont(new Font("SansSerif", Font.BOLD, 18));
+				listPartides.setForeground(Color.white);
+				listPartides.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				listPartides.addListSelectionListener(this);
 
-			listPartides.setListData(player);
-		} else {
-			if (err.equals("No hi ha cap partida")) {
+				listPartides.setListData(player);
+			} else {
+				if (err.equals("No hi ha cap partida")) {
 
-				Error("You don't have friends? Start a New Game Now!", "/NoPlayers.png", 70, 200, 500, 30);
+					Error("You don't have friends? Start a New Game Now!", "/NoPlayers.png", 70, 200, 500, 30);
 
-			} else { // ServerError.png
+				} else { // ServerError.png
 
-				Error("Internal Server Error. Please try again", "/ServerError.png", 120, 200, 500, 30);
+					Error("Internal Server Error. Please try again", "/ServerError.png", 120, 200, 500, 30);
+				}
 			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
 		}
 
 	}

@@ -24,6 +24,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class NewGame extends JPanel implements ActionListener, ListSelectionListener {
@@ -132,40 +133,46 @@ public class NewGame extends JPanel implements ActionListener, ListSelectionList
 	}
 
 	private void addPlayers() {
-		String APIplayers = api.getCandidatsSol(interficieBase.getPlayerID());
 
-		JSONObject json = new JSONObject(APIplayers);
+		try {
+			String APIplayers = api.getCandidatsSol(interficieBase.getPlayerID());
 
-		String sErr = json.getString("sErr");
-		String Mss = json.getString("res");
+			JSONObject json = new JSONObject(APIplayers);
 
-		if (!Mss.equals("")) {
-			String player[] = Mss.split(";");
-			panelCentral.setVisible(false);
-			listUsuaris.setVisible(true);
-			scrollPanel.setVisible(true);
-			panelNewGame.add(scrollPanel, BorderLayout.CENTER);
-			panelNewGame.repaint();
-			validate();
+			String sErr = json.getString("sErr");
+			String Mss = json.getString("res");
 
-			DefaultListCellRenderer renderer = (DefaultListCellRenderer) listUsuaris.getCellRenderer();
-			renderer.setHorizontalAlignment(SwingConstants.CENTER);
+			if (!Mss.equals("")) {
+				String player[] = Mss.split(";");
+				panelCentral.setVisible(false);
+				listUsuaris.setVisible(true);
+				scrollPanel.setVisible(true);
+				panelNewGame.add(scrollPanel, BorderLayout.CENTER);
+				panelNewGame.repaint();
+				validate();
 
-			listUsuaris.setFont(new Font("SansSerif", Font.BOLD, 18));
-			listUsuaris.setForeground(Color.white);
-			listUsuaris.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			listUsuaris.addListSelectionListener(this);
+				DefaultListCellRenderer renderer = (DefaultListCellRenderer) listUsuaris.getCellRenderer();
+				renderer.setHorizontalAlignment(SwingConstants.CENTER);
 
-			listUsuaris.setListData(player);
-		} else {
-			if (sErr.equals("No hi han usuaris connectats.")) {
+				listUsuaris.setFont(new Font("SansSerif", Font.BOLD, 18));
+				listUsuaris.setForeground(Color.white);
+				listUsuaris.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				listUsuaris.addListSelectionListener(this);
 
-				Error("Sorry. Nobody is playing", "/NoPlayers.png", 180, 200, 500, 30);
+				listUsuaris.setListData(player);
+			} else {
+				if (sErr.equals("No hi han usuaris connectats.")) {
 
-			} else { // ServerError.png
+					Error("Sorry. Nobody is playing", "/NoPlayers.png", 180, 200, 500, 30);
 
-				Error("Internal Server Error. Please try again", "/ServerError.png", 120, 200, 500, 30);
+				} else { // ServerError.png
+
+					Error("Internal Server Error. Please try again", "/ServerError.png", 120, 200, 500, 30);
+				}
 			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
 		}
 
 	}

@@ -24,6 +24,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ContinueGame extends JPanel implements ActionListener, ListSelectionListener {
@@ -58,25 +59,30 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 	}
 
 	public JPanel ContinueGameCreate() {
-		panelContinueGame = new JPanel();
+		try {
+			panelContinueGame = new JPanel();
 
-		panelContinueGame.setLayout(new BorderLayout());
+			panelContinueGame.setLayout(new BorderLayout());
 
-		labelErrorMessage.setFont(new Font("SansSerif", Font.BOLD, 20));
-		labelErrorMessage.setForeground(new Color(237, 215, 178));
+			labelErrorMessage.setFont(new Font("SansSerif", Font.BOLD, 20));
+			labelErrorMessage.setForeground(new Color(237, 215, 178));
 
-		AjustaPantalla(panelNord, panelSud, panelEst, panelOest);
-		listPartides.setBackground(Color.GRAY);
-		panelCentral.setBackground(Color.GRAY);
-		panelContinueGame.add(panelCentral, BorderLayout.CENTER);
+			AjustaPantalla(panelNord, panelSud, panelEst, panelOest);
+			listPartides.setBackground(Color.GRAY);
+			panelCentral.setBackground(Color.GRAY);
+			panelContinueGame.add(panelCentral, BorderLayout.CENTER);
 
-		listPartides.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		scrollPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+			listPartides.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+			scrollPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
-		panelCentral.setLayout(null);
-		BotonsSud(panelSud);
-		BotonsEst(panelEst);
-		YourTurn();
+			panelCentral.setLayout(null);
+			BotonsSud(panelSud);
+			BotonsEst(panelEst);
+
+			YourTurn();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 
 		return panelContinueGame;
 	}
@@ -182,7 +188,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 		panelEst.add(menu);
 	}
 
-	private void addPlayers(String APIplayers) {
+	private void addPlayers(String APIplayers) throws JSONException {
 
 		JSONObject json = new JSONObject(APIplayers);
 
@@ -250,43 +256,56 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		int presButton = 0;
+		try {
 
-		if (e.getSource() == bRefresh) {
-			switch (presButton) {
-			case 0:
-				YourTurn();
-				break;
-			case 1:
-				RivalTurn();
-				break;
-			case 2:
-				FineshedMaches();
-				break;
-			}
-		} else {
-			if (e.getSource() == bYourTurn) {
-				this.bPlayGame.setVisible(true);
-				bRefresh.setPreferredSize(new Dimension(100, 40));
-				YourTurn();
-				presButton = 0;
+			int presButton = 0;
+
+			if (e.getSource() == bRefresh) {
+				switch (presButton) {
+				case 0:
+
+					YourTurn();
+
+					break;
+				case 1:
+					RivalTurn();
+					break;
+				case 2:
+					FineshedMaches();
+					break;
+				}
 			} else {
-				if (e.getSource() == bRivalTurn) {
+				if (e.getSource() == bYourTurn) {
 					this.bPlayGame.setVisible(true);
 					bRefresh.setPreferredSize(new Dimension(100, 40));
-					RivalTurn();
-					presButton = 1;
+					try {
+						YourTurn();
+					} catch (JSONException e1) {
+						e1.printStackTrace();
+					}
+					presButton = 0;
 				} else {
-					if (e.getSource() == bFinishedMatches) {
-						this.bPlayGame.setVisible(false);
-						bRefresh.setPreferredSize(new Dimension(250, 40));
-						FineshedMaches();
-						presButton = 2;
+					if (e.getSource() == bRivalTurn) {
+						this.bPlayGame.setVisible(true);
+						bRefresh.setPreferredSize(new Dimension(100, 40));
+						RivalTurn();
+						presButton = 1;
 					} else {
-						ComenssarJoc(torn, false, null);
+						if (e.getSource() == bFinishedMatches) {
+							this.bPlayGame.setVisible(false);
+							bRefresh.setPreferredSize(new Dimension(250, 40));
+							FineshedMaches();
+							presButton = 2;
+						} else {
+							ComenssarJoc(torn, false, null);
+
+						}
 					}
 				}
 			}
+		} catch (JSONException e1) {
+
+			e1.printStackTrace();
 		}
 	}
 
@@ -298,7 +317,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 	}
 
-	public void ComenssarJoc(boolean torn, boolean res, String mss) {
+	public void ComenssarJoc(boolean torn, boolean res, String mss) throws JSONException {
 
 		String triaPartida = api.triaPartida(interficieBase.getPlayerID(), contrincant);
 
@@ -339,7 +358,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 		interficieBase.bRequests.setForeground(Color.WHITE);
 	}
 
-	public void YourTurn() {
+	public void YourTurn() throws JSONException {
 		String APIplayers = api.getPartidesTorn(interficieBase.getPlayerID());
 		addPlayers(APIplayers);
 		torn = true;
@@ -357,7 +376,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 	}
 
-	public void RivalTurn() {
+	public void RivalTurn() throws JSONException {
 		String APIplayers = api.getPartidesNoTorn(interficieBase.getPlayerID());
 		addPlayers(APIplayers);
 		torn = false;
@@ -374,7 +393,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 	}
 
-	public void FineshedMaches() {
+	public void FineshedMaches() throws JSONException {
 		String APIplayers = api.getPartidesAcabades(interficieBase.getPlayerID());
 		addPlayers(APIplayers);
 
@@ -390,7 +409,7 @@ public class ContinueGame extends JPanel implements ActionListener, ListSelectio
 
 	}
 
-	public String TornPartidaEnCurs() {
+	public String TornPartidaEnCurs() throws JSONException {
 		String APIplayers = api.getPartidesTorn(interficieBase.getPlayerID());
 		JSONObject json = new JSONObject(APIplayers);
 

@@ -8,6 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.lambdaworks.crypto.SCryptUtil;
@@ -21,7 +22,7 @@ import CapaPersistencia.EstadistiquesSQLOracle;
 import CapaPersistencia.PartidesSQLOracle;
 import CapaPersistencia.UsuariSQLOracle;
 
-//http://localhost:8080/Api/ServerJocDames/login?user=Ricard&password=1234
+//http://localhost:8080/JocDames/login?user=Ricard&password=123
 @ApplicationPath("/")
 
 public class ServerJocDames implements JocDamesInterficie {
@@ -536,10 +537,16 @@ public class ServerJocDames implements JocDamesInterficie {
 	private String crearJSON(String res, String err, String sErr) {
 		if (this.json == null)
 			this.json = new JSONObject();
-		json.put("res", res);
-		json.put("err", err);
-		json.put("sErr", sErr);
-		return json.toString();
+		try {
+			json.put("res", res);
+			json.put("err", err);
+			json.put("sErr", sErr);
+			return json.toString();
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 
 	private void instanciarMoviments(@QueryParam("idSessio") String idSessio,
