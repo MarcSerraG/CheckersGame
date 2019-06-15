@@ -311,18 +311,18 @@ public class Partida extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == bTaules)
-			return;
+			FerTaules();
+
+		else
 
 		if (e.getSource() == bGrabarTirada)
 			GrabaTirada();
 		else if (e.getSource() == bBufar)
 			BufarDesbloquejarPeces();
-		else {
-			if (!bufar)
-				MourePessa((JButton) e.getSource(), taulell2.get(e.getSource()));
-			else
-				Bufar((JButton) e.getSource(), taulell2.get(e.getSource()));
-		}
+		else if (!bufar)
+			MourePessa((JButton) e.getSource(), taulell2.get(e.getSource()));
+		else
+			Bufar((JButton) e.getSource(), taulell2.get(e.getSource()));
 
 	}
 
@@ -425,16 +425,13 @@ public class Partida extends JPanel implements ActionListener {
 			case "perd":
 				JOptionPane.showMessageDialog(null, "LOOOOOOSEEERR!!!");
 				break;
-			// case "continua":
-			// lMessage.setText("It's your turn Again!");
-			// interficieBase.refresh();
-			// break;
+			case "continua":
+				break;
 			case "taules":
 				JOptionPane.showMessageDialog(null, "Perdre per Taules? LOOOSSEEERRR!");
 				break;
 			default:
 				lMessage.setText("It's " + NomContrincant + " turn");
-
 			}
 		} else {
 			lMessage.setText(err);
@@ -467,7 +464,7 @@ public class Partida extends JPanel implements ActionListener {
 		if (Boolean.parseBoolean(mss)) {
 			lMessage.setText("Token eliminated! It's your turn again!");
 		} else {
-			lMessage.setText("You can't blow!");
+			lMessage.setText("You can't blow this token!");
 		}
 
 		json = new JSONObject(interficieBase.getAPI().obtenirTaulerRes(interficieBase.getPlayerID(), idPartida));
@@ -475,6 +472,11 @@ public class Partida extends JPanel implements ActionListener {
 		setAnticTaulell(mss);
 		bufar = false;
 
+	}
+
+	private void FerTaules() {
+		JOptionPane.showMessageDialog(null,
+				"Aquesta funció estarà disponible en la pròxima versió. Disculpa les molesties.");
 	}
 
 }
