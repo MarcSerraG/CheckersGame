@@ -35,7 +35,7 @@ public class ServerJocDames implements JocDamesInterficie {
 	private static HashMap<String, Moviments> mapMovs = new HashMap<String, Moviments>();;
 	private Moviments movTornAct;
 	private JSONObject json;
-	private String contrincant;
+	private static String contrincant;
 
 	public ServerJocDames() throws Exception {
 		connSQL = new ConnectionSQLOracle();
@@ -44,7 +44,7 @@ public class ServerJocDames implements JocDamesInterficie {
 		statSQL = new EstadistiquesSQLOracle(connSQL);
 		json = new JSONObject();
 		movTornAct = null;
-		contrincant = "";
+		// contrincant = "";
 	}
 
 	/**
@@ -369,7 +369,7 @@ public class ServerJocDames implements JocDamesInterficie {
 	@Produces("application/json")
 	public String grabarTirada(@QueryParam("idSessio") String idSessio, @QueryParam("idPartida") String idPartida) {
 
-		this.movTornAct = this.mapMovs.get(idSessio);
+		this.movTornAct = ServerJocDames.mapMovs.get(idSessio);
 
 		String movs = this.movTornAct.movsToString();
 		if (movs == null || movs.isEmpty())
@@ -381,6 +381,8 @@ public class ServerJocDames implements JocDamesInterficie {
 
 		String taulellRes = this.movTornAct.getTaulellActual().toString();
 		this.partSQL.guardarEstatTauler(idPartida, taulellRes);
+
+		System.out.println("Contrincant --> " + contrincant);
 
 		System.out.println("Canvi de torn! " + this.partSQL.canviarTorn(idPartida, contrincant));
 
@@ -405,7 +407,7 @@ public class ServerJocDames implements JocDamesInterficie {
 	// Implementació mínima... no comprova peça per peça ni diu si es pot matar
 	public String obtenirMovimentsPossibles(@QueryParam("idSessio") String idSessio,
 			@QueryParam("idPartida") String idPartida) {
-		
+
 		this.movTornAct = this.mapMovs.get(idSessio);
 		if (this.movTornAct == null)
 			return crearJSON("", "Error, no s'ha fet triaPartida abans...", "");
@@ -574,8 +576,7 @@ public class ServerJocDames implements JocDamesInterficie {
 		System.out.println(idPartida);
 		System.out.println(this.partSQL.getTorn(idPartida));
 
-		this.mapMovs.put(idSessio, 
-				new Moviments(movsAnt, taulerAct, taulerAnt, tornJugador));
+		this.mapMovs.put(idSessio, new Moviments(movsAnt, taulerAct, taulerAnt, tornJugador));
 	}
 
 	public ConnectionSQLOracle getConnectionSQL() {

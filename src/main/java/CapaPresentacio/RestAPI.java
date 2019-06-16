@@ -183,6 +183,7 @@ public class RestAPI implements JocDamesInterficie {
 	public String triaPartida(String idSessio, String usuari) {
 
 		try {
+			System.out.println("Contrincant--> " + usuari);
 			return getData("triaPartida?idSessio=" + URLEncoder.encode(idSessio, "UTF-8") + "&usuari="
 					+ URLEncoder.encode(usuari, "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
